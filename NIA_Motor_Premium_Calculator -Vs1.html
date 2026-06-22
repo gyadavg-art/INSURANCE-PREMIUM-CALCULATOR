@@ -1069,46 +1069,7 @@ input,select,button,textarea{font-family:inherit}
 <!-- ════════════════════════════════════════════════════════
      PRINT DOCUMENT
 ════════════════════════════════════════════════════════ -->
-<div class="print-doc" id="printDoc" style="max-width:780px;margin:0 auto;padding:28px 32px;font-family:'Inter',sans-serif">
-  <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #1C2A45;padding-bottom:14px;margin-bottom:20px">
-    <div>
-      <div style="font-family:'Sora',sans-serif;font-size:1.75rem;font-weight:800;color:#1C2A45">Insurance Quotation</div>
-      <div style="font-size:.84rem;color:#3C4F6E;margin-top:3px;font-weight:600">The New India Assurance Co. Ltd.</div>
-      <div id="pqCovType" style="display:inline-block;margin-top:5px;padding:2px 10px;background:#1A2F5E;color:#fff;border-radius:20px;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Package Policy</div>
-    </div>
-    <div style="text-align:right">
-      <div style="font-size:.78rem;font-weight:700;color:#1C2A45">Agent / Branch Office</div>
-      <div style="font-size:.66rem;color:#6B7FA3;margin-top:4px" id="pqDate"></div>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:1.5px solid #1C2A45;border-radius:9px;overflow:hidden;margin-bottom:20px">
-    <div style="padding:14px;text-align:center;border-right:1.5px solid #DDE3F0">
-      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6B7FA3;margin-bottom:5px">Vehicle Type</div>
-      <div id="pqVehType" style="font-size:.92rem;font-weight:800;color:#1C2A45">-</div>
-    </div>
-    <div style="padding:14px;text-align:center;border-right:1.5px solid #DDE3F0">
-      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6B7FA3;margin-bottom:5px">Class / Spec</div>
-      <div id="pqSpec" style="font-size:.92rem;font-weight:800;color:#1C2A45">-</div>
-    </div>
-    <div style="padding:14px;text-align:center;background:#EBF0FF">
-      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#1A2F5E;margin-bottom:5px">IDV</div>
-      <div style="font-size:1.1rem;font-weight:800;color:#1A2F5E">₹ <span id="pqIDV">-</span></div>
-    </div>
-  </div>
-  <div>
-    <div style="font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6B7FA3;border-bottom:1.5px solid #DDE3F0;padding-bottom:6px;margin-bottom:12px">Coverages &amp; Add-ons</div>
-    <ul id="pqCovList" style="display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;list-style:none;padding:0;margin-bottom:22px"></ul>
-  </div>
-  <div style="background:#1C2A45;border-radius:12px;padding:22px 28px;display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <div style="color:rgba(255,255,255,.55);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600">Total Payable Premium</div>
-      <div style="color:rgba(255,255,255,.38);font-size:.62rem;margin-top:3px">All discounts · Incl. 18% GST</div>
-    </div>
-    <div style="font-family:'Sora',sans-serif;font-size:2.4rem;font-weight:800;color:#fff">
-      <span style="font-size:1.2rem;opacity:.6">₹</span><span id="pqPremium">-</span>
-    </div>
-  </div>
-</div>
+<div class="print-doc" id="printDoc"></div>
 
 <!-- ════════════════════════════════════════════════════════
      JAVASCRIPT
@@ -1293,7 +1254,7 @@ function calculatePC(){
   const ll=ct!=='SAOD'&&$('pcLL').checked?50:0;
 
   /* Add-ons */
-  let addons=0; const cov=[];
+  let addons=0; const cov=[]; const _adLines=[];
   if(ct!=='TP') cov.push('Own Damage Cover');
   cov.push('Third Party Liability');  /* TP always included for both PKG and TP-Only */
   if(pa)cov.push('Owner-Driver PA — ₹15L');
@@ -1308,29 +1269,29 @@ function calculatePC(){
     const rL={1:{'2':0.38,'4':0.58,'unlimited':0.86},2:{'2':0.48,'4':0.72,'unlimited':1.08},3:{'2':0.62,'4':0.94,'unlimited':1.40},4:{'2':0.81,'4':1.22,'unlimited':1.84},5:{'2':1.00,'4':1.51,'unlimited':2.27},6:{'2':1.19,'4':1.80,'unlimited':2.70},7:{'2':1.38,'4':2.09,'unlimited':3.13}};
     const rH={1:{'2':0.43,'4':0.65,'unlimited':0.97},2:{'2':0.52,'4':0.79,'unlimited':1.19},3:{'2':0.67,'4':1.00,'unlimited':1.51},4:{'2':0.86,'4':1.29,'unlimited':1.94},5:{'2':1.05,'4':1.58,'unlimited':2.37},6:{'2':1.24,'4':1.86,'unlimited':2.80},7:{'2':1.43,'4':2.15,'unlimited':3.23}};
     const rate=(isHighCC?rH:rL)[br]?.(cl)||0;
-    addons+=((rate/100)*idv)*(1-dsc('nilDep')/100);cov.push(`Nil Dep (${cl} claims)`);
+    const _nilA=((rate/100)*idv)*(1-dsc('nilDep')/100);addons+=_nilA;_adLines.push({l:`Nil Depreciation (${cl} Claims)`,a:_nilA});cov.push(`Nil Dep (${cl} claims)`);
   }
   if(aOn('engineProtect')){
     const et=$('pc_engineProtectType').value;
     const rate=et==='with'?({1:0.26,2:0.28,3:0.30,4:0.35,5:0.40}[br]||0.25):0.25;
-    addons+=((rate/100)*idv)*(1-dsc('engineProtect')/100);cov.push('Engine Protect');
+    const _epA=((rate/100)*idv)*(1-dsc('engineProtect')/100);addons+=_epA;_adLines.push({l:'Engine Protect Cover',a:_epA});cov.push('Engine Protect');
   }
-  if(aOn('rti')){const r={1:0.21,2:0.44,3:0.71}[br]||0;addons+=((r/100)*idv)*(1-dsc('rti')/100);cov.push('RTI');}
-  if(aOn('consumables')){const r={1:0.14,2:0.16,3:0.18,4:0.21,5:0.25}[br]||0;addons+=((r/100)*idv)*(1-dsc('consumables')/100);cov.push('Consumables');}
-  if(aOn('tyreAlloy')){const r={1:0.20,2:0.25,3:0.30}[br]||0;addons+=((r/100)*idv)*(1-dsc('tyreAlloy')/100);cov.push('Tyre & Alloy');}
-  if(aOn('keyProtect')){addons+=250;cov.push('Key Protect — ₹250');}
-  if(aOn('personalBelonging')){addons+=500;cov.push('Personal Belonging — ₹500');}
-  if(aOn('lossContents')){addons+=140;cov.push('Loss of Contents — ₹140');}
+  if(aOn('rti')){const r={1:0.21,2:0.44,3:0.71}[br]||0;const _rtiA=((r/100)*idv)*(1-dsc('rti')/100);addons+=_rtiA;_adLines.push({l:'Return to Invoice (RTI)',a:_rtiA});cov.push('RTI');}
+  if(aOn('consumables')){const r={1:0.14,2:0.16,3:0.18,4:0.21,5:0.25}[br]||0;const _conA=((r/100)*idv)*(1-dsc('consumables')/100);addons+=_conA;_adLines.push({l:'Consumables Cover',a:_conA});cov.push('Consumables');}
+  if(aOn('tyreAlloy')){const r={1:0.20,2:0.25,3:0.30}[br]||0;const _taA=((r/100)*idv)*(1-dsc('tyreAlloy')/100);addons+=_taA;_adLines.push({l:'Tyre & Alloy Cover',a:_taA});cov.push('Tyre & Alloy');}
+  if(aOn('keyProtect')){addons+=250;_adLines.push({l:'Key Protect Cover',a:250});cov.push('Key Protect — ₹250');}
+  if(aOn('personalBelonging')){addons+=500;_adLines.push({l:'Personal Belonging Cover',a:500});cov.push('Personal Belonging — ₹500');}
+  if(aOn('lossContents')){addons+=140;_adLines.push({l:'Loss of Contents Cover',a:140});cov.push('Loss of Contents — ₹140');}
   if(aOn('ncbProtect')){
     const rates={0:8.5,20:10.63,25:14.88,35:19.13,45:21.25,50:21.25};
-    addons+=(rates[ncbPct]||8.5)/100*Math.max(0,baseOD-odDiscAmt);cov.push('NCB Protection');
+    const _ncbPA=(rates[ncbPct]||8.5)/100*Math.max(0,baseOD-odDiscAmt);addons+=_ncbPA;_adLines.push({l:'NCB Protection Cover',a:_ncbPA});cov.push('NCB Protection');
   }
-  if(aOn('rsa')){addons+=$('pc_rsaType').value==='basic'?50:60;cov.push('RSA');}
+  if(aOn('rsa')){const _rsaA=$('pc_rsaType').value==='basic'?50:60;addons+=_rsaA;_adLines.push({l:'Roadside Assistance (RSA)',a:_rsaA});cov.push('RSA');}
   if(aOn('batteryProtect')){
     let bp=0;
     if(vt==='EV'){bp={1:0.27,2:0.29,3:0.31}[br]||0;cov.push('Battery Protect (EV)');}
     else if(vt==='HEV'){const ht=$('pc_hevType').value;bp=ht==='basic'?({1:0.20,2:0.25,3:0.30}[br]||0):({1:0.43,2:0.50,3:0.57}[br]||0);cov.push('Hybrid Protect');}
-    addons+=((bp/100)*idv)*(1-dsc('batteryProtect')/100);
+    const _bpA=((bp/100)*idv)*(1-dsc('batteryProtect')/100);addons+=_bpA;if(_bpA>0)_adLines.push({l:vt==='EV'?'Battery Protect (EV)':'Hybrid Protect (HEV)',a:_bpA});
   }
 
   /* Electrical accessories: 4% on declared value (GR-41) */
@@ -1366,12 +1327,20 @@ function calculatePC(){
 
   /* Print */
   const vEl=$('pcVehicleType');
-  $('pqVehType').innerText='Private Car';
-  $('pqSpec').innerText=vEl.options[vEl.selectedIndex].text.split('(')[0].trim();
-  $('pqIDV').innerText=ct!=='TP'?Math.round(idv).toLocaleString('en-IN'):'N/A';
-  $('pqPremium').innerText=grand.toLocaleString('en-IN');
-  $('pqCovType').innerText=ct==='PKG'?'Package Policy':ct==='TP'?'TP Only':'Standalone OD';
-  buildPrintCovList(cov);
+  buildPrintDoc({
+    mode:'PC', date:new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'}),
+    covType: ct==='PKG'?'Package Policy':ct==='TP'?'TP Only':'Standalone OD',
+    vehType:'Private Car', spec:vEl.options[vEl.selectedIndex].text.split('(')[0].trim(),
+    zone: $('pcZone').options[$('pcZone').selectedIndex].text,
+    idv: ct!=='TP'?Math.round(idv).toLocaleString('en-IN'):'N/A',
+    age: $('pcAgeDisplay').value, ncbPct,
+    od:{ show:ct!=='TP', base:baseOD, discOD:odDiscAmt, discNCB:ncbAmt, net:netOD,
+         elec:pcElecPrem, nonElec:pcNonElecPrem, tow:pcTowPrem, geo:0 },
+    tp:{ show:ct!=='SAOD', base:tp, hev:hevDisc, pa, ll, llEmp:0 },
+    addons:{ items:_adLines, total:addons },
+    gst:{ split:false, total:grand-Math.round(netOD+netTP+pa+ll+addons+pcElecPrem+pcNonElecPrem+pcTowPrem) },
+    grand, cov
+  });
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1618,7 +1587,7 @@ function calculateCV(){
   const llEmp = $('cvLLEmployee').checked ? 50 : 0;
 
   /* Add-ons */
-  let addons=0; const cov=[];
+  let addons=0; const cov=[]; const _adLines=[];
   if(ct!=='TP') cov.push('Own Damage Cover');
   cov.push('Third Party Liability');  /* TP always included for both PKG and TP-Only */
   if(pa)cov.push('Owner-Driver PA — ₹15L');
@@ -1648,14 +1617,14 @@ function calculateCV(){
     }
     const yrBr=Math.min(Math.ceil(parseFloat($('cvAgeYr').value)||1),5);
     const rate=(nilRates[nilKey]||nilRates.u7500)[yrBr-1]||0;
-    addons+=((rate/100)*idv)*(1-dsc2('nilDep')/100);cov.push('Nil Depreciation');
+    const _nilCA=((rate/100)*idv)*(1-dsc2('nilDep')/100);addons+=_nilCA;_adLines.push({l:'Nil Depreciation',a:_nilCA});cov.push('Nil Depreciation');
   }
   // Consumables for CV — use same rate structure as PC (passenger CV tariff references PC)
   if(aOn2('consumables')){
     const yrBr=Math.min(Math.ceil(parseFloat($('cvAgeYr').value)||1),5);
     const conRates=[0.14,0.16,0.18,0.21,0.25];
     const rate=conRates[yrBr-1]||0.14;
-    addons+=((rate/100)*idv)*(1-dsc2('consumables')/100);cov.push('Consumables');
+    const _conCA=((rate/100)*idv)*(1-dsc2('consumables')/100);addons+=_conCA;_adLines.push({l:'Consumables Cover',a:_conCA});cov.push('Consumables');
   }
   // Passenger CV only add-ons (RTI, Engine Protect, Key Protect, Tyre & Alloy)
   if(isPass){
@@ -1663,20 +1632,20 @@ function calculateCV(){
       const yrBr=Math.min(Math.ceil(parseFloat($('cvAgeYr').value)||1),3);
       const rtiR=[0.25,0.49,0.75];
       const rate=rtiR[yrBr-1]||0;
-      addons+=((rate/100)*idv)*(1-dsc2('rti')/100);cov.push('Return to Invoice');
+      const _rtiCA=((rate/100)*idv)*(1-dsc2('rti')/100);addons+=_rtiCA;_adLines.push({l:'Return to Invoice',a:_rtiCA});cov.push('Return to Invoice');
     }
     if(aOn2('engineProtect')){
       const yrBr=Math.min(Math.ceil(parseFloat($('cvAgeYr').value)||1),5);
       const epR=[0.30,0.42,0.45,0.52,0.52];
       const rate=epR[yrBr-1]||0;
-      addons+=((rate/100)*idv)*(1-dsc2('engineProtect')/100);cov.push('Engine Protect');
+      const _epCA=((rate/100)*idv)*(1-dsc2('engineProtect')/100);addons+=_epCA;_adLines.push({l:'Engine Protect',a:_epCA});cov.push('Engine Protect');
     }
-    if(aOn2('keyProtect')){addons+=375;cov.push('Key Protect — ₹375');}
+    if(aOn2('keyProtect')){addons+=375;_adLines.push({l:'Key Protect Cover',a:375});cov.push('Key Protect — ₹375');}
     if(aOn2('tyreAlloy')){
       const yrBr=Math.min(Math.ceil(parseFloat($('cvAgeYr').value)||1),3);
       const taR=[0.45,0.52,0.60];
       const rate=taR[yrBr-1]||0;
-      addons+=((rate/100)*idv)*(1-dsc2('tyreAlloy')/100);cov.push('Tyre & Alloy');
+      const _taCA=((rate/100)*idv)*(1-dsc2('tyreAlloy')/100);addons+=_taCA;_adLines.push({l:'Tyre & Alloy Cover',a:_taCA});cov.push('Tyre & Alloy');
     }
   }
 
@@ -1786,30 +1755,246 @@ function calculateCV(){
 
   /* Print */
   const clEl=$('cvClass');
-  $('pqVehType').innerText='Commercial Vehicle';
-  $('pqSpec').innerText=clEl.options[clEl.selectedIndex].text;
-  $('pqIDV').innerText=ct!=='TP'?Math.round(idv).toLocaleString('en-IN'):'N/A';
-  $('pqPremium').innerText=grand.toLocaleString('en-IN');
-  $('pqCovType').innerText=ct==='PKG'?'Package Policy':ct==='TP'?'TP Only':'Standalone OD';
-  buildPrintCovList(cov);
+  buildPrintDoc({
+    mode:'CV', date:new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'}),
+    covType: ct==='PKG'?'Package Policy':'TP Only',
+    vehType:'Commercial Vehicle', spec:clEl.options[clEl.selectedIndex].text,
+    zone: $('cvZone').options[$('cvZone').selectedIndex].text,
+    idv: ct!=='TP'?Math.round(idv).toLocaleString('en-IN'):'N/A',
+    age: $('cvAgeDisplay').value, ncbPct,
+    od:{ show:ct!=='TP', base:(baseOD-gvwLoad), gvwLoad, discOD:finalOdDisc, discNCB:finalNcb,
+         net:netOD||0, imt23:cvImt23, spFactor:(isShortPeriod&&ct!=='TP')?spFactor:null, netSP:netOD_sp,
+         elec:cvElecPrem, nonElec:cvNonElecPrem, tow:cvTowPrem, geo:0 },
+    tp:{ show:true, base:tp, hev:hevDisc, pa, ll:llDrv, llEmp, geo:0 },
+    addons:{ items:_adLines, total:addons },
+    gst:{ split:false, total:grand-Math.round((ct!=='TP'?netOD_sp:0)+(ct!=='SAOD'?netTP_sp:0)+pa+llDrv+llEmp+addons+cvImt23+cvElecPrem+cvNonElecPrem+cvTowPrem) },
+    grand, cov, policyMonths: effectiveMonths||12
+  });
 }
 
-/* ── PRINT COV LIST ──────────────────────────────────── */
-function buildPrintCovList(cov){
-  const ul=$('pqCovList'); ul.innerHTML='';
-  cov.forEach(c=>{
-    const li=document.createElement('li');
-    li.style.cssText='display:flex;align-items:center;gap:7px;font-size:.8rem;font-weight:600;color:#1C2A45';
-    li.innerHTML=`<svg style="width:14px;height:14px;color:#1A8A72;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>${c}`;
-    ul.appendChild(li);
-  });
+/* ── PRINT DOC BUILDER ───────────────────────────────── */
+function buildPrintDoc(d){
+  const C = {
+    indigo:'#1E1346', indigoMid:'#3730A3', indigoLt:'#EEF2FF',
+    green:'#065F46',  greenMid:'#059669',  greenLt:'#ECFDF5',
+    amber:'#92400E',  amberBg:'#FFFBEB',   amberBdr:'#FDE68A',
+    ink:'#0F172A',    inkMid:'#334155',    inkLite:'#64748B',
+    border:'#E2E8F0', borderLt:'#F8FAFC',  white:'#FFFFFF',
+    disc:'#065F46', discBg:'#F0FDF4',
+    grand:'#1E1346', grandBg:'linear-gradient(135deg,#1E1346,#3730A3)'
+  };
+  const fmt2=(n)=>(parseFloat(n)||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const row=(lbl,val,style='')=>`
+    <tr style="border-bottom:1px solid ${C.border}">
+      <td style="padding:7px 12px;font-size:.8rem;color:${C.inkMid};font-weight:500;${style}">${lbl}</td>
+      <td style="padding:7px 12px;font-size:.8rem;color:${C.ink};font-weight:600;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;${style}">₹ ${val}</td>
+    </tr>`;
+  const discRow=(lbl,val)=>val&&parseFloat(val)>0?`
+    <tr style="border-bottom:1px solid ${C.border}">
+      <td style="padding:7px 12px;font-size:.8rem;color:${C.green};font-weight:600;">↓ ${lbl}</td>
+      <td style="padding:7px 12px;font-size:.8rem;color:${C.green};font-weight:700;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;">− ₹ ${val}</td>
+    </tr>`:'';
+  const subRow=(lbl,val,clr=C.indigoMid)=>`
+    <tr style="background:${C.indigoLt}">
+      <td style="padding:8px 12px;font-size:.82rem;color:${clr};font-weight:800;border-top:1.5px solid ${clr};">${lbl}</td>
+      <td style="padding:8px 12px;font-size:.9rem;color:${clr};font-weight:900;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;border-top:1.5px solid ${clr};">₹ ${val}</td>
+    </tr>`;
+  const colHeader=(title,color,bg)=>`
+    <tr style="background:${bg}">
+      <td colspan="2" style="padding:10px 12px;font-family:'Sora',sans-serif;font-size:.78rem;font-weight:800;color:${color};text-transform:uppercase;letter-spacing:.1em;">${title}</td>
+    </tr>`;
+
+  let odTable='';
+  if(d.od&&d.od.show){
+    const od=d.od;
+    odTable=`
+    <table style="width:100%;border-collapse:collapse;border:1.5px solid ${C.border};border-radius:10px;overflow:hidden;font-family:'Inter',sans-serif;">
+      ${colHeader('🔵 Own Damage Premium',C.white,C.indigoMid)}
+      ${row('Base OD Tariff',fmt2(od.base))}
+      ${discRow(`Basic OD Discount`,fmt2(od.discOD))}
+      ${discRow(`NCB Discount (${d.ncbPct||0}%)`,fmt2(od.discNCB))}
+      ${subRow('Net OD Premium',fmt2(od.net))}
+      ${od.spFactor&&od.spFactor<1?row(`Short Period Factor (${Math.round(od.spFactor*100)}%)`,fmt2(od.netSP)):''}
+      ${od.gvwLoad>0?row('GVW Loading (>12,000 kg)',fmt2(od.gvwLoad)):''}
+      ${od.imt23>0?row('IMT 23 Loading (15%)',fmt2(od.imt23)):''}
+      ${od.elec>0?row('Electrical Accessories (4%)',fmt2(od.elec)):''}
+      ${od.nonElec>0?row('Non-Electrical Accessories',fmt2(od.nonElec)):''}
+      ${od.tow>0?row('Additional Towing Charges',fmt2(od.tow)):''}
+      ${od.geo>0?row('Geo. Extension — OD',fmt2(od.geo)):''}
+    </table>`;
+  }
+
+  let tpTable='';
+  if(d.tp&&d.tp.show){
+    const tp=d.tp;
+    tpTable=`
+    <table style="width:100%;border-collapse:collapse;border:1.5px solid ${C.border};border-radius:10px;overflow:hidden;font-family:'Inter',sans-serif;">
+      ${colHeader('🟢 Third Party Premium',C.white,C.greenMid)}
+      ${row('Basic TP Premium',fmt2(tp.base))}
+      ${discRow('HEV Discount (7.5%)',fmt2(tp.hev))}
+      ${tp.pa>0?row('Compulsory PA Cover (GR-36A)',fmt2(tp.pa)):''}
+      ${tp.ll>0?row('LL — Paid Driver/Crew',fmt2(tp.ll)):''}
+      ${tp.llEmp>0?row('LL — Employees',fmt2(tp.llEmp)):''}
+      ${tp.geo>0?row('Geo. Extension — TP',fmt2(tp.geo)):''}
+      ${subRow('Net TP + PA + LL Total',fmt2((tp.base-tp.hev)+(tp.pa||0)+(tp.ll||0)+(tp.llEmp||0)+(tp.geo||0)),C.greenMid)}
+    </table>`;
+  }
+
+  let addonsHtml='';
+  if(d.addons&&d.addons.items&&d.addons.items.length>0){
+    const rows=d.addons.items.map(it=>`
+      <tr style="border-bottom:1px solid ${C.border}">
+        <td style="padding:7px 12px;font-size:.8rem;color:${C.inkMid};font-weight:500;">✦ ${it.l}</td>
+        <td style="padding:7px 12px;font-size:.8rem;color:${C.ink};font-weight:600;text-align:right;white-space:nowrap;">₹ ${fmt2(it.a)}</td>
+      </tr>`).join('');
+    addonsHtml=`
+    <div style="margin-top:14px">
+    <table style="width:100%;border-collapse:collapse;border:1.5px solid ${C.amberBdr};border-radius:10px;overflow:hidden;font-family:'Inter',sans-serif;">
+      <tr style="background:${C.amber};"><td colspan="2" style="padding:10px 12px;font-family:'Sora',sans-serif;font-size:.78rem;font-weight:800;color:${C.white};text-transform:uppercase;letter-spacing:.1em;">⭐ Add-on Covers</td></tr>
+      ${rows}
+      <tr style="background:${C.amberBg};">
+        <td style="padding:8px 12px;font-size:.82rem;color:${C.amber};font-weight:800;border-top:1.5px solid ${C.amberBdr};">Add-ons Total</td>
+        <td style="padding:8px 12px;font-size:.9rem;color:${C.amber};font-weight:900;text-align:right;white-space:nowrap;border-top:1.5px solid ${C.amberBdr};">₹ ${fmt2(d.addons.total)}</td>
+      </tr>
+    </table></div>`;
+  }
+
+  let gstHtml='';
+  if(d.gst){
+    if(d.gst.split){
+      gstHtml=`
+      <div style="margin-top:14px;background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:10px;padding:14px 16px;font-family:'Inter',sans-serif;">
+        <div style="font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#9A3412;margin-bottom:10px;">GST Calculation (Goods Vehicle)</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:140px;background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #FED7AA;text-align:center;">
+            <div style="font-size:.65rem;color:#64748B;font-weight:600;margin-bottom:4px;">OD Section @ 18%</div>
+            <div style="font-size:1rem;font-weight:800;color:#9A3412;">₹ ${d.gst.odGst.toLocaleString('en-IN')}</div>
+          </div>
+          <div style="flex:1;min-width:140px;background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #FED7AA;text-align:center;">
+            <div style="font-size:.65rem;color:#64748B;font-weight:600;margin-bottom:4px;">TP Section @ 5%</div>
+            <div style="font-size:1rem;font-weight:800;color:#9A3412;">₹ ${d.gst.tpGst.toLocaleString('en-IN')}</div>
+          </div>
+          <div style="flex:1;min-width:140px;background:#92400E;border-radius:8px;padding:10px 12px;text-align:center;">
+            <div style="font-size:.65rem;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:4px;">Total GST</div>
+            <div style="font-size:1rem;font-weight:800;color:#fff;">₹ ${(d.gst.odGst+d.gst.tpGst).toLocaleString('en-IN')}</div>
+          </div>
+        </div>
+      </div>`;
+    } else {
+      const gstAmt=d.gst.total||0;
+      gstHtml=`
+      <div style="margin-top:14px;background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-family:'Inter',sans-serif;">
+        <div style="font-size:.78rem;color:#92400E;font-weight:600;">Goods & Services Tax (GST) @ 18%</div>
+        <div style="font-size:1rem;font-weight:800;color:#9A3412;">₹ ${gstAmt.toLocaleString('en-IN')}</div>
+      </div>`;
+    }
+  }
+
+  const covPills=(d.cov||[]).map(c=>`<span style="display:inline-block;background:${C.indigoLt};border:1px solid ${C.border};border-radius:20px;padding:3px 10px;font-size:.7rem;font-weight:600;color:${C.indigoMid};margin:3px 3px 3px 0;">✓ ${c}</span>`).join('');
+  const policyDuration = d.policyMonths && d.policyMonths<12 ? `<span style="margin-left:8px;padding:2px 9px;background:#FEF3C7;color:#92400E;border-radius:12px;font-size:.6rem;font-weight:700;">SHORT PERIOD — ${d.policyMonths} MONTHS</span>` : '';
+
+  const printHtml=`
+<div style="font-family:'Inter',system-ui,sans-serif;max-width:800px;margin:0 auto;color:${C.ink};background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
+  <div style="background:linear-gradient(135deg,${C.indigo} 0%,${C.indigoMid} 100%);padding:24px 28px;border-radius:14px 14px 0 0;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,.05);border-radius:50%;"></div>
+    <div style="position:absolute;bottom:-60px;left:60px;width:220px;height:220px;background:rgba(255,255,255,.04);border-radius:50%;"></div>
+    <div style="position:relative;z-index:1;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-.01em;">Motor Insurance</div>
+          <div style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:900;color:rgba(255,255,255,.55);line-height:1.1;">Quotation</div>
+          <div style="margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(4px);border-radius:20px;padding:4px 12px;font-size:.68rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.08em;">${d.covType}</span>
+            <span style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(4px);border-radius:20px;padding:4px 12px;font-size:.68rem;font-weight:700;color:#fff;">${d.mode==='PC'?'Private Car':'Commercial Vehicle'}</span>
+            ${policyDuration}
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:3px;">Date of Quotation</div>
+          <div style="font-size:.85rem;color:#fff;font-weight:600;">${d.date}</div>
+          <div style="font-size:.6rem;color:rgba(255,255,255,.4);margin-top:8px;font-weight:600;">For Agent / Branch Use Only</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="background:${C.borderLt};border:1.5px solid ${C.border};border-top:none;padding:0;display:flex;flex-wrap:wrap;">
+    <div style="flex:1;min-width:120px;padding:12px 16px;border-right:1px solid ${C.border};">
+      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${C.inkLite};margin-bottom:3px;">Vehicle Type</div>
+      <div style="font-size:.88rem;font-weight:800;color:${C.ink};">${d.vehType}</div>
+    </div>
+    <div style="flex:2;min-width:180px;padding:12px 16px;border-right:1px solid ${C.border};">
+      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${C.inkLite};margin-bottom:3px;">Class / Specification</div>
+      <div style="font-size:.82rem;font-weight:700;color:${C.ink};">${d.spec}</div>
+    </div>
+    <div style="flex:1;min-width:100px;padding:12px 16px;border-right:1px solid ${C.border};">
+      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${C.inkLite};margin-bottom:3px;">Zone</div>
+      <div style="font-size:.82rem;font-weight:700;color:${C.ink};">${d.zone}</div>
+    </div>
+    <div style="flex:1;min-width:100px;padding:12px 16px;border-right:1px solid ${C.border};">
+      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${C.inkLite};margin-bottom:3px;">Age</div>
+      <div style="font-size:.82rem;font-weight:700;color:${C.ink};">${d.age||'—'}</div>
+    </div>
+    <div style="flex:1;min-width:120px;padding:12px 16px;background:${C.indigoLt};">
+      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${C.indigoMid};margin-bottom:3px;">Insured Value (IDV)</div>
+      <div style="font-size:1rem;font-weight:900;color:${C.indigo};">₹ ${d.idv}</div>
+    </div>
+  </div>
+  <div style="border:1.5px solid ${C.border};border-top:none;padding:18px;background:#fff;">
+    <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:${C.inkLite};margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+      <span style="display:inline-block;width:24px;height:2px;background:${C.indigoMid};border-radius:2px;"></span>
+      Premium Breakdown
+      <span style="display:inline-block;flex:1;height:1px;background:${C.border};"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:${(d.od&&d.od.show&&d.tp&&d.tp.show)?'1fr 1fr':'1fr'};gap:14px;">
+      ${odTable}
+      ${tpTable}
+    </div>
+    ${addonsHtml}
+    ${gstHtml}
+  </div>
+  <div style="background:linear-gradient(135deg,${C.indigo},${C.indigoMid});padding:20px 24px;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 14px 14px;flex-wrap:wrap;gap:12px;">
+    <div>
+      <div style="font-size:.65rem;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.14em;font-weight:700;margin-bottom:4px;">Total Payable Premium</div>
+      <div style="font-size:.72rem;color:rgba(255,255,255,.4);font-weight:500;">All discounts applied · Inclusive of all applicable GST</div>
+    </div>
+    <div style="font-family:'Sora',sans-serif;font-size:2.4rem;font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1;">
+      <span style="font-size:1.3rem;opacity:.65;vertical-align:top;line-height:1.5;">₹</span>${d.grand.toLocaleString('en-IN')}
+    </div>
+  </div>
+  <div style="margin-top:14px;padding:14px 16px;background:${C.borderLt};border:1.5px solid ${C.border};border-radius:10px;">
+    <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:${C.inkLite};margin-bottom:8px;">Coverages Included</div>
+    <div>${covPills}</div>
+  </div>
+  <div style="margin-top:12px;padding:12px 16px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;">
+    <div style="font-size:.66rem;color:#92400E;font-weight:600;line-height:1.6;">
+      ⚠️ <strong>Important:</strong> This is an indicative quotation generated for reference purposes. Premium is computed as per tariff rates and is subject to final underwriting review, inspection, and confirmation. Actual policy premium may vary. Policy is subject to standard terms, conditions, and exclusions.
+    </div>
+  </div>
+</div>`;
+
+  const container = $('printDoc');
+  if(container) container.innerHTML = printHtml;
+}
+
+function animateCounter(id, target){
+  const el=$(id); if(!el) return;
+  const start = parseInt(el.innerText.replace(/,/g,''))||0;
+  const diff = target - start;
+  if(diff === 0){ el.innerText = target.toLocaleString('en-IN'); return; }
+  const steps = 28, dur = 520;
+  let step = 0;
+  const t = setInterval(()=>{
+    step++;
+    const ease = 1 - Math.pow(1 - step/steps, 3);
+    el.innerText = Math.round(start + diff * ease).toLocaleString('en-IN');
+    if(step >= steps){ clearInterval(t); el.innerText = target.toLocaleString('en-IN'); }
+  }, dur/steps);
 }
 
 /* ── INIT ────────────────────────────────────────────── */
 window.onload=function(){
   const today=new Date().toISOString().split('T')[0];
   $('pcPolDate').value=today; $('cvPolDate').value=today;
-  $('pqDate').innerText='Generated: '+new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
   pcUpdateAge(); cvUpdateAge();
   pcCovChange(); cvCovChange();
   cvClassChange(); cvFuelChange();
