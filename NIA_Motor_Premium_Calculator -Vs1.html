@@ -2198,31 +2198,12 @@ function buildPrintDoc(d){
   /* ── GST BLOCK ── */
   let gstHtml='';
   if(d.gst){
-    if(d.gst.split){
-      const tot=(d.gst.odGst||0)+(d.gst.tpGst||0);
-      gstHtml=`<div ${S(`margin-top:12px;background:${gstLt};border:1.5px solid ${gstBdr};border-radius:8px;padding:12px 14px;`)}>
-        <div ${S(`font-size:7.5pt;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:${gstBg};margin-bottom:10px;`)}>GST Breakdown (Goods Carrying Vehicle)</div>
-        <div ${S(`display:flex;gap:10px;flex-wrap:wrap;`)}>
-          <div ${S(`flex:1;min-width:130px;background:#fff;border:1px solid ${gstBdr};border-radius:6px;padding:8px 12px;text-align:center;`)}>
-            <div ${S(`font-size:7pt;color:${inkLt};font-weight:600;margin-bottom:3px;`)}>OD GST @ 18%</div>
-            <div ${S(`font-size:10pt;font-weight:800;color:${gstBg};`)}>₹ ${(d.gst.odGst||0).toLocaleString('en-IN')}</div>
-          </div>
-          <div ${S(`flex:1;min-width:130px;background:#fff;border:1px solid ${gstBdr};border-radius:6px;padding:8px 12px;text-align:center;`)}>
-            <div ${S(`font-size:7pt;color:${inkLt};font-weight:600;margin-bottom:3px;`)}>TP GST @ 5%</div>
-            <div ${S(`font-size:10pt;font-weight:800;color:${gstBg};`)}>₹ ${(d.gst.tpGst||0).toLocaleString('en-IN')}</div>
-          </div>
-          <div ${S(`flex:1;min-width:130px;background:${gstBg};border-radius:6px;padding:8px 12px;text-align:center;`)}>
-            <div ${S(`font-size:7pt;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:3px;`)}>Total GST</div>
-            <div ${S(`font-size:10pt;font-weight:800;color:#fff;`)}>₹ ${tot.toLocaleString('en-IN')}</div>
-          </div>
-        </div>
-      </div>`;
-    } else {
+    {
       const g=d.gst.total||0;
       gstHtml=`<div ${S(`margin-top:12px;background:${gstLt};border:1.5px solid ${gstBdr};border-radius:8px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;`)}>
         <div>
           <div ${S(`font-size:8.5pt;color:${gstBg};font-weight:700;`)}>Goods &amp; Services Tax (GST)</div>
-          <div ${S(`font-size:7pt;color:${inkLt};margin-top:2px;`)}>@ 18% on Net Premium</div>
+          <div ${S(`font-size:7pt;color:${inkLt};margin-top:2px;`)}>Applicable GST on Net Premium</div>
         </div>
         <div ${S(`font-size:12pt;font-weight:900;color:${gstBg};font-variant-numeric:tabular-nums;`)}>₹ ${g.toLocaleString('en-IN')}</div>
       </div>`;
