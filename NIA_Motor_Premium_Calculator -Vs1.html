@@ -2096,7 +2096,7 @@ function calculateCV(){
     idv: ct!=='TP'?Math.round(idv).toLocaleString('en-IN'):'N/A',
     age: ageText,
     ncbPct,
-    od:{ show:ct!=='TP', base:(baseOD-gvwLoad-otLoad), gvwLoad, otLoad, discOD:odDiscAmt||0, discNCB:ncbAmt||0,
+    od:{ show:ct!=='TP', base:(baseOD-gvwLoad-otLoad), gvwLoad, otLoad, discOD:finalOdDisc||0, discNCB:finalNcb||0,
          net:netOD||0, imt23:cvImt23, spFactor:(isShortPeriod&&ct!=='TP')?spFactor:null, netSP:netOD_sp,
          elec:cvElecPrem, nonElec:cvNonElecPrem, tow:cvTowPrem, geo:cvGeoODPrem },
     tp:{ show:ct!=='SAOD', base:tp, hev:hevDisc, pa, ll:llDrv, llEmp, geo:cvGeoTPPrem },
