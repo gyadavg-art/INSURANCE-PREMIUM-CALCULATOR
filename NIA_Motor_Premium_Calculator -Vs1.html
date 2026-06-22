@@ -3,310 +3,589 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NIA Motor Premium Calculator — Private Car &amp; Commercial Vehicle</title>
+<title>Motor Premium Calculator — Private Car &amp; Commercial Vehicle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ══════════════════════════════════════════════════════
-   DESIGN TOKENS — dual-theme system
-   PC = Private Car (blue)  |  CV = Commercial Vehicle (green)
-══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════════════════ */
 :root {
-  /* Shared neutrals */
-  --ink:       #1C2A45;
-  --ink-mid:   #3C4F6E;
-  --ink-lite:  #6B7FA3;
-  --smoke:     #F4F6FB;
-  --border:    #DDE3F0;
-  --white:     #FFFFFF;
-  --teal:      #1A8A72;
-  --red:       #C0392B;
-  --gold-pale: #FBF5E6;
+  /* PC theme — Violet/Indigo */
+  --pc-deep:   #1A0E4E;
+  --pc-mid:    #3730A3;
+  --pc-vivid:  #4F46E5;
+  --pc-soft:   #EEF2FF;
+  --pc-glow:   rgba(79,70,229,.28);
 
-  /* PC theme (blue) */
-  --pc-dark:   #1A2F5E;
-  --pc-mid:    #2A4490;
-  --pc-lt:     #4169C8;
-  --pc-gold:   #D4A843;
-  --pc-gold-lt:#E8C978;
-  --pc-smoke:  #EDF1FC;
+  /* CV theme — Emerald */
+  --cv-deep:   #052E1C;
+  --cv-mid:    #065F46;
+  --cv-vivid:  #059669;
+  --cv-soft:   #ECFDF5;
+  --cv-glow:   rgba(5,150,105,.28);
 
-  /* CV theme (green) */
-  --cv-dark:   #1A3D2A;
-  --cv-mid:    #215C3A;
-  --cv-lt:     #2E7D4F;
-  --cv-amber:  #D97706;
-  --cv-amb-lt: #F59E0B;
-  --cv-smoke:  #EDF7F1;
-
-  /* Active theme (defaults to PC, JS swaps) */
-  --th-dark:   var(--pc-dark);
+  /* Active theme (JS toggles body.cv-mode) */
+  --th-deep:   var(--pc-deep);
   --th-mid:    var(--pc-mid);
-  --th-lt:     var(--pc-lt);
-  --th-accent: var(--pc-gold);
-  --th-acc-lt: var(--pc-gold-lt);
-  --th-smoke:  var(--pc-smoke);
+  --th-vivid:  var(--pc-vivid);
+  --th-soft:   var(--pc-soft);
+  --th-glow:   var(--pc-glow);
 
-  --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:24px;
-  --sh-sm:0 1px 4px rgba(28,42,69,.07);
-  --sh-md:0 4px 18px rgba(28,42,69,.12);
-  --sh-lg:0 8px 36px rgba(28,42,69,.18);
+  /* Shared */
+  --amber:     #F59E0B;
+  --amber-lt:  #FCD34D;
+  --amber-dk:  #D97706;
+  --teal:      #059669;
+  --red:       #EF4444;
+  --ink:       #0F172A;
+  --ink-mid:   #334155;
+  --ink-lite:  #64748B;
+  --border:    #E2E8F0;
+  --border-lt: #F1F5FF;
+  --white:     #FFFFFF;
+  --bg:        #EEF2FF;
+  --shadow-sm: 0 1px 3px rgba(15,23,42,.07), 0 1px 2px rgba(15,23,42,.04);
+  --shadow-md: 0 4px 16px rgba(15,23,42,.10), 0 2px 6px rgba(15,23,42,.06);
+  --shadow-lg: 0 12px 40px rgba(15,23,42,.14), 0 4px 12px rgba(15,23,42,.08);
+  --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 26px;
 }
 body.cv-mode {
-  --th-dark:   var(--cv-dark);
-  --th-mid:    var(--cv-mid);
-  --th-lt:     var(--cv-lt);
-  --th-accent: var(--cv-amber);
-  --th-acc-lt: var(--cv-amb-lt);
-  --th-smoke:  var(--cv-smoke);
+  --th-deep:  var(--cv-deep);
+  --th-mid:   var(--cv-mid);
+  --th-vivid: var(--cv-vivid);
+  --th-soft:  var(--cv-soft);
+  --th-glow:  var(--cv-glow);
+  --bg:       #E8F5F0;
 }
 
-/* ══ RESET ══════════════════════════════════════════════ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:16px;scroll-behavior:smooth}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--smoke);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh;transition:background .3s}
-input,select,button,textarea{font-family:inherit}
-.hidden{display:none!important}
+/* ═══ RESET & BASE ══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  transition: background .5s ease;
+}
+input, select, button { font-family: inherit; }
+.hidden { display: none !important; }
 
-/* ══ TOP VEHICLE SWITCHER ════════════════════════════════ */
-.app-header-bar{
-  background:var(--th-dark);
-  padding:0 24px;
-  transition:background .35s;
-  box-shadow:0 2px 12px rgba(0,0,0,.22);
+/* ═══ KEYFRAMES ═════════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-.app-header-bar-inner{
-  max-width:1100px;margin:0 auto;
-  display:flex;align-items:center;gap:14px;padding:12px 0;
+@keyframes drift1 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%      { transform: translate(30px,-20px) scale(1.05); }
+  66%      { transform: translate(-20px,15px) scale(.97); }
 }
-.vs-logo{
-  width:36px;height:36px;background:var(--th-accent);border-radius:9px;
-  display:flex;align-items:center;justify-content:center;font-size:17px;
-  flex-shrink:0;transition:background .35s;box-shadow:0 2px 8px rgba(0,0,0,.25);
+@keyframes drift2 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%      { transform: translate(-25px,20px) scale(1.04); }
+  66%      { transform: translate(20px,-10px) scale(.98); }
 }
-.vs-title{font-family:'Sora',sans-serif;font-size:.95rem;font-weight:800;color:#fff;line-height:1.2}
-.vs-sub{font-size:.6rem;color:rgba(255,255,255,.50);margin-top:2px;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
-
-/* ── VEHICLE TYPE SELECTOR HERO ──────────────────────── */
-.vehicle-switcher{
-  background:linear-gradient(160deg,var(--th-dark) 0%,var(--th-mid) 100%);
-  padding:32px 24px 34px;
-  transition:background .4s;
-  border-bottom:3px solid var(--th-accent);
-  box-shadow:0 6px 28px rgba(0,0,0,.22);
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 0 0 var(--th-glow); }
+  50%      { box-shadow: 0 0 0 10px transparent; }
 }
-.vs-inner{
-  max-width:1100px;margin:0 auto;
-  display:flex;flex-direction:column;align-items:center;gap:18px;
-}
-.vs-chooser-label{
-  font-family:'Sora',sans-serif;
-  font-size:.7rem;font-weight:700;
-  color:rgba(255,255,255,.5);
-  text-transform:uppercase;letter-spacing:.22em;
-}
-.mode-toggle{
-  display:flex;align-items:center;
-  background:rgba(0,0,0,.28);
-  border:2px solid rgba(255,255,255,.20);
-  border-radius:70px;padding:5px;gap:5px;
-}
-.mode-btn{
-  padding:14px 46px;border-radius:60px;border:none;cursor:pointer;
-  font-family:'Sora',sans-serif;font-size:1.08rem;font-weight:800;
-  letter-spacing:.04em;transition:all .24s;white-space:nowrap;
-  background:transparent;color:rgba(255,255,255,.45);
-  display:flex;align-items:center;gap:11px;
-}
-.mode-btn .m-icon{font-size:1.35rem}
-.mode-btn.active{
-  background:var(--th-accent);
-  color:var(--ink);
-  box-shadow:0 4px 18px rgba(0,0,0,.32);
-  transform:scale(1.04);
-}
-.mode-btn:hover:not(.active){
-  color:rgba(255,255,255,.85);
-  background:rgba(255,255,255,.10);
-}
-.vs-active-label{
-  font-size:.76rem;font-weight:700;
-  color:var(--th-acc-lt);
-  letter-spacing:.08em;text-transform:uppercase;
-  transition:color .4s;
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
 }
 
-/* ══ MAIN ════════════════════════════════════════════════ */
-.app-main{max-width:1100px;margin:0 auto;padding:24px 24px 56px}
-
-/* ══ CARDS ═══════════════════════════════════════════════ */
-.card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:var(--r-lg);box-shadow:var(--sh-sm);
-  overflow:hidden;margin-bottom:16px;
+/* ═══ TITLE BAR ═════════════════════════════════════════════ */
+.app-header-bar {
+  background: var(--th-deep);
+  padding: 0 28px;
+  transition: background .5s ease;
+  position: relative;
+  z-index: 10;
 }
-.card-header{
-  display:flex;align-items:center;gap:10px;
-  padding:14px 20px 12px;border-bottom:1px solid var(--border);background:#FAFCFF;
+.app-header-bar-inner {
+  max-width: 1120px; margin: 0 auto;
+  display: flex; align-items: center; gap: 12px; padding: 12px 0;
 }
-.s-num{
-  width:22px;height:22px;background:var(--th-dark);color:var(--th-accent);
-  border-radius:6px;display:flex;align-items:center;justify-content:center;
-  font-size:.66rem;font-weight:800;flex-shrink:0;transition:background .35s,color .35s;
+.vs-logo {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--amber), var(--amber-lt));
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+  flex-shrink: 0; transition: background .5s ease;
+  box-shadow: 0 2px 8px rgba(245,158,11,.35);
 }
-.card-header h2{font-family:'Sora',sans-serif;font-size:.88rem;font-weight:700;color:var(--ink)}
-.ch-note{font-size:.66rem;color:var(--ink-lite);margin-left:auto;font-weight:500}
-.card-body{padding:18px 20px}
-
-/* ══ COVERAGE TABS ════════════════════════════════════════ */
-.cov-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
-.cov-tab{position:relative}
-.cov-tab input[type=radio]{position:absolute;opacity:0;pointer-events:none}
-.cov-tab-label{
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:12px 6px;border-radius:var(--r-md);border:2px solid var(--border);
-  background:var(--smoke);cursor:pointer;transition:all .18s;text-align:center;
-}
-.tab-icon{font-size:1.3rem}
-.tab-name{font-size:.77rem;font-weight:700;color:var(--ink-mid);line-height:1.2}
-.tab-desc{font-size:.61rem;color:var(--ink-lite);line-height:1.25;margin-top:1px}
-.cov-tab input:checked + .cov-tab-label{
-  border-color:var(--th-mid);background:var(--th-smoke);
-}
-.cov-tab input:checked + .cov-tab-label .tab-name{color:var(--th-dark)}
-.cov-tab-label:hover{border-color:var(--th-lt);background:var(--th-smoke)}
-.cov-banner{
-  margin-top:10px;padding:8px 12px;background:var(--th-smoke);
-  border-radius:8px;font-size:.74rem;color:var(--th-dark);
-  font-weight:500;border-left:3px solid var(--th-mid);transition:background .3s,color .3s,border-color .3s;
+.vs-title {
+  font-family: 'Sora', sans-serif; font-size: .95rem; font-weight: 800;
+  color: #fff; letter-spacing: .01em;
 }
 
-/* ══ FORM ════════════════════════════════════════════════ */
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.form-grid.cols3{grid-template-columns:1fr 1fr 1fr}
-@media(max-width:580px){.form-grid,.form-grid.cols3{grid-template-columns:1fr}}
-.field-g{display:flex;flex-direction:column;gap:4px}
-.f-label{font-size:.68rem;font-weight:700;color:var(--ink-lite);text-transform:uppercase;letter-spacing:.06em}
-.f-inp,.f-sel{
-  width:100%;background:var(--smoke);border:1.5px solid var(--border);border-radius:var(--r-sm);
-  padding:8px 11px;font-size:.85rem;font-weight:500;color:var(--ink);
-  transition:border-color .18s,box-shadow .18s;outline:none;appearance:none;
+/* ═══ HERO — VEHICLE SWITCHER ═══════════════════════════════ */
+.vehicle-switcher {
+  background: var(--th-deep);
+  padding: 36px 28px 42px;
+  position: relative; overflow: hidden;
+  transition: background .5s ease;
+  border-bottom: 1px solid rgba(255,255,255,.06);
 }
-.f-inp:focus,.f-sel:focus{border-color:var(--th-mid);box-shadow:0 0 0 3px rgba(42,68,144,.10);background:var(--white)}
-.f-inp.readonly{background:#ECF0FC;color:var(--th-dark);font-weight:700;cursor:default;border-color:transparent}
-.f-inp.idv-f{font-size:.96rem;font-weight:700;color:var(--th-dark);border-color:var(--th-lt)}
-.sel-wrap{position:relative}
-.sel-wrap::after{content:'';position:absolute;right:11px;top:50%;transform:translateY(-50%);border:4px solid transparent;border-top:5px solid var(--ink-lite);pointer-events:none}
-.idv-warn{font-size:.7rem;color:#B45309;font-weight:600;margin-top:3px}
-.sub-label{font-size:.68rem;font-weight:700;color:var(--ink-lite);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
-.sec-div{height:1px;background:var(--border);margin:13px 0}
+.vehicle-switcher::before,
+.vehicle-switcher::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+  opacity: .55;
+  transition: background .5s ease;
+}
+.vehicle-switcher::before {
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, var(--th-vivid), transparent 70%);
+  top: -100px; left: -60px;
+  animation: drift1 12s ease-in-out infinite;
+}
+.vehicle-switcher::after {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, var(--amber), transparent 70%);
+  bottom: -80px; right: -40px; opacity: .35;
+  animation: drift2 16s ease-in-out infinite;
+}
+.vs-inner {
+  max-width: 1120px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+  position: relative; z-index: 2;
+}
+.vs-chooser-label {
+  font-family: 'Sora', sans-serif;
+  font-size: .68rem; font-weight: 700;
+  color: rgba(255,255,255,.45);
+  text-transform: uppercase; letter-spacing: .22em;
+}
+.mode-toggle {
+  display: flex; align-items: center;
+  background: rgba(0,0,0,.30);
+  border: 1.5px solid rgba(255,255,255,.14);
+  border-radius: 60px; padding: 5px; gap: 4px;
+  backdrop-filter: blur(10px);
+}
+.mode-btn {
+  padding: 12px 44px; border-radius: 50px; border: none; cursor: pointer;
+  font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 800;
+  letter-spacing: .03em; transition: all .28s cubic-bezier(.4,0,.2,1);
+  background: transparent; color: rgba(255,255,255,.42);
+  display: flex; align-items: center; gap: 10px; white-space: nowrap;
+}
+.mode-btn .m-icon { font-size: 1.25rem; }
+.mode-btn.active {
+  background: linear-gradient(135deg, var(--th-vivid), var(--th-mid));
+  color: #fff;
+  box-shadow: 0 4px 20px var(--th-glow), 0 2px 8px rgba(0,0,0,.25);
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
+.mode-btn:hover:not(.active) {
+  color: rgba(255,255,255,.8);
+  background: rgba(255,255,255,.08);
+}
+.vs-active-label {
+  font-size: .74rem; font-weight: 600;
+  color: var(--amber); letter-spacing: .06em; text-transform: uppercase;
+  transition: color .5s ease;
+}
 
-/* ══ CHECK BLOCKS ════════════════════════════════════════ */
-.check-block{
-  display:flex;align-items:flex-start;gap:10px;
-  background:var(--gold-pale);border:1.5px solid #E2C47A;
-  border-radius:var(--r-sm);padding:10px 13px;cursor:pointer;
-}
-.check-block.neutral{background:var(--smoke);border-color:var(--border)}
-.check-block+.check-block{margin-top:7px}
-.check-block input[type=checkbox]{width:15px;height:15px;accent-color:var(--th-dark);cursor:pointer;flex-shrink:0;margin-top:1px}
-.cbt strong{display:block;font-size:.8rem;font-weight:700;color:var(--ink);line-height:1.3}
-.cbt span{font-size:.69rem;color:var(--ink-mid);line-height:1.35}
+/* ═══ MAIN LAYOUT ═══════════════════════════════════════════ */
+.app-main { max-width: 1120px; margin: 0 auto; padding: 28px 24px 60px; }
+.input-area { display: flex; flex-direction: column; gap: 0; }
 
-/* ══ ADD-ON GRID ═════════════════════════════════════════ */
-.addon-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:580px){.addon-grid{grid-template-columns:1fr}}
-.addon-card{
-  border:1.5px solid var(--border);border-radius:var(--r-md);
-  padding:11px 13px;background:var(--smoke);
-  display:flex;flex-direction:column;gap:7px;
-  transition:border-color .18s,background .18s,opacity .18s;
+/* ═══ CARDS ═════════════════════════════════════════════════ */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 3.5px solid var(--th-vivid);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 14px;
+  transition: border-color .5s ease, box-shadow .2s;
 }
-.addon-card.active{border-color:var(--th-mid);background:var(--th-smoke)}
-.addon-card.age-disabled{opacity:.4;pointer-events:none;border-color:var(--border)!important;background:var(--smoke)!important}
-.addon-card.cov-hidden{display:none!important}
-.addon-top{display:flex;align-items:flex-start;justify-content:space-between;gap:7px}
-.addon-lbl{display:flex;align-items:flex-start;gap:8px;cursor:pointer;flex:1}
-.addon-lbl input[type=checkbox]{width:14px;height:14px;accent-color:var(--th-dark);cursor:pointer;flex-shrink:0;margin-top:2px}
-.aname{font-size:.8rem;font-weight:700;color:var(--ink);line-height:1.3}
-.ameta{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:2px}
-.atag{padding:1px 6px;border-radius:10px;font-weight:700;letter-spacing:.03em;font-size:.56rem;text-transform:uppercase}
-.atag.t-pkg{background:#DCE8FF;color:#1A2F5E}
-.atag.t-saod{background:#DCF5EE;color:#0F6B56}
-.atag.t-age{background:#FEF3C7;color:#92400E}
-.atag.t-cv{background:#D1FAE5;color:#1A3D2A}
-.atag.t-off{background:#FEE2E2;color:#991B1B}
-.disc-g{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0}
-.disc-g label{font-size:.59rem;font-weight:700;color:var(--ink-lite);text-transform:uppercase;letter-spacing:.06em}
-.disc-g input{width:54px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.74rem;font-weight:600;text-align:center;outline:none;background:var(--white)}
-.disc-g input:focus{border-color:var(--th-accent)}
-.addon-sub{width:100%;background:var(--white);border:1.5px solid var(--border);border-radius:6px;padding:5px 9px;font-size:.74rem;font-weight:500;color:var(--ink);outline:none;appearance:none}
+.card:hover { box-shadow: var(--shadow-md); }
+.card-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 22px 12px;
+  border-bottom: 1px solid var(--border-lt);
+  background: linear-gradient(135deg, rgba(255,255,255,.9), rgba(241,245,255,.6));
+}
+.s-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--th-vivid); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Sora', sans-serif; font-size: .72rem; font-weight: 800;
+  flex-shrink: 0; transition: background .5s ease;
+  box-shadow: 0 2px 6px var(--th-glow);
+}
+.card-header h2 {
+  font-family: 'Sora', sans-serif; font-size: .9rem; font-weight: 700;
+  color: var(--ink); flex: 1;
+}
+.ch-note {
+  font-size: .64rem; color: var(--ink-lite); font-weight: 500;
+  background: var(--border-lt); padding: 2px 8px; border-radius: 20px;
+  border: 1px solid var(--border);
+}
+.card-body { padding: 20px 22px; }
 
-/* ══ ACTION BUTTONS ══════════════════════════════════════ */
-.action-row{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:4px}
-.btn-calc{
-  background:linear-gradient(135deg,var(--th-dark) 0%,var(--th-mid) 100%);
-  color:var(--white);border:none;border-radius:var(--r-md);
-  padding:14px 0;font-family:'Sora',sans-serif;font-size:.93rem;font-weight:800;
-  letter-spacing:.07em;text-transform:uppercase;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  box-shadow:var(--sh-md);transition:transform .15s,box-shadow .18s,background .3s;
+/* ═══ COVERAGE TABS ═════════════════════════════════════════ */
+.cov-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.cov-tab { position: relative; }
+.cov-tab input[type=radio] { position: absolute; opacity: 0; pointer-events: none; }
+.cov-tab-label {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 14px 8px; border-radius: var(--r-md);
+  border: 2px solid var(--border);
+  background: var(--border-lt);
+  cursor: pointer; transition: all .22s cubic-bezier(.4,0,.2,1); text-align: center;
 }
-.btn-calc:hover{transform:translateY(-2px);box-shadow:var(--sh-lg)}
-.btn-calc:active{transform:translateY(0)}
-.btn-print{
-  background:var(--th-accent);color:var(--ink);border:none;border-radius:var(--r-md);
-  padding:14px 16px;font-weight:700;font-size:.78rem;letter-spacing:.05em;
-  text-transform:uppercase;cursor:pointer;display:flex;align-items:center;
-  justify-content:center;gap:6px;transition:transform .15s,background .3s;white-space:nowrap;
-  box-shadow:0 2px 8px rgba(0,0,0,.15);
+.tab-icon { font-size: 1.4rem; transition: transform .22s; }
+.tab-name {
+  font-size: .78rem; font-weight: 700; color: var(--ink-mid);
+  line-height: 1.2; transition: color .2s;
 }
-.btn-print:hover{filter:brightness(1.08);transform:translateY(-2px)}
+.tab-desc { font-size: .61rem; color: var(--ink-lite); line-height: 1.25; margin-top: 2px; }
+.cov-tab input:checked + .cov-tab-label {
+  border-color: var(--th-vivid);
+  background: var(--th-soft);
+  box-shadow: 0 0 0 3px var(--th-glow);
+}
+.cov-tab input:checked + .cov-tab-label .tab-name { color: var(--th-mid); }
+.cov-tab input:checked + .cov-tab-label .tab-icon { transform: scale(1.12); }
+.cov-tab-label:hover { border-color: var(--th-vivid); background: var(--th-soft); }
 
-/* ══ QUOTE PANEL ═════════════════════════════════════════ */
-.quote-panel{
-  background:var(--white);border:2px solid var(--th-dark);
-  border-radius:var(--r-lg);box-shadow:var(--sh-lg);overflow:hidden;margin-top:20px;
-  transition:border-color .35s;
+.cov-banner {
+  margin-top: 12px; padding: 10px 14px;
+  background: var(--th-soft); border-radius: var(--r-md);
+  font-size: .76rem; color: var(--th-mid); font-weight: 500;
+  border-left: 3px solid var(--th-vivid);
+  transition: background .4s, color .4s, border-color .4s;
 }
-.qp-head{
-  background:linear-gradient(130deg,var(--th-dark) 0%,var(--th-mid) 100%);
-  padding:13px 20px;display:flex;align-items:center;gap:10px;
-  transition:background .35s;
-}
-.qp-head h2{font-family:'Sora',sans-serif;font-size:.85rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.07em;flex:1}
-.qp-pill{font-size:.63rem;font-weight:700;padding:3px 9px;border-radius:12px;background:rgba(255,255,255,.18);color:#fff;letter-spacing:.04em;text-transform:uppercase}
-.qp-body{display:grid;grid-template-columns:1fr 1fr 1fr}
-.qp-col{padding:16px 18px;border-right:1px solid var(--border)}
-.qp-col:last-child{border-right:none}
-.qp-col-ttl{font-size:.64rem;font-weight:700;color:var(--ink-lite);text-transform:uppercase;letter-spacing:.07em;margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--border)}
-.qrow{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;font-size:.78rem;border-bottom:1px dashed #EEF2FB}
-.qrow:last-of-type{border-bottom:none}
-.qlbl{color:var(--ink-mid);font-weight:500}
-.qval{font-weight:600;color:var(--ink)}
-.qrow.disc .qval{color:var(--teal)}
-.qrow.bold-r .qlbl,.qrow.bold-r .qval{font-weight:700;font-size:.8rem;color:var(--ink)}
-.qrow.acc-r .qlbl,.qrow.acc-r .qval{color:var(--th-dark);font-weight:700;transition:color .35s}
-.q-total-col{
-  background:linear-gradient(135deg,var(--th-dark) 0%,var(--th-mid) 100%);
-  padding:20px;display:flex;flex-direction:column;justify-content:center;
-  transition:background .35s;
-}
-.q-ttl-lbl{font-size:.63rem;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:5px}
-.q-ttl-amt{font-family:'Sora',sans-serif;font-size:1.9rem;font-weight:800;color:#fff;line-height:1}
-.q-ttl-amt .rs{font-size:1.1rem;opacity:.7;margin-right:2px;vertical-align:top;line-height:1.38}
-.q-ttl-gst{font-size:.6rem;color:var(--th-acc-lt);margin-top:4px;font-weight:500;transition:color .35s}
-@media(max-width:680px){.qp-body{grid-template-columns:1fr}.qp-col{border-right:none;border-bottom:1px solid var(--border)}}
 
-/* ══ PRINT ═══════════════════════════════════════════════ */
-@media print{
-  body{background:#fff!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  @page{size:A4 portrait;margin:1.2cm}
-  .vehicle-switcher,.app-main .input-area,.no-print{display:none!important}
-  .print-doc{display:block!important}
+/* ═══ FORM ══════════════════════════════════════════════════ */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+@media(max-width:600px) { .form-grid, .form-grid.cols3 { grid-template-columns: 1fr; } }
+
+.field-g { display: flex; flex-direction: column; gap: 5px; }
+.f-label {
+  font-size: .69rem; font-weight: 700; color: var(--ink-lite);
+  text-transform: uppercase; letter-spacing: .07em;
 }
-.print-doc{display:none}
+.f-inp, .f-sel {
+  width: 100%;
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 13px;
+  font-size: .875rem; font-weight: 500; color: var(--ink);
+  transition: border-color .18s, box-shadow .18s;
+  outline: none; appearance: none;
+}
+.f-inp:focus, .f-sel:focus {
+  border-color: var(--th-vivid);
+  box-shadow: 0 0 0 3px var(--th-glow);
+  background: #FAFCFF;
+}
+.f-inp.readonly {
+  background: var(--th-soft);
+  color: var(--th-mid); font-weight: 700;
+  cursor: default; border-color: transparent;
+}
+.f-inp.idv-f {
+  font-size: 1rem; font-weight: 700;
+  color: var(--th-mid); border-color: var(--th-vivid);
+  background: var(--th-soft);
+}
+.sel-wrap { position: relative; }
+.sel-wrap::after {
+  content: '';
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  border: 4px solid transparent; border-top: 5px solid var(--ink-lite);
+  pointer-events: none;
+}
+.idv-warn { font-size: .7rem; color: #B45309; font-weight: 600; margin-top: 3px; }
+.sub-label {
+  font-size: .69rem; font-weight: 700; color: var(--ink-lite);
+  text-transform: uppercase; letter-spacing: .07em; margin-bottom: 9px;
+}
+.sec-div { height: 1px; background: var(--border); margin: 14px 0; }
+
+/* ═══ CHECK BLOCKS ══════════════════════════════════════════ */
+.check-block {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: #FFFBEB; border: 1.5px solid #FDE68A;
+  border-radius: var(--r-md); padding: 12px 14px; cursor: pointer;
+  transition: all .18s;
+}
+.check-block:hover { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(245,158,11,.12); }
+.check-block.neutral { background: var(--border-lt); border-color: var(--border); }
+.check-block.neutral:hover { border-color: var(--th-vivid); box-shadow: 0 0 0 3px var(--th-glow); }
+.check-block + .check-block { margin-top: 8px; }
+.check-block input[type=checkbox] {
+  width: 16px; height: 16px; accent-color: var(--th-vivid);
+  cursor: pointer; flex-shrink: 0; margin-top: 1px;
+}
+.cbt strong { display: block; font-size: .82rem; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.cbt span { font-size: .7rem; color: var(--ink-mid); line-height: 1.4; }
+
+/* ═══ ADDON GRID ════════════════════════════════════════════ */
+.addon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media(max-width:600px) { .addon-grid { grid-template-columns: 1fr; } }
+
+.addon-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  background: var(--white);
+  display: flex; flex-direction: column; gap: 8px;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+  cursor: default;
+}
+.addon-card.active {
+  border-color: var(--th-vivid);
+  background: var(--th-soft);
+  box-shadow: 0 0 0 3px var(--th-glow);
+}
+.addon-card.age-disabled { opacity: .38; pointer-events: none; filter: grayscale(.4); }
+.addon-card.cov-hidden { display: none !important; }
+
+.addon-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.addon-lbl { display: flex; align-items: flex-start; gap: 9px; cursor: pointer; flex: 1; }
+.addon-lbl input[type=checkbox] {
+  width: 15px; height: 15px; accent-color: var(--th-vivid);
+  cursor: pointer; flex-shrink: 0; margin-top: 2px;
+}
+.aname { font-size: .82rem; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.ameta { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 3px; }
+.atag {
+  padding: 2px 7px; border-radius: 20px;
+  font-weight: 700; letter-spacing: .03em;
+  font-size: .57rem; text-transform: uppercase;
+}
+.atag.t-pkg  { background: var(--th-soft); color: var(--th-mid); }
+.atag.t-saod { background: #DCFCE7; color: #166534; }
+.atag.t-cv   { background: #D1FAE5; color: #065F46; }
+.atag.t-age  { background: #FEF3C7; color: #92400E; }
+.atag.t-off  { background: #FEE2E2; color: #991B1B; }
+
+.disc-g { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
+.disc-g label { font-size: .59rem; font-weight: 700; color: var(--ink-lite); text-transform: uppercase; letter-spacing: .06em; }
+.disc-g input {
+  width: 56px; border: 1.5px solid var(--border); border-radius: 6px;
+  padding: 4px 7px; font-size: .76rem; font-weight: 600;
+  text-align: center; outline: none; background: var(--white);
+  transition: border-color .18s;
+}
+.disc-g input:focus { border-color: var(--amber); box-shadow: 0 0 0 2px rgba(245,158,11,.2); }
+.addon-sub {
+  width: 100%; background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 7px; padding: 6px 10px; font-size: .76rem;
+  font-weight: 500; color: var(--ink); outline: none; appearance: none;
+  transition: border-color .18s;
+}
+.addon-sub:focus { border-color: var(--th-vivid); }
+
+/* ═══ ACTION BUTTONS ════════════════════════════════════════ */
+.action-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 4px; }
+
+.btn-calc {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, var(--th-deep) 0%, var(--th-mid) 50%, var(--th-vivid) 100%);
+  color: #fff; border: none; border-radius: var(--r-md);
+  padding: 16px 0;
+  font-family: 'Sora', sans-serif; font-size: .95rem; font-weight: 800;
+  letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  box-shadow: 0 4px 18px var(--th-glow), var(--shadow-md);
+  transition: transform .18s, box-shadow .2s;
+}
+.btn-calc::before {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2.8s linear infinite;
+}
+.btn-calc:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px var(--th-glow), var(--shadow-lg);
+}
+.btn-calc:active { transform: translateY(0); }
+
+.btn-print {
+  background: linear-gradient(135deg, var(--amber), var(--amber-lt));
+  color: var(--ink); border: none; border-radius: var(--r-md);
+  padding: 16px 18px; font-weight: 700; font-size: .78rem;
+  letter-spacing: .05em; text-transform: uppercase; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  box-shadow: 0 4px 14px rgba(245,158,11,.3);
+  transition: transform .18s, box-shadow .2s, filter .2s;
+  white-space: nowrap;
+}
+.btn-print:hover { filter: brightness(1.07); transform: translateY(-2px); box-shadow: 0 8px 22px rgba(245,158,11,.4); }
+.btn-print svg { width: 15px; height: 15px; }
+
+/* ═══ QUOTE PANEL ═══════════════════════════════════════════ */
+.quote-panel {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden; margin-top: 22px;
+}
+.qp-head {
+  background: linear-gradient(135deg, var(--th-deep) 0%, var(--th-mid) 100%);
+  padding: 16px 24px; display: flex; align-items: center; gap: 12px;
+  transition: background .5s ease;
+}
+.qp-head h2 {
+  font-family: 'Sora', sans-serif; font-size: .88rem; font-weight: 700;
+  color: #fff; text-transform: uppercase; letter-spacing: .08em; flex: 1;
+}
+.qp-pill {
+  font-size: .63rem; font-weight: 800; padding: 4px 12px; border-radius: 20px;
+  background: rgba(255,255,255,.15); color: #fff; letter-spacing: .06em;
+  text-transform: uppercase; border: 1px solid rgba(255,255,255,.22);
+  backdrop-filter: blur(4px);
+}
+.qp-body { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+@media(max-width:700px) {
+  .qp-body { grid-template-columns: 1fr; }
+  .qp-col { border-right: none !important; border-bottom: 1px solid var(--border); }
+}
+.qp-col { padding: 18px 20px; border-right: 1px solid var(--border); }
+.qp-col:last-child { border-right: none; }
+.qp-col-ttl {
+  font-size: .65rem; font-weight: 800; color: var(--th-vivid);
+  text-transform: uppercase; letter-spacing: .1em;
+  margin-bottom: 10px; padding-bottom: 7px;
+  border-bottom: 2px solid var(--th-soft);
+  transition: color .4s, border-color .4s;
+}
+.qrow {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 5px 0; font-size: .79rem;
+  border-bottom: 1px dashed var(--border-lt);
+}
+.qrow:last-of-type { border-bottom: none; }
+.qlbl { color: var(--ink-mid); font-weight: 500; }
+.qval { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.qrow.disc .qval { color: var(--teal); }
+.qrow.bold-r .qlbl { font-weight: 700; color: var(--ink); }
+.qrow.bold-r .qval { font-weight: 800; color: var(--th-mid); font-size: .84rem; }
+.qrow.acc-r .qlbl { color: var(--th-mid); font-weight: 600; }
+.qrow.acc-r .qval { color: var(--th-vivid); font-weight: 700; }
+
+.q-total-col {
+  background: linear-gradient(145deg, var(--th-deep), var(--th-mid));
+  padding: 24px 22px; display: flex; flex-direction: column; justify-content: center;
+  transition: background .5s ease;
+  position: relative; overflow: hidden;
+}
+.q-total-col::before {
+  content: '₹';
+  position: absolute; right: -10px; bottom: -20px;
+  font-size: 9rem; font-family: 'Sora', sans-serif; font-weight: 900;
+  color: rgba(255,255,255,.04); pointer-events: none; line-height: 1;
+  user-select: none;
+}
+.q-ttl-lbl {
+  font-size: .65rem; color: rgba(255,255,255,.55);
+  text-transform: uppercase; letter-spacing: .12em; font-weight: 600; margin-bottom: 6px;
+  line-height: 1.5;
+}
+.q-ttl-amt {
+  font-family: 'Sora', sans-serif; font-size: 1.95rem; font-weight: 900;
+  color: #fff; line-height: 1; font-variant-numeric: tabular-nums;
+}
+.q-ttl-amt .rs { font-size: 1.1rem; opacity: .65; margin-right: 2px; vertical-align: top; line-height: 1.42; }
+.q-ttl-gst {
+  font-size: .61rem; color: var(--amber-lt); margin-top: 7px; font-weight: 500; line-height: 1.4;
+}
+
+/* ═══ PRINT ═════════════════════════════════════════════════ */
+@media print {
+  body { background: #fff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  @page { size: A4 portrait; margin: 1.2cm; }
+  .app-header-bar, .vehicle-switcher, .app-main, .no-print { display: none !important; }
+  .print-doc { display: block !important; }
+}
+.print-doc { display: none; }
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS
+═══════════════════════════════════════════════════════ */
+html, body { overflow-x: hidden; }
+@media (max-width: 768px) {
+  .f-inp, .f-sel, .addon-sub, .disc-g input { font-size: 16px; min-height: 44px; padding: 10px 13px; }
+  .check-block input[type=checkbox], .addon-lbl input[type=checkbox] { width: 20px; height: 20px; flex-shrink: 0; }
+  .card-body { padding: 16px 16px; } .card-header { padding: 12px 16px 10px; } .qp-col { padding: 14px 16px; }
+}
+@media (max-width: 480px) {
+  .vehicle-switcher { padding: 24px 16px 28px; }
+  .vehicle-switcher::before { width: 200px; height: 200px; top: -60px; left: -40px; }
+  .vehicle-switcher::after  { width: 160px; height: 160px; bottom: -40px; right: -20px; }
+  .mode-toggle { padding: 4px; gap: 3px; border-radius: 50px; }
+  .mode-btn { padding: 10px 18px; font-size: .82rem; letter-spacing: .01em; }
+  .mode-btn .m-icon { font-size: 1rem; }
+  .vs-chooser-label { font-size: .62rem; letter-spacing: .14em; }
+  .vs-active-label  { font-size: .68rem; }
+  .app-header-bar-inner { padding: 10px 0; gap: 10px; }
+  .vs-logo { width: 30px; height: 30px; font-size: 14px; }
+  .vs-title { font-size: .82rem; }
+  .app-main { padding: 16px 12px 48px; }
+  .card { margin-bottom: 10px; border-radius: 12px; }
+  .card-body { padding: 14px 12px; }
+  .card-header { padding: 11px 14px 9px; gap: 9px; }
+  .card-header h2 { font-size: .82rem; }
+  .s-num { width: 24px; height: 24px; font-size: .65rem; }
+  .ch-note { display: none; }
+  .cov-tabs { gap: 6px; }
+  .cov-tab-label { padding: 10px 4px; border-radius: 8px; }
+  .tab-icon  { font-size: 1.2rem; }
+  .tab-name  { font-size: .7rem; }
+  .tab-desc  { font-size: .56rem; line-height: 1.2; }
+  .cov-banner { font-size: .72rem; padding: 8px 11px; }
+  .sub-label { margin-bottom: 7px; } .sec-div { margin: 10px 0; }
+  .f-label { font-size: .65rem; letter-spacing: .05em; }
+  .action-row { grid-template-columns: 1fr; gap: 8px; }
+  .btn-calc  { padding: 14px 0; font-size: .88rem; border-radius: 10px; }
+  .btn-print { padding: 12px 0; font-size: .75rem; border-radius: 10px; width: 100%; }
+  .quote-panel { border-radius: 14px; margin-top: 16px; }
+  .qp-head { padding: 12px 16px; }
+  .qp-head h2 { font-size: .78rem; letter-spacing: .05em; }
+  .qp-pill { font-size: .58rem; padding: 3px 8px; }
+  .qp-col-ttl { font-size: .6rem; letter-spacing: .07em; }
+  .qrow { font-size: .75rem; padding: 4px 0; }
+  .q-total-col { padding: 18px 16px; }
+  .q-ttl-lbl { font-size: .6rem; letter-spacing: .09em; }
+  .q-ttl-amt { font-size: 1.65rem; }
+  .q-ttl-gst { font-size: .57rem; }
+  .addon-card { padding: 10px 11px; border-radius: 10px; }
+  .aname { font-size: .78rem; }
+  .atag  { font-size: .53rem; padding: 1px 5px; }
+  .disc-g input { width: 50px; font-size: .74rem; }
+  .check-block { padding: 10px 12px; gap: 10px; border-radius: 10px; }
+  .cbt strong  { font-size: .78rem; }
+  .cbt span    { font-size: .66rem; }
+  input[type=number][style*="width:60px"] { width: 54px !important; font-size: 14px; }
+}
+@media (max-width: 360px) {
+  .mode-btn { padding: 9px 12px; font-size: .76rem; }
+  .mode-btn .m-icon { font-size: .9rem; }
+  .card-body { padding: 12px 10px; }
+  .qp-col    { padding: 12px 12px; }
+  .q-ttl-amt { font-size: 1.45rem; }
+}
 </style>
 </head>
 <body>
@@ -316,8 +595,7 @@ input,select,button,textarea{font-family:inherit}
   <div class="app-header-bar-inner">
     <div class="vs-logo" id="vsLogo">🚗</div>
     <div>
-      <div class="vs-title" id="vsTitle">NIA Motor Premium Calculator</div>
-      <div class="vs-sub">New India Assurance Co. Ltd.</div>
+      <div class="vs-title" id="vsTitle">Motor Premium Calculator</div>
     </div>
   </div>
 </div>
@@ -325,7 +603,7 @@ input,select,button,textarea{font-family:inherit}
 <!-- ════════════ VEHICLE TYPE SELECTOR — HERO ══════════ -->
 <div class="vehicle-switcher" id="switcher">
   <div class="vs-inner">
-    <div class="vs-chooser-label">Select Vehicle Type</div>
+    <div class="vs-chooser-label">Select Vehicle Type to Calculate Premium</div>
     <div class="mode-toggle">
       <button class="mode-btn active" id="btnPC" onclick="setMode('PC')">
         <span class="m-icon">🚗</span>Private Car
@@ -639,7 +917,7 @@ input,select,button,textarea{font-family:inherit}
       <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
       Calculate Premium
     </button>
-    <button class="btn-print" onclick="window.print()">
+    <button class="btn-print" onclick="calculatePC(); window.print()">
       <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
       Print Quote
     </button>
@@ -666,7 +944,8 @@ input,select,button,textarea{font-family:inherit}
         <div class="qrow disc" id="pc_hevRow" style="display:none"><span class="qlbl">HEV 7.5% Disc.</span><span class="qval">− ₹ <span id="pc_lbl_hevDisc">0.00</span></span></div>
         <div class="qrow"><span class="qlbl">Compulsory PA</span><span class="qval">₹ <span id="pc_lbl_pa">0.00</span></span></div>
         <div class="qrow"><span class="qlbl">LL — Paid Driver</span><span class="qval">₹ <span id="pc_lbl_ll">0.00</span></span></div>
-        <div class="qrow acc-r"><span class="qlbl">Add-on Covers</span><span class="qval">₹ <span id="pc_lbl_addons">0.00</span></span></div>
+        <div id="pcAddonsWrap"></div>
+        <div class="qrow acc-r" id="pcAddonsTotalRow" style="display:none; border-top:1px solid var(--border-lt); margin-top:4px; padding-top:6px;"><span class="qlbl">Total Add-ons</span><span class="qval">₹ <span id="pc_lbl_addons">0.00</span></span></div>
       </div>
       <div class="q-total-col">
         <p class="q-ttl-lbl">Total Premium<br>Incl. 18% GST</p>
@@ -725,13 +1004,16 @@ input,select,button,textarea{font-family:inherit}
               <option value="C2">C-2: Bus / Minibus &gt;6 Pass (4-wheel)</option>
               <option value="C3">C-3: Auto 7–17 Pass (3-wheel)</option>
             </optgroup>
+            <optgroup label="── Special Vehicles ──">
+              <option value="D">MISC. &amp; SPECIAL TYPES (CLASS-D)</option>
+            </optgroup>
           </select></div>
         </div>
         <div class="field-g">
           <label class="f-label">Geographical Zone</label>
           <div class="sel-wrap"><select id="cvZone" class="f-sel">
-            <option value="A">Zone A — Mumbai/Delhi/Kolkata/Chennai</option>
-            <option value="B" selected>Zone B — State Capitals</option>
+            <option value="A">Zone A — Metro Cities</option>
+            <option value="B" selected>Zone B — All State Capitals</option>
             <option value="C">Zone C — Rest of India</option>
           </select></div>
         </div>
@@ -752,8 +1034,8 @@ input,select,button,textarea{font-family:inherit}
         <div class="form-grid cols3">
           <div class="field-g">
             <label class="f-label">Gross Vehicle Weight (GVW)</label>
-            <div class="sel-wrap"><select id="cvGVW" class="f-sel">
-              <option value="u7500">Up to 7,500 kg</option>
+            <div class="sel-wrap"><select id="cvGVW" class="f-sel" onchange="cvGvwChange()">
+              <option value="u7500">Up to 7,500 kg - छोटा हांथी /बोलेरो पीक उप</option>
               <option value="7500to12000" selected>7,500 to 12,000 kg</option>
               <option value="12000to20000">12,001 to 20,000 kg</option>
               <option value="20000to40000">20,001 to 40,000 kg</option>
@@ -761,7 +1043,7 @@ input,select,button,textarea{font-family:inherit}
             </select></div>
           </div>
           <div class="field-g hidden" id="cvExactGvwField">
-            <label class="f-label">Exact GVW (kg) — for &gt;12,000 kg loading</label>
+            <label class="f-label">ACTUAL GVW AS PER RC</label>
             <input type="number" id="cvExactGVW" class="f-inp" value="15000" min="12001">
           </div>
           <div class="field-g hidden" id="cvCngKitField">
@@ -818,6 +1100,20 @@ input,select,button,textarea{font-family:inherit}
         </div>
       </div>
 
+      <!-- Class-D specific fields -->
+      <div id="cvClassDFields" class="hidden">
+        <div class="sec-div"></div>
+        <div class="form-grid cols3">
+          <div class="field-g">
+            <label class="f-label">Type of Vehicle (Class D)</label>
+            <div class="sel-wrap"><select id="cvClassDType" class="f-sel">
+              <option value="type1">i) Tractors ≤6 HP, Hearses, Plane Loader</option>
+              <option value="type2" selected>ii) Agri Tractor, Crane/JCB, Other</option>
+            </select></div>
+          </div>
+        </div>
+      </div>
+
       <!-- Common date / IDV fields -->
       <div class="sec-div"></div>
       <div class="form-grid">
@@ -866,13 +1162,8 @@ input,select,button,textarea{font-family:inherit}
             </select></div>
           </div>
           <div class="field-g">
-            <label class="f-label">Policy Duration (months)
-              <span style="font-weight:400;font-style:italic;text-transform:none;letter-spacing:0"> — 12 = full year</span>
-            </label>
-            <input type="number" id="cvPolicyMonths" class="f-inp" value="12" min="1" max="12"
-              style="border-color:var(--cv-amber,#D97706);font-weight:700;color:var(--cv-dark,#1A3D2A)"
-              oninput="this.value=Math.min(12,Math.max(1,parseInt(this.value)||1))"
-              title="Short period: 1–11 months. Short-period rates applied to net premium (GR.12). TP-Only short period policies are not permissible (NB.2).">
+            <label class="f-label">Policy Duration (months)</label>
+            <input type="number" id="cvPolicyMonths" class="f-inp" value="12" min="1" max="12" style="border-color:var(--cv-amber,#D97706);font-weight:700;color:var(--cv-dark,#1A3D2A)" oninput="this.value=Math.min(12,Math.max(1,parseInt(this.value)||1))">
             <p id="cvSpLabel" style="font-size:.67rem;color:var(--cv-amber,#D97706);font-weight:600;margin-top:3px;display:none"></p>
           </div>
         </div>
@@ -890,15 +1181,25 @@ input,select,button,textarea{font-family:inherit}
         <p class="sub-label">Legal Liability Covers</p>
         <div class="check-block neutral" style="align-items:center">
           <input type="checkbox" id="cvLLDriver" style="margin-top:0">
-          <div class="cbt" style="flex:1"><strong>LL to Paid Driver / Cleaner / Conductor</strong><span>₹50 per person · Endt. 40 Sec-4</span></div>
+          <div class="cbt" style="flex:1"><strong>LL to Paid Driver / Cleaner / Conductor / Coolie</strong><span>₹50 per person · Endt. 40 Sec-4</span></div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
             <label style="font-size:.62rem;font-weight:700;color:var(--ink-lite);text-transform:uppercase;letter-spacing:.05em">No. of Persons</label>
             <input type="number" id="cvLLDriverPersons" value="1" min="1" max="10" style="width:60px;border:1.5px solid var(--border);border-radius:6px;padding:4px 8px;font-size:.82rem;font-weight:600;text-align:center;outline:none;background:var(--white)">
           </div>
         </div>
-        <label class="check-block neutral">
+        <label class="check-block neutral" id="cvLlEmpBlock">
           <input type="checkbox" id="cvLLEmployee">
           <div class="cbt"><strong>LL to Employees (Coolie / Loader etc.)</strong><span>₹50 per employee · Endt. 39 Sec-4 · For goods carrying vehicle</span></div>
+        </label>
+      </div>
+
+      <!-- CLASS D OVERTURNING COVER -->
+      <div id="cvOverturningBlock" class="hidden">
+        <div class="sec-div"></div>
+        <p class="sub-label">Overturning Risk Cover (Class-D)</p>
+        <label class="check-block neutral">
+          <input type="checkbox" id="cvOverturning">
+          <div class="cbt"><strong>Enable Overturning Cover</strong><span>0.5% extra on IDV subject to minimum of ₹100. For mobile cranes, excavators, rigs etc.</span></div>
         </label>
       </div>
 
@@ -908,7 +1209,7 @@ input,select,button,textarea{font-family:inherit}
         <p class="sub-label">IMT 23 — Extended Coverage Loading (Sec-4)</p>
         <label class="check-block neutral" style="cursor:pointer">
           <input type="checkbox" id="cvIMT23" style="margin-top:0">
-          <div class="cbt"><strong>IMT 23: Tyre, Tube, Lamps, Mudguards, Bonnet, Bumpers, Paintwork, Headlights</strong><span>15% of gross OD premium (before any discount) · Excess: 50% of assessed loss · Not applicable to Taxi &amp; 2-Wheeler passenger vehicles (Sec.4 IMT No.23 / GR-40)</span></div>
+          <div class="cbt"><strong>IMT 23: Tyre, Tube, Lamps, Mudguards, Bonnet, Bumpers, Paintwork, Headlights</strong><span>15% of gross OD premium (before any discount) · Excess: 50% of assessed loss</span></div>
         </label>
       </div>
 
@@ -935,21 +1236,32 @@ input,select,button,textarea{font-family:inherit}
         <p class="sub-label">Additional Towing Charges (GR-47)</p>
         <div class="form-grid" style="margin-bottom:0">
           <div class="field-g">
-            <label class="f-label">Additional Towing Amount Required (₹) <span style="font-weight:400;font-style:italic">over inbuilt ₹1,500</span></label>
+            <label class="f-label">Additional Towing Amount Required (₹)</label>
             <input type="number" id="cvTowingAmt" class="f-inp" value="0" min="0" max="20000" placeholder="Up to ₹10,000 @ 5% · ₹10,001–₹20,000 @ 7.5%">
           </div>
         </div>
-        <p style="font-size:.67rem;color:var(--ink-lite);margin-top:5px">Inbuilt ₹1,500. Additional: up to ₹10,000 @ 5%; above ₹10,000 up to ₹20,000 @ 7.5% (GR-47).</p>
       </div>
 
       <!-- GEOGRAPHICAL EXTENSION — CV -->
       <div class="sec-div"></div>
       <div id="cvGeoBlock">
         <p class="sub-label">Geographical Extension Beyond India (GR-4 / Endt.1)</p>
-        <label class="check-block neutral" style="cursor:pointer">
-          <input type="checkbox" id="cvGeoExt" style="margin-top:0">
-          <div class="cbt"><strong>Extend Coverage Beyond India</strong><span>Coverage noted in policy endorsement (Endt.1). Extra premium per GR-4 is determined by underwriter based on countries specified — endorsed &amp; charged separately by branch.</span></div>
-        </label>
+        <div class="check-block neutral" style="align-items:center;gap:14px">
+          <input type="checkbox" id="cvGeoExt" style="margin-top:0;flex-shrink:0" onchange="var f=document.getElementById('cvGeoRateFields');if(f)f.style.display=this.checked?'block':'none'">
+          <div class="cbt" style="flex:1"><strong>Extend Coverage Beyond India</strong><span>GR-4 / Endt.1 — OD ₹400 · TP ₹100</span></div>
+        </div>
+        <div id="cvGeoRateFields" style="display:none;margin-top:12px">
+          <div class="form-grid">
+            <div class="field-g">
+              <label class="f-label">OD Geo. Extension Premium (₹)</label>
+              <input type="number" id="cvGeoODPrem" class="f-inp readonly" value="400" readonly>
+            </div>
+            <div class="field-g">
+              <label class="f-label">TP Geo. Extension Premium (₹)</label>
+              <input type="number" id="cvGeoTPPrem" class="f-inp readonly" value="100" readonly>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -965,7 +1277,7 @@ input,select,button,textarea{font-family:inherit}
         <div class="addon-card" id="cv_card_nilDep" data-maxyr="5" data-allow="PKG">
           <div class="addon-top">
             <label class="addon-lbl"><input type="checkbox" id="cv_nilDep" onchange="cvCardToggle('nilDep')">
-              <span><span class="aname">Nil Depreciation</span><div class="ameta"><span class="atag t-cv">All CV Classes</span><span class="atag t-age">≤5 yrs</span><span class="atag t-off hidden" id="cv_dtag_nilDep">Age Exceeded</span></div></span>
+              <span><span class="aname">Nil Depreciation</span><div class="ameta"><span class="atag t-cv">All CV Classes</span><span class="atag t-age">≤5 yrs</span></div></span>
             </label>
             <div class="disc-g"><label>Disc %</label><input type="number" id="cv_disc_nilDep" value="0" min="0" max="100"></div>
           </div>
@@ -973,7 +1285,7 @@ input,select,button,textarea{font-family:inherit}
         <div class="addon-card" id="cv_card_consumables" data-maxyr="5" data-allow="PKG">
           <div class="addon-top">
             <label class="addon-lbl"><input type="checkbox" id="cv_consumables" onchange="cvCardToggle('consumables')">
-              <span><span class="aname">Consumables Cover</span><div class="ameta"><span class="atag t-cv">All CV Classes</span><span class="atag t-age">≤5 yrs</span><span class="atag t-off hidden" id="cv_dtag_consumables">Age Exceeded</span></div></span>
+              <span><span class="aname">Consumables Cover</span><div class="ameta"><span class="atag t-cv">All CV Classes</span><span class="atag t-age">≤5 yrs</span></div></span>
             </label>
             <div class="disc-g"><label>Disc %</label><input type="number" id="cv_disc_consumables" value="0" min="0" max="100"></div>
           </div>
@@ -981,7 +1293,7 @@ input,select,button,textarea{font-family:inherit}
         <div class="addon-card" id="cv_card_rti" data-maxyr="3" data-allow="PKG">
           <div class="addon-top">
             <label class="addon-lbl"><input type="checkbox" id="cv_rti" onchange="cvCardToggle('rti')">
-              <span><span class="aname">Return to Invoice (RTI)</span><div class="ameta"><span class="atag t-cv">Passenger CV ≤1+9</span><span class="atag t-age">≤3 yrs</span><span class="atag t-off hidden" id="cv_dtag_rti">Age Exceeded</span></div></span>
+              <span><span class="aname">Return to Invoice (RTI)</span><div class="ameta"><span class="atag t-cv">Passenger CV ≤1+9</span><span class="atag t-age">≤3 yrs</span></div></span>
             </label>
             <div class="disc-g"><label>Disc %</label><input type="number" id="cv_disc_rti" value="0" min="0" max="100"></div>
           </div>
@@ -989,7 +1301,7 @@ input,select,button,textarea{font-family:inherit}
         <div class="addon-card" id="cv_card_engineProtect" data-maxyr="5" data-allow="PKG">
           <div class="addon-top">
             <label class="addon-lbl"><input type="checkbox" id="cv_engineProtect" onchange="cvCardToggle('engineProtect')">
-              <span><span class="aname">Engine Protect</span><div class="ameta"><span class="atag t-cv">Passenger CV</span><span class="atag t-age">≤5 yrs</span><span class="atag t-off hidden" id="cv_dtag_engineProtect">Age Exceeded</span></div></span>
+              <span><span class="aname">Engine Protect</span><div class="ameta"><span class="atag t-cv">Passenger CV</span><span class="atag t-age">≤5 yrs</span></div></span>
             </label>
             <div class="disc-g"><label>Disc %</label><input type="number" id="cv_disc_engineProtect" value="0" min="0" max="100"></div>
           </div>
@@ -997,14 +1309,14 @@ input,select,button,textarea{font-family:inherit}
         <div class="addon-card" id="cv_card_keyProtect" data-maxyr="5" data-allow="PKG">
           <div class="addon-top">
             <label class="addon-lbl"><input type="checkbox" id="cv_keyProtect" onchange="cvCardToggle('keyProtect')">
-              <span><span class="aname">Key Protect Cover</span><div class="ameta"><span class="atag t-cv">Passenger CV</span><span class="atag t-age">≤5 yrs · ₹375 flat</span><span class="atag t-off hidden" id="cv_dtag_keyProtect">Age Exceeded</span></div></span>
+              <span><span class="aname">Key Protect Cover</span><div class="ameta"><span class="atag t-cv">Passenger CV</span><span class="atag t-age">≤5 yrs · ₹375 flat</span></div></span>
             </label>
           </div>
         </div>
         <div class="addon-card" id="cv_card_tyreAlloy" data-maxyr="3" data-allow="PKG">
           <div class="addon-top">
             <label class="addon-lbl"><input type="checkbox" id="cv_tyreAlloy" onchange="cvCardToggle('tyreAlloy')">
-              <span><span class="aname">Tyre &amp; Alloy Cover</span><div class="ameta"><span class="atag t-cv">Passenger CV</span><span class="atag t-age">≤3 yrs</span><span class="atag t-off hidden" id="cv_dtag_tyreAlloy">Age Exceeded</span></div></span>
+              <span><span class="aname">Tyre &amp; Alloy Cover</span><div class="ameta"><span class="atag t-cv">Passenger CV</span><span class="atag t-age">≤3 yrs</span></div></span>
             </label>
             <div class="disc-g"><label>Disc %</label><input type="number" id="cv_disc_tyreAlloy" value="0" min="0" max="100"></div>
           </div>
@@ -1019,7 +1331,7 @@ input,select,button,textarea{font-family:inherit}
       <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
       Calculate CV Premium
     </button>
-    <button class="btn-print" onclick="window.print()">
+    <button class="btn-print" onclick="calculateCV(); window.print()">
       <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
       Print Quote
     </button>
@@ -1033,6 +1345,7 @@ input,select,button,textarea{font-family:inherit}
         <p class="qp-col-ttl">Own Damage (OD)</p>
         <div class="qrow"><span class="qlbl">Base OD Tariff</span><span class="qval">₹ <span id="cv_lbl_baseOD">0.00</span></span></div>
         <div class="qrow" id="cv_gvwRow"><span class="qlbl">GVW Loading (>12t)</span><span class="qval">₹ <span id="cv_lbl_gvwLoad">0.00</span></span></div>
+        <div class="qrow" id="cv_otRow" style="display:none"><span class="qlbl">Overturning Cover</span><span class="qval">₹ <span id="cv_lbl_otLoad">0.00</span></span></div>
         <div class="qrow disc"><span class="qlbl">Basic OD Disc.</span><span class="qval">− ₹ <span id="cv_lbl_odDisc">0.00</span></span></div>
         <div class="qrow disc"><span class="qlbl">NCB Discount</span><span class="qval">− ₹ <span id="cv_lbl_ncbDisc">0.00</span></span></div>
         <div class="qrow bold-r"><span class="qlbl">Net OD Premium (Annual)</span><span class="qval">₹ <span id="cv_lbl_netOD">0.00</span></span></div>
@@ -1042,21 +1355,23 @@ input,select,button,textarea{font-family:inherit}
         <div class="qrow" id="cvElecRow"><span class="qlbl">Elec. Accessories (4%)</span><span class="qval">₹ <span id="cv_lbl_elec">0.00</span></span></div>
         <div class="qrow" id="cvNonElecRow"><span class="qlbl">Non-Elec. Accessories</span><span class="qval">₹ <span id="cv_lbl_nonElec">0.00</span></span></div>
         <div class="qrow" id="cvTowingRow"><span class="qlbl">Add. Towing Premium</span><span class="qval">₹ <span id="cv_lbl_towing">0.00</span></span></div>
-        <div class="qrow" id="cvGeoRow"><span class="qlbl">Geo. Extension</span><span class="qval">₹ <span id="cv_lbl_geo">0.00</span></span></div>
+        <div class="qrow" id="cvGeoRow"><span class="qlbl">Geo. Ext. — OD</span><span class="qval">₹ <span id="cv_lbl_geo">0.00</span></span></div>
       </div>
       <div class="qp-col" id="cvQColTP">
         <p class="qp-col-ttl">TP / PA / LL &amp; Add-ons</p>
         <div class="qrow"><span class="qlbl">Third Party (TP) <span id="cvTpFullNote" style="font-size:.62rem;color:var(--cv-amber,#D97706);font-weight:600;display:none">— Full Annual</span></span><span class="qval">₹ <span id="cv_lbl_tp">0.00</span></span></div>
         <div class="qrow disc" id="cv_hevRow" style="display:none"><span class="qlbl">HEV 7.5% Disc.</span><span class="qval">− ₹ <span id="cv_lbl_hevDisc">0.00</span></span></div>
         <div class="qrow"><span class="qlbl">Compulsory PA</span><span class="qval">₹ <span id="cv_lbl_pa">0.00</span></span></div>
-        <div class="qrow"><span class="qlbl">LL — Driver</span><span class="qval">₹ <span id="cv_lbl_llDriver">0.00</span></span></div>
+        <div class="qrow"><span class="qlbl">LL — Paid Crew</span><span class="qval">₹ <span id="cv_lbl_llDriver">0.00</span></span></div>
         <div class="qrow"><span class="qlbl">LL — Employees</span><span class="qval">₹ <span id="cv_lbl_llEmp">0.00</span></span></div>
-        <div class="qrow acc-r"><span class="qlbl">Add-on Covers</span><span class="qval">₹ <span id="cv_lbl_addons">0.00</span></span></div>
+        <div id="cvAddonsWrap"></div>
+        <div class="qrow acc-r" id="cvAddonsTotalRow" style="display:none; border-top: 1px solid var(--border-lt); margin-top: 4px; padding-top: 6px;"><span class="qlbl">Total Add-ons</span><span class="qval">₹ <span id="cv_lbl_addons">0.00</span></span></div>
+        <div class="qrow" id="cvGeoTPRow"><span class="qlbl">Geo. Ext. — TP</span><span class="qval">₹ <span id="cv_lbl_geo_tp">0.00</span></span></div>
       </div>
       <div class="q-total-col">
-        <p class="q-ttl-lbl">Total Premium<br>Incl. 18% GST</p>
+        <p class="q-ttl-lbl" id="cv_gst_lbl">Total Premium<br>Incl. 18% GST</p>
         <p class="q-ttl-amt"><span class="rs">₹</span><span id="cv_lbl_grand">0</span></p>
-        <p class="q-ttl-gst">All discounts applied</p>
+        <p class="q-ttl-gst" id="cv_gst_note">All discounts applied</p>
       </div>
     </div>
   </div>
@@ -1066,61 +1381,45 @@ input,select,button,textarea{font-family:inherit}
 </div><!-- /input-area -->
 </main>
 
-<!-- ════════════════════════════════════════════════════════
-     PRINT DOCUMENT
-════════════════════════════════════════════════════════ -->
 <div class="print-doc" id="printDoc"></div>
 
 <!-- ════════════════════════════════════════════════════════
      JAVASCRIPT
 ════════════════════════════════════════════════════════ -->
 <script>
-/* ── HELPERS ─────────────────────────────────────────── */
 const $ = id => document.getElementById(id);
-const show = id => $(id).classList.remove('hidden');
-const hide = id => $(id).classList.add('hidden');
+const show = id => { const el = $(id); if(el) el.classList.remove('hidden'); };
+const hide = id => { const el = $(id); if(el) el.classList.add('hidden'); };
 const sd = (id,v) => { const el=$(id); if(!el)return; v ? el.classList.remove('hidden') : el.classList.add('hidden'); };
 const getV = id => parseFloat($(id).value) || 0;
 const pcCovType = () => document.querySelector('input[name="pcCov"]:checked').value;
 const cvCovType = () => document.querySelector('input[name="cvCov"]:checked').value;
 
-/* ── MODE SWITCHER ────────────────────────────────────── */
-let currentMode = 'PC';
 function setMode(m){
   currentMode = m;
-  $('btnPC').classList.toggle('active', m==='PC');
-  $('btnCV').classList.toggle('active', m==='CV');
-  /* Must use classList — style.display is overridden by .hidden{display:none!important} */
+  const btnPC = $('btnPC');
+  if(btnPC) btnPC.classList.toggle('active', m==='PC');
+  const btnCV = $('btnCV');
+  if(btnCV) btnCV.classList.toggle('active', m==='CV');
   if(m==='PC'){
-    $('pcSection').classList.remove('hidden');
-    $('cvSection').classList.add('hidden');
+    const pcSec = $('pcSection'); if(pcSec) pcSec.classList.remove('hidden');
+    const cvSec = $('cvSection'); if(cvSec) cvSec.classList.add('hidden');
   } else {
-    $('cvSection').classList.remove('hidden');
-    $('pcSection').classList.add('hidden');
+    const cvSec = $('cvSection'); if(cvSec) cvSec.classList.remove('hidden');
+    const pcSec = $('pcSection'); if(pcSec) pcSec.classList.add('hidden');
   }
   document.body.classList.toggle('cv-mode', m==='CV');
-  $('vsLogo').textContent = m==='PC' ? '🚗' : '🚛';
-  $('vsTitle').textContent = 'NIA Motor Premium Calculator';
+  const logo = $('vsLogo'); if(logo) logo.textContent = m==='PC' ? '🚗' : '🚛';
   const lbl = $('vsActiveLbl');
   if(lbl) lbl.textContent = m==='PC' ? 'Private Car — Section 2 Tariff' : 'Commercial Vehicle — Section 4 Tariff';
-  /* Re-run section setup after the section becomes visible */
   if(m==='CV'){ cvCovChange(); cvClassChange(); cvFuelChange(); }
   else { pcCovChange(); }
 }
 
-/* ══════════════════════════════════════════════════════
-   PRIVATE CAR LOGIC
-══════════════════════════════════════════════════════ */
-const PC_BANNERS = {
-  PKG:'Package Policy: Own Damage + Third Party Liability + Compulsory PA. All add-on covers available.',
-  TP:'TP Only: Third Party Liability + Compulsory PA + LL. No OD. No add-ons.',
-  SAOD:'Standalone OD: Own Damage only. No TP · No PA · No LL. Add-ons available by age.'
-};
-
 function pcCovChange(){
   const ct = pcCovType();
-  $('pcCovBanner').innerText = PC_BANNERS[ct];
-  $('pcQpPill').innerText = ct==='PKG'?'Package':ct==='TP'?'TP Only':'SAOD';
+  const banner = $('pcCovBanner'); if(banner) banner.innerText = PC_BANNERS[ct];
+  const qpPill = $('pcQpPill'); if(qpPill) qpPill.innerText = ct==='PKG'?'Package':ct==='TP'?'TP Only':'SAOD';
   sd('pcIdvField', ct!=='TP');
   sd('pcQColOD', ct!=='TP');
   sd('pcOdDiscBlock', ct!=='TP');
@@ -1136,59 +1435,41 @@ function pcVehicleChange(){
   sd('pcKwField', vt==='EV');
   sd('pcCcField', vt!=='EV');
   sd('pcCngKitField', vt==='CNG_KIT');
-  const bcard = $('pc_card_batteryProtect');
-  if(vt==='EV'||vt==='HEV'){
-    bcard.classList.remove('hidden');
-    $('pc_batteryTitle').innerText = vt==='EV'?'Battery Protect (EV)':'Hybrid Protect (HEV)';
-    sd('pc_hevWrap', vt==='HEV');
-  } else {
-    bcard.classList.add('hidden');
-    $('pc_batteryProtect').checked=false; bcard.classList.remove('active');
-  }
   pcRefreshAddons();
 }
 
 function pcUpdateAge(){
   const r=$('pcRegDate').value, p=$('pcPolDate').value;
   if(r&&p){
-    let m=(new Date(p)-new Date(r))/(1000*60*60*24*30.44);
+    let m=Math.floor((new Date(p)-new Date(r))/(1000*60*60*24*30.44));
     if(m<0)m=0;
-    m=Math.floor(m);
-    $('pcAgeDisplay').value=m+' months ('+(m/12).toFixed(1)+' yrs)';
-    $('pcAgeYr').value=(m/12).toFixed(3);
+    const disp = $('pcAgeDisplay'); if(disp) disp.value=m+' months ('+(m/12).toFixed(1)+' yrs)';
+    const yr = $('pcAgeYr'); if(yr) yr.value=(m/12).toFixed(3);
     let br=1;
     if(m<=12)br=1;else if(m<=24)br=2;else if(m<=36)br=3;else if(m<=48)br=4;
     else if(m<=60)br=5;else if(m<=72)br=6;else if(m<=84)br=7;
     else if(m<=120)br=8;else br=11;
-    $('pcAgeBr').value=br;
+    const abr = $('pcAgeBr'); if(abr) abr.value=br;
   } else {
-    $('pcAgeDisplay').value='—';$('pcAgeBr').value=1;$('pcAgeYr').value=0;
+    const disp = $('pcAgeDisplay'); if(disp) disp.value='—';
+    const abr = $('pcAgeBr'); if(abr) abr.value=1;
+    const yr = $('pcAgeYr'); if(yr) yr.value=0;
   }
   pcRefreshAddons();
 }
 
 function pcRefreshAddons(){
-  const ct=pcCovType(), yrF=parseFloat($('pcAgeYr').value)||0;
+  const ct=pcCovType(), ageYrEl=$('pcAgeYr');
+  const yrF = ageYrEl ? parseFloat(ageYrEl.value)||0 : 0;
   document.querySelectorAll('#pcSection .addon-card').forEach(card=>{
     const id=card.id.replace('pc_card_','');
-    if(id==='batteryProtect') return;
     const allow=(card.dataset.allow||'PKG').split(',');
     const maxYr=parseFloat(card.dataset.maxyr)||999;
-    const chk=$('pc_'+id), dtag=$('pc_dtag_'+id);
     const covOk=allow.includes(ct), ageOk=yrF<=maxYr;
-    if(!covOk){ card.classList.add('cov-hidden'); if(chk){chk.checked=false;chk.disabled=true;} }
-    else if(!ageOk){ card.classList.remove('cov-hidden','active'); card.classList.add('age-disabled'); if(chk){chk.checked=false;chk.disabled=true;} if(dtag)dtag.classList.remove('hidden'); }
-    else { card.classList.remove('cov-hidden','age-disabled'); if(chk)chk.disabled=false; if(dtag)dtag.classList.add('hidden'); }
+    if(!covOk){ card.classList.add('cov-hidden'); }
+    else if(!ageOk){ card.classList.remove('cov-hidden','active'); card.classList.add('age-disabled'); }
+    else { card.classList.remove('cov-hidden','age-disabled'); }
   });
-  // Battery card
-  const bc=$('pc_card_batteryProtect');
-  if(!bc.classList.contains('hidden')){
-    const covOk=['PKG','SAOD'].includes(ct), ageOk=yrF<=3;
-    const chk=$('pc_batteryProtect'), dtag=$('pc_dtag_batteryProtect');
-    if(!covOk){bc.classList.add('cov-hidden');if(chk){chk.checked=false;chk.disabled=true;}}
-    else if(!ageOk){bc.classList.remove('cov-hidden','active');bc.classList.add('age-disabled');if(chk){chk.checked=false;chk.disabled=true;}if(dtag)dtag.classList.remove('hidden');}
-    else{bc.classList.remove('cov-hidden','age-disabled');if(chk)chk.disabled=false;if(dtag)dtag.classList.add('hidden');}
-  }
 }
 
 function pcCardToggle(id){
@@ -1199,22 +1480,13 @@ function pcCardToggle(id){
 function calculatePC(){
   pcUpdateAge();
   const ct=pcCovType(), vt=$('pcVehicleType').value, zone=$('pcZone').value;
-  const br=parseInt($('pcAgeBr').value)||1, yrF=parseFloat($('pcAgeYr').value)||0;
+  const abr = $('pcAgeBr');
+  const br = abr ? parseInt(abr.value)||1 : 1;
   const idv=ct!=='TP'?(getV('pcIDV')):0;
   const cc=$('pcCC').value, kw=$('pcKW').value;
   const ncbPct=parseFloat($('pcNCB').value)||0;
   const isHighCC=(cc==='over1500'&&vt!=='EV');
 
-  // IDV warning
-  if(ct!=='TP'){
-    let minI=15000;
-    if(vt!=='EV'){if(cc==='1000to1500')minI=20000;if(cc==='over1500')minI=30000;}
-    const w=$('pcIdvWarn');
-    if(idv>0&&idv<minI){w.innerText=`⚠️ Min IDV: ₹${minI.toLocaleString('en-IN')}`;w.classList.remove('hidden');}
-    else w.classList.add('hidden');
-  }
-
-  /* OD */
   let baseOD=0,odDiscAmt=0,ncbAmt=0,netOD=0;
   if(ct!=='TP'){
     let r=0;
@@ -1240,7 +1512,6 @@ function calculatePC(){
     netOD=Math.max(0,afterBasic-ncbAmt);
   }
 
-  /* TP */
   let tp=0,hevDisc=0;
   if(ct!=='SAOD'){
     if(vt==='EV')tp=kw==='under30'?1780:kw==='30to65'?2904:6712;
@@ -1248,19 +1519,12 @@ function calculatePC(){
     if(vt==='HEV')hevDisc=tp*0.075;
   }
   const netTP=tp-hevDisc;
+  const paCb = $('pcCompPA');
+  const pa = ct!=='SAOD' && paCb && paCb.checked ? 275 : 0;
+  const llCb = $('pcLL');
+  const ll = ct!=='SAOD' && llCb && llCb.checked ? 50 : 0;
 
-  /* PA & LL */
-  const pa=ct!=='SAOD'&&$('pcCompPA').checked?275:0;
-  const ll=ct!=='SAOD'&&$('pcLL').checked?50:0;
-
-  /* Add-ons */
   let addons=0; const cov=[]; const _adLines=[];
-  if(ct!=='TP') cov.push('Own Damage Cover');
-  cov.push('Third Party Liability');  /* TP always included for both PKG and TP-Only */
-  if(pa)cov.push('Owner-Driver PA — ₹15L');
-  if(ll)cov.push('LL — Paid Driver');
-  /* pcGeoExt cov.push is below, after const declarations */
-
   const aOn=(id)=>{const c=$('pc_'+id);return c&&!c.disabled&&c.checked;};
   const dsc=(id)=>{const e=$('pc_disc_'+id);return e?Math.min(100,Math.max(0,getV('pc_disc_'+id))):0;};
 
@@ -1268,85 +1532,104 @@ function calculatePC(){
     const cl=$('pc_nilDepClaims').value;
     const rL={1:{'2':0.38,'4':0.58,'unlimited':0.86},2:{'2':0.48,'4':0.72,'unlimited':1.08},3:{'2':0.62,'4':0.94,'unlimited':1.40},4:{'2':0.81,'4':1.22,'unlimited':1.84},5:{'2':1.00,'4':1.51,'unlimited':2.27},6:{'2':1.19,'4':1.80,'unlimited':2.70},7:{'2':1.38,'4':2.09,'unlimited':3.13}};
     const rH={1:{'2':0.43,'4':0.65,'unlimited':0.97},2:{'2':0.52,'4':0.79,'unlimited':1.19},3:{'2':0.67,'4':1.00,'unlimited':1.51},4:{'2':0.86,'4':1.29,'unlimited':1.94},5:{'2':1.05,'4':1.58,'unlimited':2.37},6:{'2':1.24,'4':1.86,'unlimited':2.80},7:{'2':1.43,'4':2.15,'unlimited':3.23}};
-    const rate=(isHighCC?rH:rL)[br]?.(cl)||0;
-    const _nilA=((rate/100)*idv)*(1-dsc('nilDep')/100);addons+=_nilA;_adLines.push({l:`Nil Depreciation (${cl} Claims)`,a:_nilA});cov.push(`Nil Dep (${cl} claims)`);
+    const table = isHighCC ? rH : rL;
+    const rate = table[br] ? (table[br][cl] || 0) : 0;
+    const _a=((rate/100)*idv)*(1-dsc('nilDep')/100);addons+=_a;_adLines.push({l:`Nil Depreciation (${cl} Claims)`,a:_a});cov.push(`Nil Dep (${cl} claims)`);
   }
   if(aOn('engineProtect')){
     const et=$('pc_engineProtectType').value;
     const rate=et==='with'?({1:0.26,2:0.28,3:0.30,4:0.35,5:0.40}[br]||0.25):0.25;
-    const _epA=((rate/100)*idv)*(1-dsc('engineProtect')/100);addons+=_epA;_adLines.push({l:'Engine Protect Cover',a:_epA});cov.push('Engine Protect');
+    const _a=((rate/100)*idv)*(1-dsc('engineProtect')/100);addons+=_a;_adLines.push({l:'Engine Protect Cover',a:_a});cov.push('Engine Protect');
   }
-  if(aOn('rti')){const r={1:0.21,2:0.44,3:0.71}[br]||0;const _rtiA=((r/100)*idv)*(1-dsc('rti')/100);addons+=_rtiA;_adLines.push({l:'Return to Invoice (RTI)',a:_rtiA});cov.push('RTI');}
-  if(aOn('consumables')){const r={1:0.14,2:0.16,3:0.18,4:0.21,5:0.25}[br]||0;const _conA=((r/100)*idv)*(1-dsc('consumables')/100);addons+=_conA;_adLines.push({l:'Consumables Cover',a:_conA});cov.push('Consumables');}
-  if(aOn('tyreAlloy')){const r={1:0.20,2:0.25,3:0.30}[br]||0;const _taA=((r/100)*idv)*(1-dsc('tyreAlloy')/100);addons+=_taA;_adLines.push({l:'Tyre & Alloy Cover',a:_taA});cov.push('Tyre & Alloy');}
-  if(aOn('keyProtect')){addons+=250;_adLines.push({l:'Key Protect Cover',a:250});cov.push('Key Protect — ₹250');}
-  if(aOn('personalBelonging')){addons+=500;_adLines.push({l:'Personal Belonging Cover',a:500});cov.push('Personal Belonging — ₹500');}
-  if(aOn('lossContents')){addons+=140;_adLines.push({l:'Loss of Contents Cover',a:140});cov.push('Loss of Contents — ₹140');}
+  if(aOn('rti')){const r={1:0.21,2:0.44,3:0.71}[br]||0;const _a=((r/100)*idv)*(1-dsc('rti')/100);addons+=_a;_adLines.push({l:'Return to Invoice (RTI)',a:_a});cov.push('RTI');}
+  if(aOn('consumables')){const r={1:0.14,2:0.16,3:0.18,4:0.21,5:0.25}[br]||0;const _a=((r/100)*idv)*(1-dsc('consumables')/100);addons+=_a;_adLines.push({l:'Consumables Cover',a:_a});cov.push('Consumables');}
+  if(aOn('tyreAlloy')){const r={1:0.20,2:0.25,3:0.30}[br]||0;const _a=((r/100)*idv)*(1-dsc('tyreAlloy')/100);addons+=_a;_adLines.push({l:'Tyre & Alloy Cover',a:_a});cov.push('Tyre & Alloy');}
+  if(aOn('keyProtect')){addons+=250;_adLines.push({l:'Key Protect Cover',a:250});cov.push('Key Protect');}
+  if(aOn('personalBelonging')){addons+=500;_adLines.push({l:'Personal Belonging Cover',a:500});cov.push('Personal Belonging');}
+  if(aOn('lossContents')){addons+=140;_adLines.push({l:'Loss of Contents Cover',a:140});cov.push('Loss of Contents');}
   if(aOn('ncbProtect')){
     const rates={0:8.5,20:10.63,25:14.88,35:19.13,45:21.25,50:21.25};
-    const _ncbPA=(rates[ncbPct]||8.5)/100*Math.max(0,baseOD-odDiscAmt);addons+=_ncbPA;_adLines.push({l:'NCB Protection Cover',a:_ncbPA});cov.push('NCB Protection');
+    const _a=(rates[ncbPct]||8.5)/100*Math.max(0,baseOD-odDiscAmt);addons+=_a;_adLines.push({l:'NCB Protection Cover',a:_a});cov.push('NCB Protection');
   }
-  if(aOn('rsa')){const _rsaA=$('pc_rsaType').value==='basic'?50:60;addons+=_rsaA;_adLines.push({l:'Roadside Assistance (RSA)',a:_rsaA});cov.push('RSA');}
+  if(aOn('rsa')){const _a=$('pc_rsaType').value==='basic'?50:60;addons+=_a;_adLines.push({l:'Roadside Assistance (RSA)',a:_a});cov.push('RSA');}
   if(aOn('batteryProtect')){
     let bp=0;
     if(vt==='EV'){bp={1:0.27,2:0.29,3:0.31}[br]||0;cov.push('Battery Protect (EV)');}
     else if(vt==='HEV'){const ht=$('pc_hevType').value;bp=ht==='basic'?({1:0.20,2:0.25,3:0.30}[br]||0):({1:0.43,2:0.50,3:0.57}[br]||0);cov.push('Hybrid Protect');}
-    const _bpA=((bp/100)*idv)*(1-dsc('batteryProtect')/100);addons+=_bpA;if(_bpA>0)_adLines.push({l:vt==='EV'?'Battery Protect (EV)':'Hybrid Protect (HEV)',a:_bpA});
+    const _a=((bp/100)*idv)*(1-dsc('batteryProtect')/100);addons+=_a;if(_a>0)_adLines.push({l:vt==='EV'?'Battery Protect (EV)':'Hybrid Protect (HEV)',a:_a});
   }
 
-  /* Electrical accessories: 4% on declared value (GR-41) */
+  const pcAddonsWrap = $('pcAddonsWrap');
+  if(pcAddonsWrap) {
+      pcAddonsWrap.innerHTML = '';
+      if (_adLines.length > 0) {
+        _adLines.forEach(it => {
+          pcAddonsWrap.innerHTML += `<div class="qrow acc-r" style="font-size:.73rem; border-bottom:1px dashed var(--border-lt); padding: 4px 0;"><span class="qlbl">↳ ${it.l}</span><span class="qval">₹ ${it.a.toFixed(2)}</span></div>`;
+        });
+        const totalRow = $('pcAddonsTotalRow'); if(totalRow) totalRow.style.display = 'flex';
+      } else {
+        pcAddonsWrap.innerHTML = `<div class="qrow acc-r"><span class="qlbl">Add-on Covers</span><span class="qval">₹ 0.00</span></div>`;
+        const totalRow = $('pcAddonsTotalRow'); if(totalRow) totalRow.style.display = 'none';
+      }
+  }
+
   const pcElecPrem = getV('pcElecVal') * 0.04;
   const pcNonElecPrem = getV('pcNonElecVal') * 0.04;
-  /* Additional towing: up to ₹1,500 @ 5% (GR-47) */
   const pcTowPrem = Math.min(getV('pcTowingAmt'), 1500) * 0.05;
-  /* Geographical extension: informational only (GR-4, Endt.1) */
-  const pcGeoExt = $('pcGeoExt').checked;
+  const geoExtCb = $('pcGeoExt');
+  const pcGeoExt = geoExtCb ? geoExtCb.checked : false;
   if(pcGeoExt) cov.push('Geographical Extension (GR-4) — premium per branch');
   const grand=Math.round((netOD+netTP+pa+ll+addons+pcElecPrem+pcNonElecPrem+pcTowPrem)*1.18);
 
-  /* Update UI */
-  $('pc_lbl_baseOD').innerText=baseOD.toFixed(2);
-  $('pc_lbl_odDisc').innerText=odDiscAmt.toFixed(2);
-  $('pc_lbl_ncbDisc').innerText=ncbAmt.toFixed(2);
-  $('pc_lbl_netOD').innerText=netOD.toFixed(2);
-  $('pc_lbl_tp').innerText=tp.toFixed(2);
-  $('pc_lbl_hevDisc').innerText=hevDisc.toFixed(2);
-  $('pc_lbl_pa').innerText=pa.toFixed(2);
-  $('pc_lbl_ll').innerText=ll.toFixed(2);
-  $('pc_lbl_addons').innerText=addons.toFixed(2);
-  $('pc_lbl_elec').innerText=pcElecPrem.toFixed(2);
-  $('pc_lbl_nonElec').innerText=pcNonElecPrem.toFixed(2);
-  $('pc_lbl_towing').innerText=pcTowPrem.toFixed(2);
-  $('pc_lbl_geo').innerText='0.00';
+  const setT = (id, val) => { const el = $(id); if(el) el.innerText = val; };
+  setT('pc_lbl_baseOD', baseOD.toFixed(2));
+  setT('pc_lbl_odDisc', odDiscAmt.toFixed(2));
+  setT('pc_lbl_ncbDisc', ncbAmt.toFixed(2));
+  setT('pc_lbl_netOD', netOD.toFixed(2));
+  setT('pc_lbl_tp', tp.toFixed(2));
+  setT('pc_lbl_hevDisc', hevDisc.toFixed(2));
+  setT('pc_lbl_pa', pa.toFixed(2));
+  setT('pc_lbl_ll', ll.toFixed(2));
+  setT('pc_lbl_addons', addons.toFixed(2));
+  setT('pc_lbl_elec', pcElecPrem.toFixed(2));
+  setT('pc_lbl_nonElec', pcNonElecPrem.toFixed(2));
+  setT('pc_lbl_towing', pcTowPrem.toFixed(2));
+  setT('pc_lbl_geo', '0.00');
+  
   sd('pcElecRow',pcElecPrem>0);
   sd('pcNonElecRow',pcNonElecPrem>0);
   sd('pcTowingRow',pcTowPrem>0);
   sd('pcGeoRow', false);
-  $('pc_lbl_grand').innerText=grand.toLocaleString('en-IN');
+  animateCounter('pc_lbl_grand', grand);
   sd('pc_hevRow',hevDisc>0);
 
-  /* Print */
   const vEl=$('pcVehicleType');
+  const specText = vEl ? vEl.options[vEl.selectedIndex].text : '';
+  const zEl = $('pcZone');
+  const zoneText = zEl ? zEl.options[zEl.selectedIndex].text : '';
+  const ageDisp = $('pcAgeDisplay');
+  const ageText = ageDisp ? ageDisp.value : '';
+
   buildPrintDoc({
     mode:'PC', date:new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'}),
     covType: ct==='PKG'?'Package Policy':ct==='TP'?'TP Only':'Standalone OD',
-    vehType:'Private Car', spec:vEl.options[vEl.selectedIndex].text.split('(')[0].trim(),
-    zone: $('pcZone').options[$('pcZone').selectedIndex].text,
+    vehType:'Private Car', spec:specText,
+    zone: zoneText,
     idv: ct!=='TP'?Math.round(idv).toLocaleString('en-IN'):'N/A',
-    age: $('pcAgeDisplay').value, ncbPct,
+    age: ageText,
+    ncbPct,
     od:{ show:ct!=='TP', base:baseOD, discOD:odDiscAmt, discNCB:ncbAmt, net:netOD,
-         elec:pcElecPrem, nonElec:pcNonElecPrem, tow:pcTowPrem, geo:0 },
-    tp:{ show:ct!=='SAOD', base:tp, hev:hevDisc, pa, ll, llEmp:0 },
+         elec:pcElecPrem, nonElec:pcNonElecPrem, tow:pcTowPrem, geo:0, geoTp:0, gvwLoad:0, otLoad:0, imt23:0, spFactor:null },
+    tp:{ show:ct!=='SAOD', base:tp, hev:hevDisc, pa, ll, llEmp:0, geo:0 },
     addons:{ items:_adLines, total:addons },
-    gst:{ split:false, total:grand-Math.round(netOD+netTP+pa+ll+addons+pcElecPrem+pcNonElecPrem+pcTowPrem) },
-    grand, cov
+    gst:{ split:false, rate:18, odGst:0, tpGst:0, total:grand-Math.round((netOD+netTP+pa+ll+addons+pcElecPrem+pcNonElecPrem+pcTowPrem)) },
+    grand, cov, policyMonths: 12
   });
 }
 
 /* ══════════════════════════════════════════════════════
-   COMMERCIAL VEHICLE LOGIC
+   COMMERCIAL VEHICLE / CLASS-D LOGIC
 ══════════════════════════════════════════════════════ */
-
 
 const CV_BANNERS = {
   PKG: 'Package Policy: Own Damage + Third Party Liability + Compulsory PA. All add-on covers available per vehicle class and age.',
@@ -1356,19 +1639,17 @@ const CV_BANNERS = {
 function cvCovChange(){
   const ct = cvCovType();
   const _banner=$('cvCovBanner'); if(_banner) _banner.innerText = CV_BANNERS[ct] || CV_BANNERS.PKG;
-  $('cvQpPill').innerText    = ct==='PKG' ? 'Package' : 'TP Only';
-  /* OD section — Package only */
+  const pill = $('cvQpPill'); if(pill) pill.innerText = ct==='PKG' ? 'Package' : 'TP Only';
   sd('cvIdvField',    ct !== 'TP');
   sd('cvQColOD',      ct !== 'TP');
   sd('cvOdDiscBlock', ct !== 'TP');
   sd('cvImt23Block',  ct !== 'TP');
   sd('cvElecBlock',   ct !== 'TP');
   sd('cvTowingBlock', ct !== 'TP');
-  sd('cvGeoBlock',    ct !== 'TP');
-  /* PA + LL — both PKG and TP Only (no SAOD in CV) */
+  sd('cvGeoBlock',    true);
+  sd('cvGeoODField',  ct !== 'TP');
   sd('cvPaBlock', true);
   sd('cvLlBlock', true);
-  /* TP quote column — always visible */
   sd('cvQColTP', true);
   ct === 'TP' ? show('cvTpNotice') : hide('cvTpNotice');
   cvRefreshAddons();
@@ -1376,15 +1657,30 @@ function cvCovChange(){
 
 function cvClassChange(){
   const cl=$('cvClass').value;
-  const isGoods=['A1','A2','A3','A4'].includes(cl);
+  const isGoods=['A1','A3'].includes(cl);
   const isPass=['C1a','C1b','C2','C3'].includes(cl);
-  sd('cvGoodsFields',isGoods);
-  sd('cvPassFields',isPass);
-  // Bus-specific fields
+  const isClassD=(cl==='D');
+  
+  sd('cvGoodsFields', isGoods);
+  sd('cvPassFields', isPass);
+  sd('cvClassDFields', isClassD);
+  sd('cvOverturningBlock', isClassD);
+  sd('cvLlEmpBlock', !isClassD);
+
   const isBus=cl==='C2';
-  sd('cvBusCapField',isBus);sd('cvBusTypeField',isBus);
-  sd('cvPassCapField',!isBus&&isPass);
-  // Show GVW loading field only when GVW > 12000
+  sd('cvBusCapField', false); 
+  sd('cvBusTypeField',isBus);
+  sd('cvPassCapField', isPass);
+
+  const passCapField = $('cvPassCapField');
+  if(passCapField) {
+      const passCapLbl = passCapField.querySelector('.f-label');
+      if (passCapLbl) {
+        if (isBus) passCapLbl.innerText = "Seating Capacity As Per RC";
+        else passCapLbl.innerText = "Licensed Passenger Capacity";
+      }
+  }
+
   cvGvwChange();
   cvRefreshAddons();
 }
@@ -1392,15 +1688,14 @@ function cvClassChange(){
 function cvGvwChange(){
   const gvw=$('cvGVW').value;
   const needsExact=['12000to20000','20000to40000','over40000'].includes(gvw);
-  sd('cvExactGvwField',needsExact);
+  sd('cvExactGvwField', needsExact && ['A1','A3'].includes($('cvClass').value));
 }
 
 function cvFuelChange(){
-  const ft=$('cvFuelType').value;
-  sd('cvKwFieldWrap',ft==='ev');
-  sd('cvCcFieldWrap',ft!=='ev');
-  sd('cvCngKitField',ft==='cng_kit');
-  sd('cvCngKitPassField',ft==='cng_kit');
+  sd('cvKwFieldWrap',$('cvFuelType').value==='ev');
+  sd('cvCcFieldWrap',$('cvFuelType').value!=='ev');
+  sd('cvCngKitField',$('cvFuelType').value==='cng_kit');
+  sd('cvCngKitPassField',$('cvFuelType').value==='cng_kit');
 }
 
 function cvUpdateAge(){
@@ -1408,29 +1703,30 @@ function cvUpdateAge(){
   if(r&&p){
     let m=Math.floor((new Date(p)-new Date(r))/(1000*60*60*24*30.44));
     if(m<0)m=0;
-    $('cvAgeDisplay').value=m+' months ('+(m/12).toFixed(1)+' yrs)';
-    $('cvAgeYr').value=(m/12).toFixed(3);
-    // CV uses 3 age bands: ≤5, 5-7, >7
+    const disp = $('cvAgeDisplay'); if(disp) disp.value=m+' months ('+(m/12).toFixed(1)+' yrs)';
+    const yr = $('cvAgeYr'); if(yr) yr.value=(m/12).toFixed(3);
     let br=1;
-    if(m<=60)br=1;else if(m<=84)br=2;else br=3;
-    $('cvAgeBr').value=br;
+    if(m<=60)br=1; else if(m<=84)br=2; else br=3;
+    const abr = $('cvAgeBr'); if(abr) abr.value=br;
   } else {
-    $('cvAgeDisplay').value='—';$('cvAgeBr').value=1;$('cvAgeYr').value=0;
+    const disp = $('cvAgeDisplay'); if(disp) disp.value='—';
+    const abr = $('cvAgeBr'); if(abr) abr.value=1;
+    const yr = $('cvAgeYr'); if(yr) yr.value=0;
   }
   cvRefreshAddons();
 }
 
 function cvRefreshAddons(){
-  const ct=cvCovType(), yrF=parseFloat($('cvAgeYr').value)||0;
+  const ct=cvCovType();
+  const yr = $('cvAgeYr');
+  const yrF=yr ? parseFloat(yr.value)||0 : 0;
   document.querySelectorAll('#cvSection .addon-card').forEach(card=>{
-    const id=card.id.replace('cv_card_','');
     const allow=(card.dataset.allow||'PKG').split(',');
     const maxYr=parseFloat(card.dataset.maxyr)||999;
-    const chk=$('cv_'+id), dtag=$('cv_dtag_'+id);
     const covOk=allow.includes(ct), ageOk=yrF<=maxYr;
-    if(!covOk){card.classList.add('cov-hidden');if(chk){chk.checked=false;chk.disabled=true;}}
-    else if(!ageOk){card.classList.remove('cov-hidden','active');card.classList.add('age-disabled');if(chk){chk.checked=false;chk.disabled=true;}if(dtag)dtag.classList.remove('hidden');}
-    else{card.classList.remove('cov-hidden','age-disabled');if(chk)chk.disabled=false;if(dtag)dtag.classList.add('hidden');}
+    if(!covOk){card.classList.add('cov-hidden');}
+    else if(!ageOk){card.classList.remove('cov-hidden','active');card.classList.add('age-disabled');}
+    else{card.classList.remove('cov-hidden','age-disabled');}
   });
 }
 
@@ -1443,66 +1739,76 @@ function calculateCV(){
   cvUpdateAge();
   const ct=cvCovType(), cl=$('cvClass').value;
   const zone=$('cvZone').value, ft=$('cvFuelType').value;
-  const br=parseInt($('cvAgeBr').value)||1;
-  const yrF=parseFloat($('cvAgeYr').value)||0;
+  const abr = $('cvAgeBr');
+  const br=abr ? parseInt(abr.value)||1 : 1;
+  const yrFEl = $('cvAgeYr');
+  const yrF=yrFEl ? parseFloat(yrFEl.value)||0 : 0;
   const idv=ct!=='TP'?getV('cvIDV'):0;
   const ncbPct=parseFloat($('cvNCB').value)||0;
-  const isGoods=['A1','A2','A3','A4'].includes(cl);
+  const isGoods=['A1','A3'].includes(cl);
   const isPass=['C1a','C1b','C2','C3'].includes(cl);
+  const isClassD=(cl==='D');
 
-  /* ── OD RATE LOOKUP ── */
-  let baseOD=0, gvwLoad=0;
+  let baseOD=0, gvwLoad=0, otLoad=0;
   if(ct!=='TP'){
-    // Goods carrying OD rates (3 zones A/B/C, 3 age bands ≤5/5-7/>7)
     const goodsRates={
       A1:{ A:[1.751,1.795,1.839], B:[1.743,1.787,1.830], C:[1.726,1.770,1.812] },
       A3:{ A:[1.664,1.706,1.747], B:[1.656,1.697,1.739], C:[1.640,1.681,1.722] },
     };
-    // Passenger C1a: 2 zones (A/B), 3 CC bands, 3 age bands
     const c1aRates={
       A:{ under1000:[3.612,3.366,3.793], '1000to1500':[3.448,3.703,3.620], over1500:[3.284,3.534,3.448] },
       B:{ under1000:[3.191,3.271,3.351], '1000to1500':[3.351,3.435,3.519], over1500:[3.510,3.598,3.686] },
     };
-    // C1b 3-wheeler taxi ≤6 pass: 3 zones, 3 age bands
     const c1bRates={ A:[1.272,1.304,1.336], B:[1.278,1.310,1.342], C:[1.260,1.292,1.328] };
-    // C2 bus >6 pass: zones A/B/C, 3 age bands (flat %)
     const c2Rates={ A:[1.680,1.722,1.764], B:[1.672,1.714,1.756], C:[1.656,1.697,1.739] };
-    // C2 fixed portion by capacity band
     const c2Fixed={ '7to18':350, '19to36':450, '37to60':550, 'over60':680 };
-    // C3 auto 7-17 pass: 3 zones, 3 age bands
     const c3Rates={ A:[1.785,1.830,1.874], B:[1.777,1.821,1.866], C:[1.759,1.803,1.847] };
+    const dRates = { A: [1.208, 1.238, 1.268], B: [1.202, 1.232, 1.262], C: [1.190, 1.220, 1.250] };
 
-    const abi=br-1; // age band index 0/1/2
+    const abi=br-1;
 
     if(isGoods){
-      const r=goodsRates[cl]?.[zone]?.[abi]||0;
+      const zoneGrp = goodsRates[cl] ? goodsRates[cl][zone] : null;
+      const r = zoneGrp ? (zoneGrp[abi] || 0) : 0;
       baseOD=(r/100)*idv;
-      // GVW >12000: extra ₹27 per 100kg
       const gvwBand=$('cvGVW').value;
       if(['12000to20000','20000to40000','over40000'].includes(gvwBand)){
         const exactGVW=getV('cvExactGVW')||15000;
-        const excessKg=Math.max(0,exactGVW-12000);
-        gvwLoad=Math.ceil(excessKg/100)*27;
+        gvwLoad=Math.max(0, ((exactGVW - 12000) / 100) * 27);
         baseOD+=gvwLoad;
       }
     } else if(cl==='C1a'){
       const cc=$('cvCC').value;
       const zoneKey=zone==='A'?'A':'B';
-      const r=c1aRates[zoneKey]?.[cc]?.[abi]||0;
+      const zoneGrp = c1aRates[zoneKey] ? c1aRates[zoneKey][cc] : null;
+      const r = zoneGrp ? (zoneGrp[abi] || 0) : 0;
       baseOD=(r/100)*idv;
     } else if(cl==='C1b'){
-      const r=c1bRates[zone]?.[abi]||0;
+      const r = c1bRates[zone] ? (c1bRates[zone][abi] || 0) : 0;
       baseOD=(r/100)*idv;
     } else if(cl==='C2'){
-      const r=c2Rates[zone]?.[abi]||0;
-      const fixed=c2Fixed[$('cvBusCap').value]||350;
+      const r = c2Rates[zone] ? (c2Rates[zone][abi] || 0) : 0;
+      const passCap = parseInt($('cvPassCap').value) || 20;
+      let busCapBand = '';
+      if(passCap <= 18) busCapBand = '7to18';
+      else if(passCap <= 36) busCapBand = '19to36';
+      else if(passCap <= 60) busCapBand = '37to60';
+      else busCapBand = 'over60';
+      const fixed=c2Fixed[busCapBand]||350;
       baseOD=fixed+((r/100)*idv);
     } else if(cl==='C3'){
-      const r=c3Rates[zone]?.[abi]||0;
+      const r = c3Rates[zone] ? (c3Rates[zone][abi] || 0) : 0;
       baseOD=(r/100)*idv;
+    } else if(isClassD){
+      const r = dRates[zone] ? (dRates[zone][abi] || 1.20) : 1.20;
+      baseOD = (r/100) * idv;
+      const otCb = $('cvOverturning');
+      if(otCb && otCb.checked){
+        otLoad = Math.max(100, (0.5/100) * idv);
+        baseOD += otLoad;
+      }
     }
 
-    // CNG/LPG OD loading
     if(ft==='cng_kit'){
       const kitVal=getV(isGoods?'cvCngKitVal':'cvCngKitPassVal');
       baseOD+=kitVal>0?kitVal*0.04:baseOD*0.05;
@@ -1514,39 +1820,41 @@ function calculateCV(){
     const ncbAmt=(ncbPct/100)*afterBasic;
     var finalOdDisc=odDiscAmt, finalNcb=ncbAmt;
     var netOD_val=Math.max(0,afterBasic-ncbAmt);
-    $('cv_lbl_baseOD').innerText=(baseOD-gvwLoad).toFixed(2);
-    $('cv_lbl_gvwLoad').innerText=gvwLoad.toFixed(2);
-    $('cv_lbl_odDisc').innerText=odDiscAmt.toFixed(2);
-    $('cv_lbl_ncbDisc').innerText=ncbAmt.toFixed(2);
-    $('cv_lbl_netOD').innerText=netOD_val.toFixed(2);
+    
+    const setT = (id, val) => { const el = $(id); if(el) el.innerText = val; };
+    setT('cv_lbl_baseOD', (baseOD-gvwLoad-otLoad).toFixed(2));
+    setT('cv_lbl_gvwLoad', gvwLoad.toFixed(2));
+    setT('cv_lbl_otLoad', otLoad.toFixed(2));
+    setT('cv_lbl_odDisc', odDiscAmt.toFixed(2));
+    setT('cv_lbl_ncbDisc', ncbAmt.toFixed(2));
+    setT('cv_lbl_netOD', netOD_val.toFixed(2));
+
     sd('cv_gvwRow',gvwLoad>0);
+    sd('cv_otRow', otLoad>0);
     var netOD=netOD_val;
   } else {
     var netOD=0, finalOdDisc=0, finalNcb=0;
-    $('cv_lbl_baseOD').innerText='0.00';$('cv_lbl_gvwLoad').innerText='0.00';
-    $('cv_lbl_odDisc').innerText='0.00';$('cv_lbl_ncbDisc').innerText='0.00';
-    $('cv_lbl_netOD').innerText='0.00';
+    const setT = (id, val) => { const el = $(id); if(el) el.innerText = val; };
+    setT('cv_lbl_baseOD', '0.00'); setT('cv_lbl_gvwLoad', '0.00'); setT('cv_lbl_otLoad', '0.00');
+    setT('cv_lbl_odDisc', '0.00'); setT('cv_lbl_ncbDisc', '0.00'); setT('cv_lbl_netOD', '0.00');
   }
 
-  /* ── TP LOOKUP ── always calculated in CV (both PKG and TP Only) */
   let tp=0, hevDisc=0;
   {
-    // Goods A1/A2 & A3/A4 TP (PAN India, by GVW)
     const goodsTP={
       u7500:{diesel:16049,ev:13642}, '7500to12000':{diesel:27186,ev:23108},
       '12000to20000':{diesel:35313,ev:30016}, '20000to40000':{diesel:43950,ev:37357},
       over40000:{diesel:44242,ev:37606}
     };
-    // A3 3-wheeler TP (flat rate, PAN India)
     const a3TP=ft==='ev'?3139:4492;
 
     if(cl==='A1'){
       const gvwB=$('cvGVW').value;
       const fuelKey=ft==='ev'?'ev':'diesel';
-      tp=goodsTP[gvwB]?.[fuelKey]||16049;
+      const gvwGrp = goodsTP[gvwB];
+      tp = gvwGrp ? (gvwGrp[fuelKey] || 16049) : 16049;
     } else if(cl==='A3') tp=a3TP;
     else if(cl==='C1a'){
-      // TP = base + per-passenger × count
       const pass=parseInt($('cvPassCap').value)||4;
       const cc=$('cvCC').value;
       if(ft==='ev'){
@@ -1566,99 +1874,93 @@ function calculateCV(){
       tp=baseC1b+perC1b*pass;
     } else if(cl==='C2'){
       const pass=parseInt($('cvPassCap').value)||20;
+      const llPersons=parseInt($('cvLLDriverPersons').value)||1;
+      const tpPass=Math.max(0, pass - llPersons);
       const bt=$('cvBusType').value;
-      if(ft==='ev'){tp=(bt==='educational'?10363:12192)+((bt==='educational'?633:745)*pass);}
-      else{tp=(bt==='educational'?12192:14343)+((bt==='educational'?745:877)*pass);}
+      if(ft==='ev'){tp=(bt==='educational'?10363:12192)+((bt==='educational'?633:745)*tpPass);}
+      else{tp=(bt==='educational'?12192:14343)+((bt==='educational'?745:877)*tpPass);}
     } else if(cl==='C3'){
       const pass=parseInt($('cvPassCap').value)||10;
       tp=ft==='ev'?(5749+1147*pass):(6763+1349*pass);
+    } else if(isClassD){
+      const dType = $('cvClassDType').value;
+      tp = (dType === 'type1') ? 1645 : 7267;
     }
-    // CNG/LPG TP loading
+
     if(ft==='cng_kit') tp+=60;
-    // HEV discount
     if(ft==='hev') hevDisc=tp*0.075;
   }
   const netTP=tp-hevDisc;
 
-  /* PA & LL — apply to both PKG and TP Only in CV (no SAOD in CV) */
-  const pa = $('cvCompPA').checked ? 275 : 0;
+  const paCb = $('cvCompPA');
+  const pa = paCb && paCb.checked ? 275 : 0;
   const _llp = parseInt($('cvLLDriverPersons').value)||1;
-  const llDrv = $('cvLLDriver').checked ? 50 * _llp : 0;
-  const llEmp = $('cvLLEmployee').checked ? 50 : 0;
+  const llDrvCb = $('cvLLDriver');
+  const llDrv = llDrvCb && llDrvCb.checked ? 50 * _llp : 0;
+  const llEmpCb = $('cvLLEmployee');
+  const llEmp = llEmpCb && llEmpCb.checked ? 50 : 0;
 
-  /* Add-ons */
   let addons=0; const cov=[]; const _adLines=[];
   if(ct!=='TP') cov.push('Own Damage Cover');
-  cov.push('Third Party Liability');  /* TP always included for both PKG and TP-Only */
+  cov.push('Third Party Liability');
   if(pa)cov.push('Owner-Driver PA — ₹15L');
-  if(llDrv)cov.push('LL — Paid Driver');
+  if(llDrv)cov.push('LL — Paid Crew');
   if(llEmp)cov.push('LL — Employees');
-  /* cvGeoExt cov.push moved below after const cvGeoExt is declared */
+  const otCb = $('cvOverturning');
+  if(isClassD && otCb && otCb.checked) cov.push('Overturning Risk Cover');
 
   const aOn2=(id)=>{const c=$('cv_'+id);return c&&!c.disabled&&c.checked;};
   const dsc2=(id)=>{const e=$('cv_disc_'+id);return e?Math.min(100,Math.max(0,getV('cv_disc_'+id))):0;};
 
-  // CV Nil Dep rates (by GVW band and age bracket)
   if(aOn2('nilDep')){
     const nilRates={
-      u7500:[0.53,0.70,0.89,1.49],        // age 1,2,3,4,5 → index br-1
+      u7500:[0.53,0.70,0.89,1.49],
       '7500to12000':[0.71,0.90,1.12,1.44,1.88],
       '20000to40000':[0.47,0.64,0.84,1.07,1.40],
       over40000:[0.96,2.07,1.61,1.27,2.71],
       C1a_C2:[1.02,1.54,2.05,2.66,3.51],
       other_pass:[0.29,0.44,0.59,0.76,1.01]
     };
-    // Map vehicle class to rate band
     let nilKey='u7500';
-    if(isGoods){
-      nilKey=$('cvGVW').value;
-    } else {
-      nilKey=(cl==='C1a')?'C1a_C2':'other_pass';
-    }
-    const yrBr=Math.min(Math.ceil(parseFloat($('cvAgeYr').value)||1),5);
-    const rate=(nilRates[nilKey]||nilRates.u7500)[yrBr-1]||0;
-    const _nilCA=((rate/100)*idv)*(1-dsc2('nilDep')/100);addons+=_nilCA;_adLines.push({l:'Nil Depreciation',a:_nilCA});cov.push('Nil Depreciation');
+    if(isGoods) nilKey=$('cvGVW').value;
+    else nilKey=(cl==='C1a')?'C1a_C2':'other_pass';
+    const yrBr=Math.min(Math.ceil(yrF||1),5);
+    const rateGrp = nilRates[nilKey] || nilRates.u7500;
+    const rate = rateGrp[yrBr-1] || 0;
+    const _a2=((rate/100)*idv)*(1-dsc2('nilDep')/100);addons+=_a2;_adLines.push({l:'Nil Depreciation',a:_a2});cov.push('Nil Depreciation');
   }
-  // Consumables for CV — use same rate structure as PC (passenger CV tariff references PC)
   if(aOn2('consumables')){
-    const yrBr=Math.min(Math.ceil(parseFloat($('cvAgeYr').value)||1),5);
+    const yrBr=Math.min(Math.ceil(yrF||1),5);
     const conRates=[0.14,0.16,0.18,0.21,0.25];
     const rate=conRates[yrBr-1]||0.14;
-    const _conCA=((rate/100)*idv)*(1-dsc2('consumables')/100);addons+=_conCA;_adLines.push({l:'Consumables Cover',a:_conCA});cov.push('Consumables');
+    const _a3=((rate/100)*idv)*(1-dsc2('consumables')/100);addons+=_a3;_adLines.push({l:'Consumables Cover',a:_a3});cov.push('Consumables');
   }
-  // Passenger CV only add-ons (RTI, Engine Protect, Key Protect, Tyre & Alloy)
   if(isPass){
     if(aOn2('rti')){
-      const yrBr=Math.min(Math.ceil(parseFloat($('cvAgeYr').value)||1),3);
+      const yrBr=Math.min(Math.ceil(yrF||1),3);
       const rtiR=[0.25,0.49,0.75];
       const rate=rtiR[yrBr-1]||0;
-      const _rtiCA=((rate/100)*idv)*(1-dsc2('rti')/100);addons+=_rtiCA;_adLines.push({l:'Return to Invoice',a:_rtiCA});cov.push('Return to Invoice');
+      const _a4=((rate/100)*idv)*(1-dsc2('rti')/100);addons+=_a4;_adLines.push({l:'Return to Invoice (RTI)',a:_a4});cov.push('Return to Invoice');
     }
     if(aOn2('engineProtect')){
-      const yrBr=Math.min(Math.ceil(parseFloat($('cvAgeYr').value)||1),5);
+      const yrBr=Math.min(Math.ceil(yrF||1),5);
       const epR=[0.30,0.42,0.45,0.52,0.52];
       const rate=epR[yrBr-1]||0;
-      const _epCA=((rate/100)*idv)*(1-dsc2('engineProtect')/100);addons+=_epCA;_adLines.push({l:'Engine Protect',a:_epCA});cov.push('Engine Protect');
+      const _a5=((rate/100)*idv)*(1-dsc2('engineProtect')/100);addons+=_a5;_adLines.push({l:'Engine Protect Cover',a:_a5});cov.push('Engine Protect');
     }
-    if(aOn2('keyProtect')){addons+=375;_adLines.push({l:'Key Protect Cover',a:375});cov.push('Key Protect — ₹375');}
+    if(aOn2('keyProtect')){addons+=375;_adLines.push({l:'Key Protect Cover',a:375});cov.push('Key Protect');}
     if(aOn2('tyreAlloy')){
-      const yrBr=Math.min(Math.ceil(parseFloat($('cvAgeYr').value)||1),3);
+      const yrBr=Math.min(Math.ceil(yrF||1),3);
       const taR=[0.45,0.52,0.60];
       const rate=taR[yrBr-1]||0;
-      const _taCA=((rate/100)*idv)*(1-dsc2('tyreAlloy')/100);addons+=_taCA;_adLines.push({l:'Tyre & Alloy Cover',a:_taCA});cov.push('Tyre & Alloy');
+      const _a6=((rate/100)*idv)*(1-dsc2('tyreAlloy')/100);addons+=_a6;_adLines.push({l:'Tyre & Alloy Cover',a:_a6});cov.push('Tyre & Alloy');
     }
   }
 
-  /* ══ SHORT PERIOD SCALE (GR.12) ══
-     Applied to NET OD premium (after NCB/discount) before GST.
-     TP-Only short period is NOT permissible (NB.2 of Short Period Scale).
-     Scale: ≤1m=20%, ≤2m=30%, ≤3m=40%, ≤4m=50%, ≤5m=60%,
-            ≤6m=70%, ≤7m=80%, ≤8m=90%, >8m=100% (full annual) */
   const cvMonths = Math.min(12, Math.max(1, parseInt($('cvPolicyMonths').value)||12));
   const isShortPeriod = cvMonths < 12;
-  // NB.2: TP-Only short period not permissible — force 12 months for TP
   const effectiveMonths = (ct === 'TP') ? 12 : cvMonths;
-  let spFactor = 1.0; // proportion of annual premium
+  let spFactor = 1.0;
   if(effectiveMonths <= 1)       spFactor = 0.20;
   else if(effectiveMonths <= 2)  spFactor = 0.30;
   else if(effectiveMonths <= 3)  spFactor = 0.40;
@@ -1667,37 +1969,30 @@ function calculateCV(){
   else if(effectiveMonths <= 6)  spFactor = 0.70;
   else if(effectiveMonths <= 7)  spFactor = 0.80;
   else if(effectiveMonths <= 8)  spFactor = 0.90;
-  else                           spFactor = 1.00; // 9–12 months = full annual
+  else                           spFactor = 1.00;
 
-  // Short period label message
   const spLabelEl = $('cvSpLabel');
-  if(effectiveMonths < 12 && ct !== 'TP'){
-    spLabelEl.style.display='block';
-    spLabelEl.innerText = `Short period: ${effectiveMonths} month${effectiveMonths>1?'s':''} → ${(spFactor*100).toFixed(0)}% of annual OD & TP`;
-  } else {
-    spLabelEl.style.display='none';
-    if(ct==='TP' && cvMonths < 12)
-      spLabelEl.innerText='TP-Only short period not permissible (NB.2)';
+  if(spLabelEl) {
+      if(effectiveMonths < 12 && ct !== 'TP'){
+        spLabelEl.style.display='block';
+        spLabelEl.innerText = `Short period: ${effectiveMonths} month${effectiveMonths>1?'s':''} → ${(spFactor*100).toFixed(0)}% of annual OD & TP`;
+      } else {
+        spLabelEl.style.display='none';
+        if(ct==='TP' && cvMonths < 12) spLabelEl.innerText='TP-Only short period not permissible (NB.2)';
+      }
   }
 
-  // Apply short-period factor to net OD
   const netOD_annual = netOD;
   const netOD_sp = netOD_annual * spFactor;
 
-  /* IMT 23: 15% on gross OD, OD discount % applied, then short-period factor */
-  const cvImt23Base = $('cvIMT23').checked ? (baseOD * 0.15) : 0;
+  const imt23Cb = $('cvIMT23');
+  const cvImt23Base = imt23Cb && imt23Cb.checked ? (baseOD * 0.15) : 0;
   const cvImt23AfterDisc = cvImt23Base * (1 - (Math.min(100,getV('cvOdDisc'))/100));
   const cvImt23 = cvImt23AfterDisc * spFactor;
 
-  /* ══ ELECTRICAL ACCESSORIES: 4% on declared value (GR-41) ══ */
-  const cvElecVal = getV('cvElecVal');
-  const cvElecPrem = cvElecVal * 0.04;
+  const cvElecPrem = getV('cvElecVal') * 0.04;
+  const cvNonElecPrem = getV('cvNonElecVal') * 0.04;
 
-  /* ══ NON-ELECTRICAL ACCESSORIES: 4% on declared value ══ */
-  const cvNonElecVal = getV('cvNonElecVal');
-  const cvNonElecPrem = cvNonElecVal * 0.04;
-
-  /* ══ ADDITIONAL TOWING: up to ₹10,000 @ 5%; ₹10,001–₹20,000 @ 7.5% (GR-47) ══ */
   const cvTowAmt = getV('cvTowingAmt');
   let cvTowPrem = 0;
   if(cvTowAmt > 0){
@@ -1706,300 +2001,391 @@ function calculateCV(){
     cvTowPrem = (band1 * 0.05) + (band2 * 0.075);
   }
 
-  /* GEO EXTENSION: informational only — premium charged by branch (GR-4, Endt.1) */
-  const cvGeoExt = $('cvGeoExt').checked;
-  const cvGeoPrem = 0;
-  if(cvGeoExt) cov.push('Geographical Extension (GR-4) — premium per branch');
-
-  // Short period applies to both OD and TP sections
-  // (NB.2: effectiveMonths forced to 12 for TP-Only, so netTP_sp = netTP for TP-Only policy)
   const netTP_sp = netTP * spFactor;
 
-  const grandBeforeGST = netOD_sp + netTP_sp + pa + llDrv + llEmp + addons
-                         + cvImt23 + cvElecPrem + cvNonElecPrem + cvTowPrem + cvGeoPrem;
-  const grand = Math.round(grandBeforeGST * 1.18);
+  const geoCb = $('cvGeoExt');
+  const cvGeoExt   = geoCb ? geoCb.checked : false;
+  const cvGeoODPrem = (cvGeoExt && ct !== 'TP') ? (parseFloat(($('cvGeoODPrem')||{value:'0'}).value)||0) : 0;
+  const cvGeoTPPrem = cvGeoExt ? (parseFloat(($('cvGeoTPPrem')||{value:'0'}).value)||0) : 0;
+  if(cvGeoExt) cov.push(ct !== 'TP' ? 'Geographical Extension (GR-4) — OD + TP' : 'Geographical Extension (GR-4) — TP Only');
 
-  /* Update UI */
-  $('cv_lbl_tp').innerText = (ct!=='TP' && isShortPeriod)
-    ? tp.toFixed(2) + ' → ₹' + netTP_sp.toFixed(2)
-    : netTP_sp.toFixed(2);
-  $('cv_lbl_hevDisc').innerText=hevDisc.toFixed(2);
-  $('cv_lbl_pa').innerText=pa.toFixed(2);
-  $('cv_lbl_llDriver').innerText=llDrv.toFixed(2);
-  $('cv_lbl_llEmp').innerText=llEmp.toFixed(2);
-  $('cv_lbl_addons').innerText=addons.toFixed(2);
-  /* Short period OD rows */
-  $('cv_lbl_netOD').innerText=netOD_annual.toFixed(2);
+  const isGoodsCV = (cl === 'A1' || cl === 'A3');
+  let grand, gstODamt, gstTPamt;
+  if(isGoodsCV){
+    const odPortion = netOD_sp + cvImt23 + cvElecPrem + cvNonElecPrem + cvTowPrem + cvGeoODPrem + addons;
+    const tpPortion = netTP_sp + pa + llDrv + llEmp + cvGeoTPPrem;
+    gstODamt = odPortion * 0.18;
+    gstTPamt = tpPortion * 0.05;
+    grand = Math.round(odPortion + tpPortion + gstODamt + gstTPamt);
+  } else {
+    const grandBeforeGST = netOD_sp + netTP_sp + pa + llDrv + llEmp + addons
+                           + cvImt23 + cvElecPrem + cvNonElecPrem + cvTowPrem + cvGeoODPrem + cvGeoTPPrem;
+    gstODamt = 0; gstTPamt = 0;
+    grand = Math.round(grandBeforeGST * 1.18);
+  }
+
+  const cvAddonsWrap = $('cvAddonsWrap');
+  if(cvAddonsWrap) {
+      cvAddonsWrap.innerHTML = '';
+      if (_adLines.length > 0) {
+        _adLines.forEach(it => {
+          cvAddonsWrap.innerHTML += `<div class="qrow acc-r" style="font-size:.73rem; border-bottom:1px dashed var(--border-lt); padding: 4px 0;"><span class="qlbl">↳ ${it.l}</span><span class="qval">₹ ${it.a.toFixed(2)}</span></div>`;
+        });
+        const totalRow = $('cvAddonsTotalRow'); if(totalRow) totalRow.style.display = 'flex';
+      } else {
+        cvAddonsWrap.innerHTML = `<div class="qrow acc-r"><span class="qlbl">Add-on Covers</span><span class="qval">₹ 0.00</span></div>`;
+        const totalRow = $('cvAddonsTotalRow'); if(totalRow) totalRow.style.display = 'none';
+      }
+  }
+
+  const setT = (id, val) => { const el = $(id); if(el) el.innerText = val; };
+  setT('cv_lbl_tp', (ct!=='TP' && isShortPeriod) ? tp.toFixed(2) + ' → ₹' + netTP_sp.toFixed(2) : netTP_sp.toFixed(2));
+  setT('cv_lbl_hevDisc', hevDisc.toFixed(2));
+  setT('cv_lbl_pa', pa.toFixed(2));
+  setT('cv_lbl_llDriver', llDrv.toFixed(2));
+  setT('cv_lbl_llEmp', llEmp.toFixed(2));
+  setT('cv_lbl_addons', addons.toFixed(2));
+  setT('cv_lbl_netOD', netOD_annual.toFixed(2));
+  
   sd('cvSpRow', isShortPeriod && ct!=='TP');
   sd('cvSpNetRow', isShortPeriod && ct!=='TP');
   if(isShortPeriod && ct!=='TP'){
-    $('cv_lbl_spFactor').innerText = (spFactor*100).toFixed(0)+'% of annual (' + effectiveMonths + ' month' + (effectiveMonths>1?'s':'') + ')';
-    $('cv_lbl_netOD_sp').innerText = netOD_sp.toFixed(2);
+    setT('cv_lbl_spFactor', (spFactor*100).toFixed(0)+'% of annual (' + effectiveMonths + ' month' + (effectiveMonths>1?'s':'') + ')');
+    setT('cv_lbl_netOD_sp', netOD_sp.toFixed(2));
   }
-  /* Extra loading rows */
-  $('cv_lbl_imt23').innerText=cvImt23.toFixed(2);
-  $('cv_lbl_elec').innerText=cvElecPrem.toFixed(2);
-  $('cv_lbl_nonElec').innerText=cvNonElecPrem.toFixed(2);
-  $('cv_lbl_towing').innerText=cvTowPrem.toFixed(2);
-  $('cv_lbl_geo').innerText=cvGeoPrem.toFixed(2);
-  sd('cvImt23Row',cvImt23>0);
-  sd('cvElecRow',cvElecPrem>0);
-  sd('cvNonElecRow',cvNonElecPrem>0);
-  sd('cvTowingRow',cvTowPrem>0);
-  sd('cvGeoRow', false);
-  $('cv_lbl_grand').innerText=grand.toLocaleString('en-IN');
+  setT('cv_lbl_imt23', cvImt23.toFixed(2));
+  setT('cv_lbl_elec', cvElecPrem.toFixed(2));
+  setT('cv_lbl_nonElec', cvNonElecPrem.toFixed(2));
+  setT('cv_lbl_towing', cvTowPrem.toFixed(2));
+  setT('cv_lbl_geo', cvGeoODPrem.toFixed(2));
+  setT('cv_lbl_geo_tp', cvGeoTPPrem.toFixed(2));
+
+  sd('cvImt23Row',   cvImt23>0);
+  sd('cvElecRow',    cvElecPrem>0);
+  sd('cvNonElecRow', cvNonElecPrem>0);
+  sd('cvTowingRow',  cvTowPrem>0);
+  sd('cvGeoRow',     cvGeoODPrem>0);
+  sd('cvGeoTPRow',   cvGeoTPPrem>0);
+  animateCounter('cv_lbl_grand', grand);
+  
+  const gstLbl  = $('cv_gst_lbl');
+  const gstNote = $('cv_gst_note');
+  if(isGoodsCV){
+    if(gstLbl)  gstLbl.innerHTML  = 'Total Premium<br>OD@18% + TP@5% GST';
+    if(gstNote) gstNote.innerText = `OD GST ₹${Math.round(gstODamt).toLocaleString('en-IN')} · TP GST ₹${Math.round(gstTPamt).toLocaleString('en-IN')}`;
+  } else {
+    if(gstLbl)  gstLbl.innerHTML  = 'Total Premium<br>Incl. 18% GST';
+    if(gstNote) gstNote.innerText = 'All discounts applied';
+  }
   sd('cv_hevRow',hevDisc>0);
-  /* Show 'Full Annual' tag on TP line when short period is in effect */
   const tpNote=$('cvTpFullNote');
   if(tpNote) tpNote.style.display = (isShortPeriod && ct!=='TP') ? 'inline' : 'none';
 
-  /* Print */
   const clEl=$('cvClass');
+  const specText = clEl ? clEl.options[clEl.selectedIndex].text : '';
+  const zEl = $('cvZone');
+  const zoneText = zEl ? zEl.options[zEl.selectedIndex].text : '';
+  const ageDisp = $('cvAgeDisplay');
+  const ageText = ageDisp ? ageDisp.value : '';
+
   buildPrintDoc({
     mode:'CV', date:new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'}),
-    covType: ct==='PKG'?'Package Policy':'TP Only',
-    vehType:'Commercial Vehicle', spec:clEl.options[clEl.selectedIndex].text,
-    zone: $('cvZone').options[$('cvZone').selectedIndex].text,
+    covType: ct==='PKG'?'Package Policy':ct==='TP'?'TP Only':'Standalone OD',
+    vehType:'Commercial Vehicle', spec:specText,
+    zone: zoneText,
     idv: ct!=='TP'?Math.round(idv).toLocaleString('en-IN'):'N/A',
-    age: $('cvAgeDisplay').value, ncbPct,
-    od:{ show:ct!=='TP', base:(baseOD-gvwLoad), gvwLoad, discOD:finalOdDisc, discNCB:finalNcb,
+    age: ageText,
+    ncbPct,
+    od:{ show:ct!=='TP', base:(baseOD-gvwLoad-otLoad), gvwLoad, otLoad, discOD:odDiscAmt||0, discNCB:ncbAmt||0,
          net:netOD||0, imt23:cvImt23, spFactor:(isShortPeriod&&ct!=='TP')?spFactor:null, netSP:netOD_sp,
-         elec:cvElecPrem, nonElec:cvNonElecPrem, tow:cvTowPrem, geo:0 },
-    tp:{ show:true, base:tp, hev:hevDisc, pa, ll:llDrv, llEmp, geo:0 },
+         elec:cvElecPrem, nonElec:cvNonElecPrem, tow:cvTowPrem, geo:cvGeoODPrem },
+    tp:{ show:ct!=='SAOD', base:tp, hev:hevDisc, pa, ll:llDrv, llEmp, geo:cvGeoTPPrem },
     addons:{ items:_adLines, total:addons },
-    gst:{ split:false, total:grand-Math.round((ct!=='TP'?netOD_sp:0)+(ct!=='SAOD'?netTP_sp:0)+pa+llDrv+llEmp+addons+cvImt23+cvElecPrem+cvNonElecPrem+cvTowPrem) },
+    gst:{ split:isGoodsCV, odGst:Math.round(gstODamt||0), tpGst:Math.round(gstTPamt||0),
+          total:grand - Math.round((ct!=='TP'?netOD_sp:0)+(ct!=='SAOD'?netTP_sp:0)+pa+llDrv+llEmp+addons+cvImt23+cvElecPrem+cvNonElecPrem+cvTowPrem+cvGeoODPrem+cvGeoTPPrem) },
     grand, cov, policyMonths: effectiveMonths||12
   });
 }
 
 /* ── PRINT DOC BUILDER ───────────────────────────────── */
 function buildPrintDoc(d){
-  const C = {
-    indigo:'#1E1346', indigoMid:'#3730A3', indigoLt:'#EEF2FF',
-    green:'#065F46',  greenMid:'#059669',  greenLt:'#ECFDF5',
-    amber:'#92400E',  amberBg:'#FFFBEB',   amberBdr:'#FDE68A',
-    ink:'#0F172A',    inkMid:'#334155',    inkLite:'#64748B',
-    border:'#E2E8F0', borderLt:'#F8FAFC',  white:'#FFFFFF',
-    disc:'#065F46', discBg:'#F0FDF4',
-    grand:'#1E1346', grandBg:'linear-gradient(135deg,#1E1346,#3730A3)'
-  };
-  const fmt2=(n)=>(parseFloat(n)||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
-  const row=(lbl,val,style='')=>`
-    <tr style="border-bottom:1px solid ${C.border}">
-      <td style="padding:7px 12px;font-size:.8rem;color:${C.inkMid};font-weight:500;${style}">${lbl}</td>
-      <td style="padding:7px 12px;font-size:.8rem;color:${C.ink};font-weight:600;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;${style}">₹ ${val}</td>
-    </tr>`;
-  const discRow=(lbl,val)=>val&&parseFloat(val)>0?`
-    <tr style="border-bottom:1px solid ${C.border}">
-      <td style="padding:7px 12px;font-size:.8rem;color:${C.green};font-weight:600;">↓ ${lbl}</td>
-      <td style="padding:7px 12px;font-size:.8rem;color:${C.green};font-weight:700;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;">− ₹ ${val}</td>
-    </tr>`:'';
-  const subRow=(lbl,val,clr=C.indigoMid)=>`
-    <tr style="background:${C.indigoLt}">
-      <td style="padding:8px 12px;font-size:.82rem;color:${clr};font-weight:800;border-top:1.5px solid ${clr};">${lbl}</td>
-      <td style="padding:8px 12px;font-size:.9rem;color:${clr};font-weight:900;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;border-top:1.5px solid ${clr};">₹ ${val}</td>
-    </tr>`;
-  const colHeader=(title,color,bg)=>`
-    <tr style="background:${bg}">
-      <td colspan="2" style="padding:10px 12px;font-family:'Sora',sans-serif;font-size:.78rem;font-weight:800;color:${color};text-transform:uppercase;letter-spacing:.1em;">${title}</td>
-    </tr>`;
+  /* colour palette — NIA corporate navy + section accents */
+  const navy='#0A1F5C', navyMid='#1A3A8F', navyLt='#E8EEFF';
+  const odBg='#1A3A8F', odBdr='#3A5FBF', odLt='#EEF2FF';
+  const tpBg='#065F46', tpBdr='#059669', tpLt='#ECFDF5';
+  const adBg='#7C3A00', adBdr='#D97706', adLt='#FFFBEB';
+  const gstBg='#7C2D12', gstBdr='#F97316', gstLt='#FFF7ED';
+  const ink='#0F172A', inkMid='#334155', inkLt='#64748B';
+  const bdr='#D1D9E8', bdrLt='#F4F6FB', white='#FFFFFF';
 
-  let odTable='';
+  const fmt=(n)=>(parseFloat(n)||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const S=(s)=>`style="${s}"`;
+
+  /* table row helpers */
+  const TR=(l,v,extra='')=>`<tr ${S(`border-bottom:1px solid ${bdr};${extra}`)}>
+    <td ${S(`padding:6px 14px;font-size:8.5pt;color:${inkMid};font-weight:500;`)}>${l}</td>
+    <td ${S(`padding:6px 14px;font-size:8.5pt;color:${ink};font-weight:700;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;`)}>${v?'₹ '+v:''}</td>
+  </tr>`;
+
+  const discTR=(l,v)=>v&&parseFloat(v)>0?`<tr ${S(`border-bottom:1px solid ${bdr};background:#F0FDF4;`)}>
+    <td ${S(`padding:6px 14px;font-size:8.5pt;color:#15803D;font-weight:600;`)}>▼ ${l}</td>
+    <td ${S(`padding:6px 14px;font-size:8.5pt;color:#15803D;font-weight:700;text-align:right;white-space:nowrap;`)}>&minus; ₹ ${v}</td>
+  </tr>`:'' ;
+
+  const netTR=(l,v,bg,clr)=>`<tr ${S(`background:${bg};`)}>
+    <td ${S(`padding:8px 14px;font-size:9pt;color:${clr};font-weight:800;border-top:2px solid ${clr};`)}>${l}</td>
+    <td ${S(`padding:8px 14px;font-size:10pt;color:${clr};font-weight:900;text-align:right;white-space:nowrap;border-top:2px solid ${clr};font-variant-numeric:tabular-nums;`)}>₹ ${v}</td>
+  </tr>`;
+
+  const secHead=(title,bg,clr=white)=>`<tr ${S(`background:${bg};`)}>
+    <td colspan="2" ${S(`padding:9px 14px;font-size:7.5pt;font-weight:800;color:${clr};text-transform:uppercase;letter-spacing:.12em;`)}>${title}</td>
+  </tr>`;
+
+  const tblWrap=(inner,bdrClr)=>`<table ${S(`width:100%;border-collapse:collapse;border:1.5px solid ${bdrClr};border-radius:8px;overflow:hidden;`)}>${inner}</table>`;
+
+  /* ── OD TABLE ── */
+  let odHtml='';
   if(d.od&&d.od.show){
-    const od=d.od;
-    odTable=`
-    <table style="width:100%;border-collapse:collapse;border:1.5px solid ${C.border};border-radius:10px;overflow:hidden;font-family:'Inter',sans-serif;">
-      ${colHeader('🔵 Own Damage Premium',C.white,C.indigoMid)}
-      ${row('Base OD Tariff',fmt2(od.base))}
-      ${discRow(`Basic OD Discount`,fmt2(od.discOD))}
-      ${discRow(`NCB Discount (${d.ncbPct||0}%)`,fmt2(od.discNCB))}
-      ${subRow('Net OD Premium',fmt2(od.net))}
-      ${od.spFactor&&od.spFactor<1?row(`Short Period Factor (${Math.round(od.spFactor*100)}%)`,fmt2(od.netSP)):''}
-      ${od.gvwLoad>0?row('GVW Loading (>12,000 kg)',fmt2(od.gvwLoad)):''}
-      ${od.imt23>0?row('IMT 23 Loading (15%)',fmt2(od.imt23)):''}
-      ${od.elec>0?row('Electrical Accessories (4%)',fmt2(od.elec)):''}
-      ${od.nonElec>0?row('Non-Electrical Accessories',fmt2(od.nonElec)):''}
-      ${od.tow>0?row('Additional Towing Charges',fmt2(od.tow)):''}
-      ${od.geo>0?row('Geo. Extension — OD',fmt2(od.geo)):''}
-    </table>`;
+    const o=d.od;
+    odHtml=tblWrap(`
+      ${secHead('Own Damage (OD) Premium',odBg)}
+      ${TR('Base OD Tariff (Tariff Rate × IDV)',fmt(o.base))}
+      ${discTR('Basic OD Discount',fmt(o.discOD))}
+      ${discTR('No-Claim Bonus (NCB '+( d.ncbPct||0)+'%)',fmt(o.discNCB))}
+      ${netTR('Net OD Premium',fmt(o.net),odLt,odBg)}
+      ${o.spFactor&&o.spFactor<1?TR('Short-Period Loading ('+Math.round(o.spFactor*100)+'%)',fmt(o.netSP)):''}
+      ${o.gvwLoad>0?TR('GVW Loading — Heavy Goods (>12 T)',fmt(o.gvwLoad)):''}
+      ${o.otLoad>0?TR('Overturning Risk Loading (0.5%)',fmt(o.otLoad)):''}
+      ${o.imt23>0?TR('IMT 23 Endorsement Loading (15%)',fmt(o.imt23)):''}
+      ${o.elec>0?TR('Electrical Accessories Premium (4%)',fmt(o.elec)):''}
+      ${o.nonElec>0?TR('Non-Electrical Accessories Premium',fmt(o.nonElec)):''}
+      ${o.tow>0?TR('Additional Towing Charges',fmt(o.tow)):''}
+      ${o.geo>0?TR('Geographical Extension — OD',fmt(o.geo)):''}
+    `,odBdr);
   }
 
-  let tpTable='';
+  /* ── TP TABLE ── */
+  let tpHtml='';
   if(d.tp&&d.tp.show){
-    const tp=d.tp;
-    tpTable=`
-    <table style="width:100%;border-collapse:collapse;border:1.5px solid ${C.border};border-radius:10px;overflow:hidden;font-family:'Inter',sans-serif;">
-      ${colHeader('🟢 Third Party Premium',C.white,C.greenMid)}
-      ${row('Basic TP Premium',fmt2(tp.base))}
-      ${discRow('HEV Discount (7.5%)',fmt2(tp.hev))}
-      ${tp.pa>0?row('Compulsory PA Cover (GR-36A)',fmt2(tp.pa)):''}
-      ${tp.ll>0?row('LL — Paid Driver/Crew',fmt2(tp.ll)):''}
-      ${tp.llEmp>0?row('LL — Employees',fmt2(tp.llEmp)):''}
-      ${tp.geo>0?row('Geo. Extension — TP',fmt2(tp.geo)):''}
-      ${subRow('Net TP + PA + LL Total',fmt2((tp.base-tp.hev)+(tp.pa||0)+(tp.ll||0)+(tp.llEmp||0)+(tp.geo||0)),C.greenMid)}
-    </table>`;
+    const t=d.tp;
+    const netTP=(t.base-t.hev)+(t.pa||0)+(t.ll||0)+(t.llEmp||0)+(t.geo||0);
+    tpHtml=tblWrap(`
+      ${secHead('Third Party (TP) Premium',tpBg)}
+      ${TR('Basic TP Premium (IRDAI Tariff)',fmt(t.base))}
+      ${discTR('HEV / Hybrid Discount (7.5%)',fmt(t.hev))}
+      ${t.pa>0?TR('Compulsory PA Cover — Owner-Driver (GR 36A)',fmt(t.pa)):''}
+      ${t.ll>0?TR('Legal Liability — Paid Driver / Cleaner / Conductor',fmt(t.ll)):''}
+      ${t.llEmp>0?TR('Legal Liability — Employees (IMT 28)',fmt(t.llEmp)):''}
+      ${t.geo>0?TR('Geographical Extension — TP',fmt(t.geo)):''}
+      ${netTR('Net TP + PA + LL Total',fmt(netTP),tpLt,tpBg)}
+    `,tpBdr);
   }
 
-  let addonsHtml='';
-  if(d.addons&&d.addons.items&&d.addons.items.length>0){
-    const rows=d.addons.items.map(it=>`
-      <tr style="border-bottom:1px solid ${C.border}">
-        <td style="padding:7px 12px;font-size:.8rem;color:${C.inkMid};font-weight:500;">✦ ${it.l}</td>
-        <td style="padding:7px 12px;font-size:.8rem;color:${C.ink};font-weight:600;text-align:right;white-space:nowrap;">₹ ${fmt2(it.a)}</td>
-      </tr>`).join('');
-    addonsHtml=`
-    <div style="margin-top:14px">
-    <table style="width:100%;border-collapse:collapse;border:1.5px solid ${C.amberBdr};border-radius:10px;overflow:hidden;font-family:'Inter',sans-serif;">
-      <tr style="background:${C.amber};"><td colspan="2" style="padding:10px 12px;font-family:'Sora',sans-serif;font-size:.78rem;font-weight:800;color:${C.white};text-transform:uppercase;letter-spacing:.1em;">⭐ Add-on Covers</td></tr>
+  /* ── ADD-ONS TABLE ── */
+  let addHtml='';
+  if(d.addons&&d.addons.items&&d.addons.items.length){
+    const rows=d.addons.items.map(it=>`<tr ${S(`border-bottom:1px solid ${bdr};`)}>
+      <td ${S(`padding:6px 14px;font-size:8.5pt;color:${inkMid};font-weight:500;`)}>&#10022; ${it.l}</td>
+      <td ${S(`padding:6px 14px;font-size:8.5pt;color:${ink};font-weight:700;text-align:right;white-space:nowrap;`)}>₹ ${fmt(it.a)}</td>
+    </tr>`).join('');
+    addHtml=`<div ${S(`margin-top:12px;`)}>${tblWrap(`
+      ${secHead('Add-On Covers',adBg)}
       ${rows}
-      <tr style="background:${C.amberBg};">
-        <td style="padding:8px 12px;font-size:.82rem;color:${C.amber};font-weight:800;border-top:1.5px solid ${C.amberBdr};">Add-ons Total</td>
-        <td style="padding:8px 12px;font-size:.9rem;color:${C.amber};font-weight:900;text-align:right;white-space:nowrap;border-top:1.5px solid ${C.amberBdr};">₹ ${fmt2(d.addons.total)}</td>
-      </tr>
-    </table></div>`;
+      ${netTR('Total Add-On Premium',fmt(d.addons.total),adLt,adBg)}
+    `,adBdr)}</div>`;
   }
 
+  /* ── GST BLOCK ── */
   let gstHtml='';
   if(d.gst){
     if(d.gst.split){
-      gstHtml=`
-      <div style="margin-top:14px;background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:10px;padding:14px 16px;font-family:'Inter',sans-serif;">
-        <div style="font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#9A3412;margin-bottom:10px;">GST Calculation (Goods Vehicle)</div>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;">
-          <div style="flex:1;min-width:140px;background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #FED7AA;text-align:center;">
-            <div style="font-size:.65rem;color:#64748B;font-weight:600;margin-bottom:4px;">OD Section @ 18%</div>
-            <div style="font-size:1rem;font-weight:800;color:#9A3412;">₹ ${d.gst.odGst.toLocaleString('en-IN')}</div>
+      const tot=(d.gst.odGst||0)+(d.gst.tpGst||0);
+      gstHtml=`<div ${S(`margin-top:12px;background:${gstLt};border:1.5px solid ${gstBdr};border-radius:8px;padding:12px 14px;`)}>
+        <div ${S(`font-size:7.5pt;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:${gstBg};margin-bottom:10px;`)}>GST Breakdown (Goods Carrying Vehicle)</div>
+        <div ${S(`display:flex;gap:10px;flex-wrap:wrap;`)}>
+          <div ${S(`flex:1;min-width:130px;background:#fff;border:1px solid ${gstBdr};border-radius:6px;padding:8px 12px;text-align:center;`)}>
+            <div ${S(`font-size:7pt;color:${inkLt};font-weight:600;margin-bottom:3px;`)}>OD GST @ 18%</div>
+            <div ${S(`font-size:10pt;font-weight:800;color:${gstBg};`)}>₹ ${(d.gst.odGst||0).toLocaleString('en-IN')}</div>
           </div>
-          <div style="flex:1;min-width:140px;background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #FED7AA;text-align:center;">
-            <div style="font-size:.65rem;color:#64748B;font-weight:600;margin-bottom:4px;">TP Section @ 5%</div>
-            <div style="font-size:1rem;font-weight:800;color:#9A3412;">₹ ${d.gst.tpGst.toLocaleString('en-IN')}</div>
+          <div ${S(`flex:1;min-width:130px;background:#fff;border:1px solid ${gstBdr};border-radius:6px;padding:8px 12px;text-align:center;`)}>
+            <div ${S(`font-size:7pt;color:${inkLt};font-weight:600;margin-bottom:3px;`)}>TP GST @ 5%</div>
+            <div ${S(`font-size:10pt;font-weight:800;color:${gstBg};`)}>₹ ${(d.gst.tpGst||0).toLocaleString('en-IN')}</div>
           </div>
-          <div style="flex:1;min-width:140px;background:#92400E;border-radius:8px;padding:10px 12px;text-align:center;">
-            <div style="font-size:.65rem;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:4px;">Total GST</div>
-            <div style="font-size:1rem;font-weight:800;color:#fff;">₹ ${(d.gst.odGst+d.gst.tpGst).toLocaleString('en-IN')}</div>
+          <div ${S(`flex:1;min-width:130px;background:${gstBg};border-radius:6px;padding:8px 12px;text-align:center;`)}>
+            <div ${S(`font-size:7pt;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:3px;`)}>Total GST</div>
+            <div ${S(`font-size:10pt;font-weight:800;color:#fff;`)}>₹ ${tot.toLocaleString('en-IN')}</div>
           </div>
         </div>
       </div>`;
     } else {
-      const gstAmt=d.gst.total||0;
-      gstHtml=`
-      <div style="margin-top:14px;background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-family:'Inter',sans-serif;">
-        <div style="font-size:.78rem;color:#92400E;font-weight:600;">Goods & Services Tax (GST) @ 18%</div>
-        <div style="font-size:1rem;font-weight:800;color:#9A3412;">₹ ${gstAmt.toLocaleString('en-IN')}</div>
+      const g=d.gst.total||0;
+      gstHtml=`<div ${S(`margin-top:12px;background:${gstLt};border:1.5px solid ${gstBdr};border-radius:8px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;`)}>
+        <div>
+          <div ${S(`font-size:8.5pt;color:${gstBg};font-weight:700;`)}>Goods &amp; Services Tax (GST)</div>
+          <div ${S(`font-size:7pt;color:${inkLt};margin-top:2px;`)}>@ 18% on Net Premium</div>
+        </div>
+        <div ${S(`font-size:12pt;font-weight:900;color:${gstBg};font-variant-numeric:tabular-nums;`)}>₹ ${g.toLocaleString('en-IN')}</div>
       </div>`;
     }
   }
 
-  const covPills=(d.cov||[]).map(c=>`<span style="display:inline-block;background:${C.indigoLt};border:1px solid ${C.border};border-radius:20px;padding:3px 10px;font-size:.7rem;font-weight:600;color:${C.indigoMid};margin:3px 3px 3px 0;">✓ ${c}</span>`).join('');
-  const policyDuration = d.policyMonths && d.policyMonths<12 ? `<span style="margin-left:8px;padding:2px 9px;background:#FEF3C7;color:#92400E;border-radius:12px;font-size:.6rem;font-weight:700;">SHORT PERIOD — ${d.policyMonths} MONTHS</span>` : '';
+  /* ── COVERAGE PILLS ── */
+  const pills=(d.cov||[]).map(c=>`<span ${S(`display:inline-block;background:${navyLt};border:1px solid #B8C8F0;border-radius:20px;padding:3px 10px;font-size:7.5pt;font-weight:700;color:${navyMid};margin:3px 3px 3px 0;`)}>&#10003; ${c}</span>`).join('');
 
-  const printHtml=`
-<div style="font-family:'Inter',system-ui,sans-serif;max-width:800px;margin:0 auto;color:${C.ink};background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
-  <div style="background:linear-gradient(135deg,${C.indigo} 0%,${C.indigoMid} 100%);padding:24px 28px;border-radius:14px 14px 0 0;position:relative;overflow:hidden;">
-    <div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,.05);border-radius:50%;"></div>
-    <div style="position:absolute;bottom:-60px;left:60px;width:220px;height:220px;background:rgba(255,255,255,.04);border-radius:50%;"></div>
-    <div style="position:relative;z-index:1;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
-        <div>
-          <div style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-.01em;">Motor Insurance</div>
-          <div style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:900;color:rgba(255,255,255,.55);line-height:1.1;">Quotation</div>
-          <div style="margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-            <span style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(4px);border-radius:20px;padding:4px 12px;font-size:.68rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.08em;">${d.covType}</span>
-            <span style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(4px);border-radius:20px;padding:4px 12px;font-size:.68rem;font-weight:700;color:#fff;">${d.mode==='PC'?'Private Car':'Commercial Vehicle'}</span>
-            ${policyDuration}
+  const spBadge=d.policyMonths&&d.policyMonths<12
+    ?`<span ${S(`padding:3px 10px;background:#FEF3C7;color:#92400E;border:1px solid #FCD34D;border-radius:20px;font-size:7pt;font-weight:800;letter-spacing:.05em;`)}>SHORT PERIOD &bull; ${d.policyMonths} MONTHS</span>`:'';
+
+  /* ── REF NUMBER ── */
+  const ref='QT-'+Date.now().toString(36).toUpperCase().slice(-6);
+
+  /* ── FINAL HTML ── */
+  const html=`
+<div ${S(`font-family:'Inter',Arial,sans-serif;max-width:780px;margin:0 auto;background:#fff;color:${ink};-webkit-print-color-adjust:exact;print-color-adjust:exact;`)}>
+
+  <!-- ══ LETTERHEAD ══ -->
+  <div ${S(`background:linear-gradient(135deg,${navy} 0%,${navyMid} 60%,#2E5FBF 100%);padding:0;border-radius:10px 10px 0 0;overflow:hidden;`)}>
+    <!-- top accent bar -->
+    <div ${S(`height:5px;background:linear-gradient(90deg,#F59E0B 0%,#EF4444 50%,#F59E0B 100%;`)}></div>
+    <div ${S(`padding:18px 24px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;`)}>
+      <!-- left: org identity -->
+      <div>
+        <div ${S(`display:flex;align-items:center;gap:12px;`)}>
+          <!-- NIA shield icon SVG -->
+          <div ${S(`width:44px;height:44px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;`)}>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div>
+            <div ${S(`font-size:7pt;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.14em;`)}>National Insurance Co. Ltd.</div>
+            <div ${S(`font-size:15pt;font-weight:900;color:#fff;letter-spacing:-.01em;line-height:1.15;font-family:'Sora',sans-serif;`)}>Motor Premium Quotation</div>
+            <div ${S(`margin-top:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;`)}>
+              <span ${S(`background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:3px 10px;font-size:7pt;font-weight:700;color:#FCD34D;text-transform:uppercase;letter-spacing:.07em;`)}>${d.covType}</span>
+              <span ${S(`background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:3px 10px;font-size:7pt;font-weight:700;color:#fff;`)}>${d.mode==='PC'?'Private Car':'Commercial Vehicle'}</span>
+              ${spBadge}
+            </div>
           </div>
         </div>
-        <div style="text-align:right;">
-          <div style="font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:3px;">Date of Quotation</div>
-          <div style="font-size:.85rem;color:#fff;font-weight:600;">${d.date}</div>
-          <div style="font-size:.6rem;color:rgba(255,255,255,.4);margin-top:8px;font-weight:600;">For Agent / Branch Use Only</div>
-        </div>
+      </div>
+      <!-- right: meta -->
+      <div ${S(`text-align:right;`)}>
+        <div ${S(`font-size:7pt;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;`)}>Quotation Ref.</div>
+        <div ${S(`font-size:10pt;font-weight:800;color:#FCD34D;letter-spacing:.05em;`)}>${ref}</div>
+        <div ${S(`font-size:7pt;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-top:8px;margin-bottom:2px;`)}>Date of Issue</div>
+        <div ${S(`font-size:9pt;font-weight:700;color:#fff;`)}>${d.date}</div>
+        <div ${S(`margin-top:8px;font-size:6.5pt;color:rgba(255,255,255,.35);font-weight:600;`)}>For Agent / Branch Use Only</div>
       </div>
     </div>
   </div>
-  <div style="background:${C.borderLt};border:1.5px solid ${C.border};border-top:none;padding:0;display:flex;flex-wrap:wrap;">
-    <div style="flex:1;min-width:120px;padding:12px 16px;border-right:1px solid ${C.border};">
-      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${C.inkLite};margin-bottom:3px;">Vehicle Type</div>
-      <div style="font-size:.88rem;font-weight:800;color:${C.ink};">${d.vehType}</div>
+
+  <!-- ══ VEHICLE DETAILS STRIP ══ -->
+  <div ${S(`display:flex;flex-wrap:wrap;border:1.5px solid ${bdr};border-top:none;background:${bdrLt};`)}>
+    <div ${S(`flex:1;min-width:110px;padding:10px 14px;border-right:1px solid ${bdr};`)}>
+      <div ${S(`font-size:6.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:${inkLt};margin-bottom:3px;`)}>Vehicle Type</div>
+      <div ${S(`font-size:9pt;font-weight:800;color:${ink};`)}>${d.vehType}</div>
     </div>
-    <div style="flex:2;min-width:180px;padding:12px 16px;border-right:1px solid ${C.border};">
-      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${C.inkLite};margin-bottom:3px;">Class / Specification</div>
-      <div style="font-size:.82rem;font-weight:700;color:${C.ink};">${d.spec}</div>
+    <div ${S(`flex:2;min-width:160px;padding:10px 14px;border-right:1px solid ${bdr};`)}>
+      <div ${S(`font-size:6.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:${inkLt};margin-bottom:3px;`)}>Class / Specification</div>
+      <div ${S(`font-size:8.5pt;font-weight:700;color:${ink};`)}>${d.spec}</div>
     </div>
-    <div style="flex:1;min-width:100px;padding:12px 16px;border-right:1px solid ${C.border};">
-      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${C.inkLite};margin-bottom:3px;">Zone</div>
-      <div style="font-size:.82rem;font-weight:700;color:${C.ink};">${d.zone}</div>
+    <div ${S(`flex:1;min-width:90px;padding:10px 14px;border-right:1px solid ${bdr};`)}>
+      <div ${S(`font-size:6.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:${inkLt};margin-bottom:3px;`)}>Zone</div>
+      <div ${S(`font-size:8.5pt;font-weight:700;color:${ink};`)}>${d.zone}</div>
     </div>
-    <div style="flex:1;min-width:100px;padding:12px 16px;border-right:1px solid ${C.border};">
-      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${C.inkLite};margin-bottom:3px;">Age</div>
-      <div style="font-size:.82rem;font-weight:700;color:${C.ink};">${d.age||'—'}</div>
+    <div ${S(`flex:1;min-width:80px;padding:10px 14px;border-right:1px solid ${bdr};`)}>
+      <div ${S(`font-size:6.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:${inkLt};margin-bottom:3px;`)}>Vehicle Age</div>
+      <div ${S(`font-size:8.5pt;font-weight:700;color:${ink};`)}>${d.age||'—'}</div>
     </div>
-    <div style="flex:1;min-width:120px;padding:12px 16px;background:${C.indigoLt};">
-      <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${C.indigoMid};margin-bottom:3px;">Insured Value (IDV)</div>
-      <div style="font-size:1rem;font-weight:900;color:${C.indigo};">₹ ${d.idv}</div>
+    <div ${S(`flex:1;min-width:110px;padding:10px 14px;background:${navyLt};`)}>
+      <div ${S(`font-size:6.5pt;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:${navyMid};margin-bottom:3px;`)}>Insured Declared Value</div>
+      <div ${S(`font-size:11pt;font-weight:900;color:${navy};font-variant-numeric:tabular-nums;`)}>₹ ${d.idv}</div>
     </div>
   </div>
-  <div style="border:1.5px solid ${C.border};border-top:none;padding:18px;background:#fff;">
-    <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:${C.inkLite};margin-bottom:14px;display:flex;align-items:center;gap:8px;">
-      <span style="display:inline-block;width:24px;height:2px;background:${C.indigoMid};border-radius:2px;"></span>
-      Premium Breakdown
-      <span style="display:inline-block;flex:1;height:1px;background:${C.border};"></span>
+
+  <!-- ══ PREMIUM BREAKDOWN ══ -->
+  <div ${S(`border:1.5px solid ${bdr};border-top:none;padding:16px;background:#fff;`)}>
+    <!-- section label -->
+    <div ${S(`display:flex;align-items:center;gap:8px;margin-bottom:14px;`)}>
+      <span ${S(`display:inline-block;width:28px;height:2.5px;background:${navy};border-radius:2px;`)}></span>
+      <span ${S(`font-size:7pt;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:${inkLt};`)}>Premium Breakdown</span>
+      <span ${S(`flex:1;height:1px;background:${bdr};`)}></span>
     </div>
-    <div style="display:grid;grid-template-columns:${(d.od&&d.od.show&&d.tp&&d.tp.show)?'1fr 1fr':'1fr'};gap:14px;">
-      ${odTable}
-      ${tpTable}
+
+    <!-- OD + TP side by side (or single col if only one) -->
+    <div ${S(`display:grid;grid-template-columns:${(d.od&&d.od.show&&d.tp&&d.tp.show)?'1fr 1fr':'1fr'};gap:12px;`)}>
+      ${odHtml}
+      ${tpHtml}
     </div>
-    ${addonsHtml}
+
+    ${addHtml}
     ${gstHtml}
   </div>
-  <div style="background:linear-gradient(135deg,${C.indigo},${C.indigoMid});padding:20px 24px;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 14px 14px;flex-wrap:wrap;gap:12px;">
+
+  <!-- ══ GRAND TOTAL BAR ══ -->
+  <div ${S(`background:linear-gradient(135deg,${navy},${navyMid});padding:18px 24px;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 10px 10px;flex-wrap:wrap;gap:10px;`)}>
     <div>
-      <div style="font-size:.65rem;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.14em;font-weight:700;margin-bottom:4px;">Total Payable Premium</div>
-      <div style="font-size:.72rem;color:rgba(255,255,255,.4);font-weight:500;">All discounts applied · Inclusive of all applicable GST</div>
+      <div ${S(`font-size:7pt;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.16em;font-weight:700;margin-bottom:3px;`)}>Total Premium Payable</div>
+      <div ${S(`font-size:7.5pt;color:rgba(255,255,255,.35);font-weight:500;`)}>All discounts applied &bull; Inclusive of 18% GST</div>
     </div>
-    <div style="font-family:'Sora',sans-serif;font-size:2.4rem;font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1;">
-      <span style="font-size:1.3rem;opacity:.65;vertical-align:top;line-height:1.5;">₹</span>${d.grand.toLocaleString('en-IN')}
-    </div>
-  </div>
-  <div style="margin-top:14px;padding:14px 16px;background:${C.borderLt};border:1.5px solid ${C.border};border-radius:10px;">
-    <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:${C.inkLite};margin-bottom:8px;">Coverages Included</div>
-    <div>${covPills}</div>
-  </div>
-  <div style="margin-top:12px;padding:12px 16px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;">
-    <div style="font-size:.66rem;color:#92400E;font-weight:600;line-height:1.6;">
-      ⚠️ <strong>Important:</strong> This is an indicative quotation generated for reference purposes. Premium is computed as per tariff rates and is subject to final underwriting review, inspection, and confirmation. Actual policy premium may vary. Policy is subject to standard terms, conditions, and exclusions.
+    <div ${S(`display:flex;align-items:flex-start;gap:4px;`)}>
+      <span ${S(`font-size:13pt;color:rgba(255,255,255,.6);font-weight:700;margin-top:4px;font-family:'Sora',sans-serif;`)}>₹</span>
+      <span ${S(`font-size:26pt;font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1;font-family:'Sora',sans-serif;font-variant-numeric:tabular-nums;`)}>${d.grand.toLocaleString('en-IN')}</span>
     </div>
   </div>
+
+  <!-- ══ COVERAGES INCLUDED ══ -->
+  <div ${S(`margin-top:12px;padding:12px 14px;background:${bdrLt};border:1.5px solid ${bdr};border-radius:8px;`)}>
+    <div ${S(`font-size:6.5pt;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:${inkLt};margin-bottom:7px;`)}>Coverages &amp; Benefits Included</div>
+    <div>${pills}</div>
+  </div>
+
+  <!-- ══ SIGNATURE / STAMP BOX ══ -->
+  <div ${S(`margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;`)}>
+    <div ${S(`flex:1;min-width:160px;border:1.5px solid ${bdr};border-radius:8px;padding:12px 14px;`)}>
+      <div ${S(`font-size:6.5pt;color:${inkLt};font-weight:700;text-transform:uppercase;letter-spacing:.09em;margin-bottom:28px;`)}>Agent / Intermediary Name &amp; Code</div>
+      <div ${S(`border-top:1px solid ${bdr};padding-top:4px;font-size:6pt;color:${inkLt};`)}>Signature</div>
+    </div>
+    <div ${S(`flex:1;min-width:160px;border:1.5px solid ${bdr};border-radius:8px;padding:12px 14px;`)}>
+      <div ${S(`font-size:6.5pt;color:${inkLt};font-weight:700;text-transform:uppercase;letter-spacing:.09em;margin-bottom:28px;`)}>Authorised Signatory &amp; Branch Stamp</div>
+      <div ${S(`border-top:1px solid ${bdr};padding-top:4px;font-size:6pt;color:${inkLt};`)}>Signature &amp; Stamp</div>
+    </div>
+    <div ${S(`flex:1;min-width:160px;border:1.5px solid ${bdr};border-radius:8px;padding:12px 14px;`)}>
+      <div ${S(`font-size:6.5pt;color:${inkLt};font-weight:700;text-transform:uppercase;letter-spacing:.09em;margin-bottom:28px;`)}>Proposer&apos;s Signature</div>
+      <div ${S(`border-top:1px solid ${bdr};padding-top:4px;font-size:6pt;color:${inkLt};`)}>Signature</div>
+    </div>
+  </div>
+
+  <!-- ══ DISCLAIMER FOOTER ══ -->
+  <div ${S(`margin-top:10px;padding:10px 14px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;`)}>
+    <div ${S(`font-size:6.5pt;color:#92400E;font-weight:600;line-height:1.65;`)}>
+      <strong>&#9888; Disclaimer:</strong> This is an indicative quotation generated for reference and illustration purposes only.
+      Premium is computed as per prevailing IRDAI tariff / filed rates and is subject to final underwriting review, risk inspection,
+      and confirmation by the competent authority. Actual policy premium may vary based on vehicle inspection, NCB verification,
+      and other underwriting factors. This quotation does not constitute a binding offer. Policy issuance is subject to standard
+      terms, conditions, and exclusions as per the policy wordings. GSTIN of insured may be required at the time of policy issuance.
+    </div>
+  </div>
+
 </div>`;
 
-  const container = $('printDoc');
-  if(container) container.innerHTML = printHtml;
+  const el=$('printDoc');
+  if(el) el.innerHTML=html;
 }
 
-function animateCounter(id, target){
-  const el=$(id); if(!el) return;
-  const start = parseInt(el.innerText.replace(/,/g,''))||0;
-  const diff = target - start;
-  if(diff === 0){ el.innerText = target.toLocaleString('en-IN'); return; }
-  const steps = 28, dur = 520;
-  let step = 0;
-  const t = setInterval(()=>{
-    step++;
-    const ease = 1 - Math.pow(1 - step/steps, 3);
-    el.innerText = Math.round(start + diff * ease).toLocaleString('en-IN');
-    if(step >= steps){ clearInterval(t); el.innerText = target.toLocaleString('en-IN'); }
-  }, dur/steps);
-}
-
-/* ── INIT ────────────────────────────────────────────── */
 window.onload=function(){
   const today=new Date().toISOString().split('T')[0];
   $('pcPolDate').value=today; $('cvPolDate').value=today;
   pcUpdateAge(); cvUpdateAge();
   pcCovChange(); cvCovChange();
   cvClassChange(); cvFuelChange();
+  
   sd('pcElecRow',false); sd('pcNonElecRow',false); sd('pcTowingRow',false); sd('pcGeoRow',false);
-  sd('cvImt23Row',false); sd('cvElecRow',false); sd('cvNonElecRow',false); sd('cvTowingRow',false); sd('cvGeoRow',false);
+  sd('cvImt23Row',false); sd('cvElecRow',false); sd('cvNonElecRow',false); sd('cvTowingRow',false); sd('cvGeoRow',false); sd('cvGeoTPRow',false);
+  
+  // Pre-calculate to ensure print document exists immediately
+  calculatePC();
+  calculateCV();
+  setMode('PC');
 };
 </script>
 </body>
