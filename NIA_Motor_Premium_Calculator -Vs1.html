@@ -2372,6 +2372,20 @@ function buildPrintDoc(d){
   if(el) el.innerHTML=html;
 }
 
+function animateCounter(id, target){
+  const el=$(id); if(!el) return;
+  const start=parseInt(el.innerText.replace(/,/g,''))||0;
+  const diff=target-start;
+  if(diff===0){el.innerText=target.toLocaleString('en-IN');return;}
+  const steps=28,dur=520;let step=0;
+  const t=setInterval(()=>{
+    step++;
+    const ease=1-Math.pow(1-step/steps,3);
+    el.innerText=Math.round(start+diff*ease).toLocaleString('en-IN');
+    if(step>=steps){clearInterval(t);el.innerText=target.toLocaleString('en-IN');}
+  },dur/steps);
+}
+
 window.onload=function(){
   const today=new Date().toISOString().split('T')[0];
   $('pcPolDate').value=today; $('cvPolDate').value=today;
