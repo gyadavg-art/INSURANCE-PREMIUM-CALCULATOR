@@ -899,6 +899,229 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
 #motorSection body { display: contents; }
 </style>
 
+<!-- ═══════════════════════════════════════════════════════
+     FIRE CALCULATOR STYLES
+     ═══════════════════════════════════════════════════════ -->
+<style>
+#firePlaceholder {
+  --fire-vivid: #dc2626;
+  --fire-mid:   #b91c1c;
+  --fire-deep:  #7f1d1d;
+  --fire-soft:  #fff1f2;
+  --fire-glow:  rgba(220,38,38,.18);
+  --fire-border:#fecaca;
+  --ink:   #0f172a;
+  --ink-m: #334155;
+  --ink-l: #64748b;
+  --bd:    #e2e8f0;
+  --white: #ffffff;
+  --r:     14px;
+  --sha:   0 2px 8px rgba(15,23,42,.07);
+  --sha-m: 0 4px 20px rgba(15,23,42,.10);
+  min-height: 100vh;
+  background: linear-gradient(160deg,#fff1f2 0%,#fef2f2 40%,#fafafa 100%);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+/* Product switcher zone */
+.fire-switcher {
+  background: linear-gradient(160deg,var(--fire-soft),#fff);
+  border-bottom: 2px solid var(--fire-border);
+  padding: 28px 24px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.fire-switcher::before {
+  content:''; position:absolute; width:280px; height:280px; border-radius:50%;
+  background:radial-gradient(circle,var(--fire-vivid),transparent 70%);
+  filter:blur(80px); opacity:.10; top:-60px; right:-40px; pointer-events:none;
+}
+.fire-sw-inner { max-width:900px; margin:0 auto; position:relative; z-index:2; }
+.fire-sw-label {
+  font-size:.68rem; font-weight:700; color:var(--ink-l); text-transform:uppercase;
+  letter-spacing:.22em; margin-bottom:18px; text-align:center;
+}
+.fire-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.fire-prod-btn {
+  position:relative; background:#fff; border:1.5px solid var(--bd); border-radius:16px;
+  padding:20px 14px 16px; cursor:pointer; display:flex; flex-direction:column;
+  align-items:center; gap:5px; transition:all .26s cubic-bezier(.4,0,.2,1);
+  box-shadow:var(--sha); overflow:hidden;
+}
+.fire-prod-btn:hover:not(.active) {
+  background:var(--fire-soft); border-color:var(--fire-vivid);
+  transform:translateY(-3px); box-shadow:0 6px 20px var(--fire-glow);
+}
+.fire-prod-btn.active {
+  background:linear-gradient(145deg,var(--fire-soft),#fff);
+  border-color:var(--fire-vivid);
+  box-shadow:0 0 0 2px var(--fire-vivid),0 8px 28px var(--fire-glow);
+  transform:translateY(-4px);
+}
+.fpb-icon { font-size:2.2rem; line-height:1; transition:transform .26s; }
+.fire-prod-btn.active .fpb-icon { transform:scale(1.12); }
+.fpb-name { font-size:.84rem; font-weight:800; color:var(--ink); line-height:1.2; text-align:center; }
+.fpb-sub  { font-size:.63rem; color:var(--ink-l); font-weight:500; text-align:center; }
+.fpb-bar  {
+  position:absolute; bottom:0; left:15%; right:15%; height:3px;
+  border-radius:3px 3px 0 0; background:var(--fire-vivid); opacity:0; transition:opacity .26s;
+}
+.fire-prod-btn.active .fpb-bar { opacity:1; }
+@media(max-width:600px){ .fire-product-grid{ grid-template-columns:repeat(2,1fr); } }
+
+/* Main content area */
+.fire-main { max-width:900px; margin:0 auto; padding:24px 24px 60px; }
+
+/* Cards */
+.fire-card {
+  background:#fff; border:1px solid var(--bd); border-left:3.5px solid var(--fire-vivid);
+  border-radius:var(--r); box-shadow:var(--sha); margin-bottom:14px; overflow:hidden;
+}
+.fire-card-head {
+  display:flex; align-items:center; gap:11px; padding:12px 20px 10px;
+  border-bottom:1px solid #fef2f2;
+  background:linear-gradient(135deg,var(--fire-soft),#fff);
+}
+.fire-snum {
+  width:26px; height:26px; border-radius:50%; background:var(--fire-vivid); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:.72rem; font-weight:800; flex-shrink:0;
+}
+.fire-card-head h2 { font-size:.88rem; font-weight:700; color:var(--ink); }
+.fire-card-body { padding:18px 20px; }
+
+/* Grid */
+.fire-grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+@media(max-width:640px){ .fire-grid3{ grid-template-columns:1fr; } }
+.fire-field { display:flex; flex-direction:column; gap:5px; }
+.fire-label {
+  font-size:.69rem; font-weight:700; color:var(--ink-l); text-transform:uppercase; letter-spacing:.07em;
+}
+.fire-inp {
+  width:100%; background:#fff; border:1.5px solid var(--bd); border-radius:10px;
+  padding:9px 12px; font-size:.88rem; font-weight:500; color:var(--ink); outline:none;
+  transition:border-color .18s,box-shadow .18s;
+}
+.fire-inp:focus { border-color:var(--fire-vivid); box-shadow:0 0 0 3px var(--fire-glow); }
+
+/* Auto-computed row */
+.fire-auto-row {
+  display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:18px;
+  background:var(--fire-soft); border-radius:var(--r); padding:14px 16px;
+  border:1.5px solid var(--fire-border);
+}
+@media(max-width:480px){ .fire-auto-row{ grid-template-columns:1fr; } }
+.fire-auto-field { display:flex; flex-direction:column; gap:4px; }
+.fire-auto-badge {
+  display:inline-block; background:var(--fire-vivid); color:#fff; border-radius:20px;
+  padding:1px 7px; font-size:.56rem; font-weight:700; letter-spacing:.04em; margin-left:5px; vertical-align:middle;
+}
+.fire-auto-val {
+  font-size:1.1rem; font-weight:800; color:var(--fire-mid); letter-spacing:-.3px;
+}
+.fire-auto-note { font-size:.63rem; color:var(--ink-l); }
+
+/* Action row */
+.fire-action-row { display:flex; gap:10px; margin-bottom:4px; }
+.fire-btn-calc {
+  flex:1; background:linear-gradient(135deg,var(--fire-mid),var(--fire-vivid));
+  color:#fff; border:none; border-radius:var(--r); padding:14px 0;
+  font-size:.9rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
+  cursor:pointer; box-shadow:0 4px 16px var(--fire-glow); transition:all .18s;
+}
+.fire-btn-calc:hover { transform:translateY(-2px); box-shadow:0 8px 28px var(--fire-glow); }
+.fire-btn-reset {
+  background:#f1f5f9; border:1.5px solid var(--bd); color:var(--ink-m); border-radius:var(--r);
+  padding:14px 20px; font-size:.82rem; font-weight:700; cursor:pointer; transition:all .18s;
+}
+.fire-btn-reset:hover { background:var(--bd); }
+
+/* Result panel */
+.fire-result {
+  background:#fff; border:1.5px solid var(--bd); border-radius:18px;
+  box-shadow:0 6px 32px rgba(15,23,42,.10); overflow:hidden; margin-top:18px;
+}
+.fire-result-head {
+  background:linear-gradient(135deg,var(--fire-soft),#fef2f2);
+  border-bottom:2px solid var(--fire-vivid); padding:13px 20px;
+  font-size:.86rem; font-weight:700; color:var(--fire-mid);
+}
+.fire-result-body { padding:0; }
+.fire-res-grid { display:grid; grid-template-columns:1fr auto; }
+@media(max-width:600px){ .fire-res-grid{ grid-template-columns:1fr; } }
+.fire-res-col { padding:16px 20px; }
+.fire-res-title {
+  font-size:.63rem; font-weight:800; color:var(--fire-vivid); text-transform:uppercase;
+  letter-spacing:.1em; margin-bottom:10px; padding-bottom:6px; border-bottom:2px solid var(--fire-soft);
+}
+.fire-res-row {
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:5px 0; font-size:.8rem; border-bottom:1px dashed #f1f5f9;
+}
+.fire-res-row:last-of-type { border-bottom:none; }
+.fire-res-row.bold .frl { font-weight:700; color:var(--ink); }
+.fire-res-row.bold .frv { font-weight:800; color:var(--fire-mid); font-size:.84rem; }
+.frl { color:var(--ink-m); font-weight:500; }
+.frv { font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums; }
+.frv.accent { color:var(--fire-vivid); font-weight:800; }
+.frv.green  { color:#059669; font-weight:700; }
+
+/* Total column */
+.fire-res-total-col {
+  background:linear-gradient(145deg,var(--fire-vivid),var(--fire-mid));
+  padding:22px 22px; display:flex; flex-direction:column; justify-content:center;
+  min-width:200px; position:relative; overflow:hidden;
+}
+.fire-res-total-col::before {
+  content:'₹'; position:absolute; right:-10px; bottom:-20px;
+  font-size:8rem; font-weight:900; color:rgba(255,255,255,.07);
+  pointer-events:none; line-height:1; user-select:none;
+}
+.fire-tot-label { font-size:.63rem; color:rgba(255,255,255,.8); text-transform:uppercase; letter-spacing:.12em; font-weight:600; margin-bottom:4px; }
+.fire-tot-amt { font-size:1.7rem; font-weight:900; color:#fff; line-height:1; font-variant-numeric:tabular-nums; }
+.fire-tot-sub { font-size:.62rem; color:rgba(255,255,255,.75); margin-top:4px; }
+.fire-comm-box {
+  margin-top:14px; padding:10px 12px; background:rgba(255,255,255,.15);
+  border-radius:10px; border:1px solid rgba(255,255,255,.25);
+}
+.fire-comm-label { font-size:.62rem; color:rgba(255,255,255,.75); text-transform:uppercase; letter-spacing:.08em; margin-bottom:3px; }
+.fire-comm-amt { font-size:1.1rem; font-weight:800; color:#fff; font-variant-numeric:tabular-nums; }
+.fire-comm-note { font-size:.6rem; color:rgba(255,255,255,.65); margin-top:2px; }
+
+/* Cold Storage dual-column result */
+.fire-cs-grid { display:grid; grid-template-columns:1fr 1fr; }
+@media(max-width:580px){ .fire-cs-grid{ grid-template-columns:1fr; } }
+.fire-cs-col { padding:16px 20px; border-right:1px solid var(--bd); }
+.fire-cs-col:last-child { border-right:none; }
+.fire-cs-col-head {
+  font-size:.78rem; font-weight:800; color:var(--fire-mid); margin-bottom:12px;
+  padding-bottom:7px; border-bottom:2px solid var(--fire-border);
+}
+.fire-cs-comm {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-top:8px; padding:8px 10px; background:#f0fdf4; border-radius:8px;
+  border:1px solid #86efac; font-size:.79rem;
+}
+.fire-cs-note {
+  padding:10px 20px 14px; font-size:.74rem; color:var(--ink-l); font-style:italic;
+  border-top:1px solid var(--bd);
+}
+
+/* Coming soon card */
+.fire-coming-card {
+  text-align:center; padding:64px 24px; background:#fff;
+  border:1.5px solid var(--bd); border-radius:18px; margin-top:8px;
+  box-shadow:var(--sha);
+}
+.fire-coming-icon { font-size:60px; margin-bottom:16px; }
+.fire-coming-card h3 { font-size:1.3rem; font-weight:800; color:var(--ink); margin-bottom:10px; }
+.fire-coming-card p { font-size:.9rem; color:var(--ink-l); max-width:340px; margin:0 auto; line-height:1.7; }
+</style>
+
 <!-- jsPDF for health PDF export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -1035,13 +1258,13 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
       </div>
 
       <!-- Fire -->
-      <div class="category-card card-fire disabled" onclick="showComingSoon('Fire')">
+      <div class="category-card card-fire" onclick="showSection('fire')">
         <div class="card-blob"></div>
         <div class="card-icon-wrap">&#128293;</div>
         <div class="card-content">
           <div class="card-title-row">
             <h2>Fire Insurance</h2>
-            <div class="coming-soon-badge">&#9201; Coming Soon</div>
+            <div class="active-badge">&#9679; Active</div>
           </div>
           <div class="card-hindi">&#2309;&#2327;&#2381;&#2344;&#2367; &#2348;&#2368;&#2350;&#2366;</div>
           <div class="card-desc-pills">
@@ -2323,13 +2546,183 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
 <div class="print-doc" id="printDoc"></div>
 </div>
 
-<!-- Fire Placeholder -->
+<!-- Fire Section -->
 <div id="firePlaceholder" class="hidden">
-  <div class="ph-icon">&#128293;</div>
-  <h2>Fire Insurance</h2>
-  <p>Tariff-based fire insurance calculator is being built. Check back soon.</p>
-  <button class="ph-back-btn" onclick="showLanding()">&#8592; Back to Products</button>
+<div id="fireSection">
+
+<!-- Fire product picker -->
+<div class="fire-switcher">
+  <div class="fire-sw-inner">
+    <div class="fire-sw-label">Select Fire Insurance Product</div>
+    <div class="fire-product-grid">
+      <button class="fire-prod-btn active" id="fbtnSK" onclick="fireSetProduct('SK')">
+        <div class="fpb-icon">🏪</div>
+        <div class="fpb-name">Shop Keeper</div>
+        <div class="fpb-sub">Property &amp; Stock</div>
+        <div class="fpb-bar"></div>
+      </button>
+      <button class="fire-prod-btn" id="fbtnCS" onclick="fireSetProduct('CS')">
+        <div class="fpb-icon">🧊</div>
+        <div class="fpb-name">Cold Storage</div>
+        <div class="fpb-sub">All Risks Cover</div>
+        <div class="fpb-bar"></div>
+      </button>
+      <button class="fire-prod-btn" id="fbtnSG" onclick="fireSetProduct('SG')">
+        <div class="fpb-icon">🏭</div>
+        <div class="fpb-name">Stand Alone Godowns</div>
+        <div class="fpb-sub">Warehousing Cover</div>
+        <div class="fpb-bar"></div>
+      </button>
+      <button class="fire-prod-btn" id="fbtnHR" onclick="fireSetProduct('HR')">
+        <div class="fpb-icon">🏠</div>
+        <div class="fpb-name">Griha Raksha</div>
+        <div class="fpb-sub">Home Insurance</div>
+        <div class="fpb-bar"></div>
+      </button>
+    </div>
+  </div>
 </div>
+
+<div class="fire-main">
+
+  <!-- ── SHOP KEEPER ── -->
+  <div id="fireSK">
+    <div class="fire-card">
+      <div class="fire-card-head"><span class="fire-snum">1</span><h2>Sum Insured Details</h2></div>
+      <div class="fire-card-body">
+        <div class="fire-grid3">
+          <div class="fire-field">
+            <label class="fire-label">SI for Stock (₹)</label>
+            <input class="fire-inp" type="number" id="skStock" placeholder="0" oninput="skAutoCalc()" min="0">
+          </div>
+          <div class="fire-field">
+            <label class="fire-label">SI for Building (₹)</label>
+            <input class="fire-inp" type="number" id="skBuilding" placeholder="0" oninput="skAutoCalc()" min="0">
+          </div>
+          <div class="fire-field">
+            <label class="fire-label">SI for Furniture / Fixtures / Fittings (₹)</label>
+            <input class="fire-inp" type="number" id="skFFF" placeholder="0" oninput="skAutoCalc()" min="0">
+          </div>
+        </div>
+        <div class="fire-auto-row">
+          <div class="fire-auto-field">
+            <label class="fire-label">SI for Fire <span class="fire-auto-badge">Auto</span></label>
+            <div class="fire-auto-val" id="skFireSI">₹ 0</div>
+            <div class="fire-auto-note">Stock + Building + FFF</div>
+          </div>
+          <div class="fire-auto-field">
+            <label class="fire-label">SI for Burglary <span class="fire-auto-badge">Auto</span></label>
+            <div class="fire-auto-val" id="skBurgSI">₹ 0</div>
+            <div class="fire-auto-note">Building + Stock</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fire-action-row">
+      <button class="fire-btn-calc" onclick="skCalculate()">🔥 Calculate Premium</button>
+      <button class="fire-btn-reset" onclick="skReset()">↺ Reset</button>
+    </div>
+
+    <div id="skResult" class="fire-result hidden">
+      <div class="fire-result-head"><span>📋 Premium Summary — Shop Keeper Insurance</span></div>
+      <div class="fire-result-body">
+        <div class="fire-res-grid">
+          <div class="fire-res-col">
+            <div class="fire-res-title">Premium Breakup</div>
+            <div class="fire-res-row"><span class="frl">Fire Premium (SI×0.75‰)</span><span class="frv" id="skFirePrem">—</span></div>
+            <div class="fire-res-row"><span class="frl">Burglary Premium (SI×0.70‰)</span><span class="frv" id="skBurgPrem">—</span></div>
+            <div class="fire-res-row bold"><span class="frl">Net Premium</span><span class="frv" id="skNetPrem">—</span></div>
+            <div class="fire-res-row"><span class="frl">GST @ 18%</span><span class="frv" id="skGST">—</span></div>
+          </div>
+          <div class="fire-res-total-col">
+            <div class="fire-tot-label">Total Premium</div>
+            <div class="fire-tot-amt" id="skTotal">—</div>
+            <div class="fire-tot-sub">Inclusive of GST</div>
+            <div class="fire-comm-box">
+              <div class="fire-comm-label">Agent Commission (15%)</div>
+              <div class="fire-comm-amt" id="skComm">—</div>
+              <div class="fire-comm-note">on Net Premium</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COLD STORAGE ── -->
+  <div id="fireCS" class="hidden">
+    <div class="fire-card">
+      <div class="fire-card-head"><span class="fire-snum">1</span><h2>Sum Insured</h2></div>
+      <div class="fire-card-body">
+        <div class="fire-field" style="max-width:420px">
+          <label class="fire-label">Total Sum Insured (₹) <span style="font-weight:400;color:#64748b">— Building + Stock + FFF + Plant &amp; Machinery</span></label>
+          <input class="fire-inp" type="number" id="csSI" placeholder="0" min="0">
+        </div>
+      </div>
+    </div>
+
+    <div class="fire-action-row">
+      <button class="fire-btn-calc" onclick="csCalculate()">🔥 Calculate Premium</button>
+      <button class="fire-btn-reset" onclick="csReset()">↺ Reset</button>
+    </div>
+
+    <div id="csResult" class="fire-result hidden">
+      <div class="fire-result-head"><span>📋 Premium Summary — Cold Storage Insurance</span></div>
+      <div class="fire-result-body">
+        <div class="fire-cs-grid">
+
+          <div class="fire-cs-col">
+            <div class="fire-cs-col-head">🏢 Branch Level</div>
+            <div class="fire-res-row"><span class="frl">Rate Applied</span><span class="frv" id="csBrRate">—</span></div>
+            <div class="fire-res-row"><span class="frl">Net Premium</span><span class="frv" id="csBrNet">—</span></div>
+            <div class="fire-res-row"><span class="frl">GST @ 18%</span><span class="frv" id="csBrGST">—</span></div>
+            <div class="fire-res-row bold"><span class="frl">Final Premium</span><span class="frv accent" id="csBrFinal">—</span></div>
+            <div class="fire-cs-comm">
+              <span class="frl">Agent Commission (25%)</span>
+              <span class="frv green" id="csBrComm">—</span>
+            </div>
+          </div>
+
+          <div class="fire-cs-col">
+            <div class="fire-cs-col-head">🏛️ RO Level</div>
+            <div class="fire-res-row"><span class="frl">Rate Applied</span><span class="frv" id="csRoRate">—</span></div>
+            <div class="fire-res-row"><span class="frl">Net Premium</span><span class="frv" id="csRoNet">—</span></div>
+            <div class="fire-res-row"><span class="frl">GST @ 18%</span><span class="frv" id="csRoGST">—</span></div>
+            <div class="fire-res-row bold"><span class="frl">Final Premium</span><span class="frv accent" id="csRoFinal">—</span></div>
+            <div class="fire-cs-comm">
+              <span class="frl">Agent Commission (25%)</span>
+              <span class="frv green" id="csRoComm">—</span>
+            </div>
+          </div>
+
+        </div>
+        <div class="fire-cs-note" id="csRateNote"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STAND ALONE GODOWNS ── -->
+  <div id="fireSG" class="hidden">
+    <div class="fire-coming-card">
+      <div class="fire-coming-icon">🏭</div>
+      <h3>Stand Alone Godowns</h3>
+      <p>Calculator for warehouse and godown fire insurance is coming soon.</p>
+    </div>
+  </div>
+
+  <!-- ── HOME INSURANCE ── -->
+  <div id="fireHR" class="hidden">
+    <div class="fire-coming-card">
+      <div class="fire-coming-icon">🏠</div>
+      <h3>Griha Raksha — Home Insurance</h3>
+      <p>Calculator for home insurance (Griha Raksha) is coming soon.</p>
+    </div>
+  </div>
+
+</div><!-- /fire-main -->
+</div><!-- /fireSection -->
+</div><!-- /firePlaceholder -->
 
 <!-- Other Placeholder -->
 <div id="otherPlaceholder" class="hidden">
@@ -4713,7 +5106,7 @@ function showSection(name) {
   document.getElementById('otherPlaceholder').classList.add('hidden');
   document.getElementById('landingScreen').classList.add('hidden');
   document.getElementById('globalNav').style.display = '';
-  const titles = { motor: 'Motor Insurance', health: 'Health Insurance' };
+  const titles = { motor: 'Motor Insurance', health: 'Health Insurance', fire: 'Fire Insurance' };
   document.getElementById('navTitle').textContent = titles[name] || name;
   if (name === 'fire')  { document.getElementById('firePlaceholder').classList.remove('hidden'); return; }
   if (name === 'other') { document.getElementById('otherPlaceholder').classList.remove('hidden'); return; }
@@ -4737,6 +5130,105 @@ function showLanding() {
   document.getElementById('globalNav').style.display = 'none';
 }
 
+// ═══════════════════════════════════════════════════════
+// FIRE CALCULATOR JS
+// ═══════════════════════════════════════════════════════
+
+function fireSetProduct(mode) {
+  ['SK','CS','SG','HR'].forEach(function(m) {
+    document.getElementById('fire'+m).classList.add('hidden');
+    document.getElementById('fbtn'+m).classList.remove('active');
+  });
+  document.getElementById('fire'+mode).classList.remove('hidden');
+  document.getElementById('fbtn'+mode).classList.add('active');
+}
+
+function ffmt(n) {
+  return '₹ ' + Math.round(n).toLocaleString('en-IN');
+}
+
+// ── Shop Keeper ──
+function skAutoCalc() {
+  var stock    = parseFloat(document.getElementById('skStock').value)    || 0;
+  var building = parseFloat(document.getElementById('skBuilding').value) || 0;
+  var fff      = parseFloat(document.getElementById('skFFF').value)      || 0;
+  var fireSI   = stock + building + fff;
+  var burgSI   = building + stock;
+  document.getElementById('skFireSI').textContent = ffmt(fireSI);
+  document.getElementById('skBurgSI').textContent = ffmt(burgSI);
+}
+
+function skCalculate() {
+  var stock    = parseFloat(document.getElementById('skStock').value)    || 0;
+  var building = parseFloat(document.getElementById('skBuilding').value) || 0;
+  var fff      = parseFloat(document.getElementById('skFFF').value)      || 0;
+  if (stock + building + fff === 0) { alert('Please enter at least one Sum Insured value.'); return; }
+  var fireSI   = stock + building + fff;
+  var burgSI   = building + stock;
+  var firePrem = fireSI * 0.75 / 1000;
+  var burgPrem = burgSI * 0.70 / 1000;
+  var netPrem  = firePrem + burgPrem;
+  var gst      = netPrem * 0.18;
+  var total    = netPrem + gst;
+  var comm     = netPrem * 0.15;
+  document.getElementById('skFirePrem').textContent = ffmt(firePrem);
+  document.getElementById('skBurgPrem').textContent = ffmt(burgPrem);
+  document.getElementById('skNetPrem').textContent  = ffmt(netPrem);
+  document.getElementById('skGST').textContent      = ffmt(gst);
+  document.getElementById('skTotal').textContent    = ffmt(total);
+  document.getElementById('skComm').textContent     = ffmt(comm);
+  document.getElementById('skResult').classList.remove('hidden');
+}
+
+function skReset() {
+  ['skStock','skBuilding','skFFF'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('skFireSI').textContent = '₹ 0';
+  document.getElementById('skBurgSI').textContent = '₹ 0';
+  document.getElementById('skResult').classList.add('hidden');
+}
+
+// ── Cold Storage ──
+function csCalculate() {
+  var si = parseFloat(document.getElementById('csSI').value) || 0;
+  if (si === 0) { alert('Please enter the Sum Insured.'); return; }
+  var brRate, roRate;
+  if (si > 50000000) {
+    brRate = 1.84; roRate = 0.77;
+    document.getElementById('csRateNote').textContent = 'Sum Insured > ₹5 Crore — higher rate band applied at Branch level.';
+  } else {
+    brRate = 0.93; roRate = 0.77;
+    document.getElementById('csRateNote').textContent = 'Sum Insured ≤ ₹5 Crore — standard rate band applied.';
+  }
+  var brNet   = si * brRate / 1000;
+  var brGST   = brNet * 0.18;
+  var brFinal = brNet + brGST;
+  var brComm  = brNet * 0.25;
+
+  var roNet   = si * roRate / 1000;
+  var roGST   = roNet * 0.18;
+  var roFinal = roNet + roGST;
+  var roComm  = roNet * 0.25;
+
+  document.getElementById('csBrRate').textContent  = brRate.toFixed(2) + '‰';
+  document.getElementById('csBrNet').textContent   = ffmt(brNet);
+  document.getElementById('csBrGST').textContent   = ffmt(brGST);
+  document.getElementById('csBrFinal').textContent = ffmt(brFinal);
+  document.getElementById('csBrComm').textContent  = ffmt(brComm);
+
+  document.getElementById('csRoRate').textContent  = roRate.toFixed(2) + '‰';
+  document.getElementById('csRoNet').textContent   = ffmt(roNet);
+  document.getElementById('csRoGST').textContent   = ffmt(roGST);
+  document.getElementById('csRoFinal').textContent = ffmt(roFinal);
+  document.getElementById('csRoComm').textContent  = ffmt(roComm);
+
+  document.getElementById('csResult').classList.remove('hidden');
+}
+
+function csReset() {
+  document.getElementById('csSI').value = '';
+  document.getElementById('csResult').classList.add('hidden');
+}
+
 function showComingSoon(name) {
   const toast = document.getElementById('csToast');
   toast.textContent = name + ' Insurance — Coming Soon!';
@@ -4747,7 +5239,6 @@ function showComingSoon(name) {
 
 <script>
 (function () {
-  /* Service Worker */
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('./sw.js')
@@ -4755,12 +5246,10 @@ function showComingSoon(name) {
         .catch(function(e){ console.log('SW error:', e); });
     });
   }
-  /* PWA Install Button */
   var deferredPrompt = null;
   var installBtn = document.getElementById('pwaInstallBtn');
   window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault();
-    deferredPrompt = e;
+    e.preventDefault(); deferredPrompt = e;
     if (installBtn) installBtn.style.display = 'flex';
   });
   if (installBtn) {
