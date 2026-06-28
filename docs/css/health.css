@@ -1,0 +1,186 @@
+
+:root{
+  --primary:#1e3a5f;--primary-light:#2563a8;--primary-dark:#0f2240;
+  --accent:#f59e0b;--accent2:#10b981;--accent3:#8b5cf6;
+  --danger:#ef4444;--bg:#f1f5f9;--card:#ffffff;
+  --text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+  --shadow:0 4px 20px rgba(0,0,0,.08);--radius:14px;
+}
+#healthSection * {box-sizing:border-box;margin:0;padding:0}
+#healthSection body {font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
+
+/* ── HEADER ── */
+#healthSection .site-header {background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 50%,var(--primary-light) 100%);padding:0;position:relative;overflow:hidden;margin-bottom:24px}
+#healthSection .site-header::before {content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+#healthSection .header-inner {max-width:960px;margin:0 auto;padding:20px 24px;display:flex;align-items:center;gap:18px;position:relative}
+#healthSection .logo-badge {width:60px;height:60px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);border-radius:14px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);flex-shrink:0}
+#healthSection .logo-badge svg {width:32px;height:32px;fill:#fff}
+#healthSection .header-text h1 {font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px;line-height:1.2}
+#healthSection .header-text p {font-size:12px;color:rgba(255,255,255,.65);margin-top:3px}
+#healthSection .header-pills {margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+#healthSection .pill {background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.9);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;backdrop-filter:blur(4px)}
+
+/* ── LAYOUT ── */
+#healthSection .container {max-width:960px;margin:0 auto;padding:0 20px 40px}
+
+/* ── CARDS ── */
+#healthSection .card {background:var(--card);border-radius:var(--radius);padding:22px 24px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid var(--border)}
+#healthSection .card-title {font-size:13px;font-weight:700;color:var(--primary);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #f0f4f8;display:flex;align-items:center;gap:10px}
+#healthSection .step-badge {background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;box-shadow:0 2px 6px rgba(37,99,168,.35)}
+#healthSection .step-badge.amber {background:linear-gradient(135deg,#d97706,#f59e0b)}
+#healthSection .step-badge.emerald {background:linear-gradient(135deg,#059669,#10b981)}
+
+/* ── FORM ── */
+#healthSection .form-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:14px}
+#healthSection .form-group {display:flex;flex-direction:column;gap:5px}
+#healthSection .form-label {font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+#healthSection input[type=text], #healthSection input[type=number], #healthSection select {
+  width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;
+  font-size:13px;outline:none;transition:.15s;background:#fff;color:var(--text);
+}
+#healthSection input:focus, #healthSection select:focus {border-color:var(--primary-light);box-shadow:0 0 0 3px rgba(37,99,168,.1)}
+
+/* ── RADIO / CHECKBOX PILLS ── */
+#healthSection .choice-group {display:flex;flex-wrap:wrap;gap:8px}
+#healthSection .choice-pill {display:flex;align-items:center;gap:7px;padding:8px 16px;border:2px solid var(--border);border-radius:9px;cursor:pointer;font-size:13px;user-select:none;transition:.15s;background:#fff;font-weight:500}
+#healthSection .choice-pill:hover {border-color:var(--primary-light);background:#f0f6ff}
+#healthSection .choice-pill:has(input:checked) {border-color:var(--primary-light)!important;background:linear-gradient(135deg,#eff6ff,#dbeafe)!important;color:var(--primary);font-weight:600}
+#healthSection .choice-pill input {accent-color:var(--primary-light)}
+
+/* ── MEMBER BLOCK ── */
+#healthSection .member-block {background:linear-gradient(135deg,#f8faff,#f0f4ff);border:1.5px solid #dde5f8;border-radius:11px;padding:14px 16px;margin-bottom:10px}
+#healthSection .member-header {display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+#healthSection .member-label {font-size:13px;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:7px}
+#healthSection .member-num {background:var(--primary);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+
+/* ── BUTTONS ── */
+#healthSection .btn {padding:9px 20px;border:none;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+#healthSection .btn-primary {background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 14px rgba(37,99,168,.3)}
+#healthSection .btn-primary:hover {transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,99,168,.4)}
+#healthSection .btn-danger {background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff}
+#healthSection .btn-danger:hover {transform:translateY(-1px)}
+#healthSection .btn-outline {background:#fff;color:var(--primary);border:2px solid var(--primary-light)}
+#healthSection .btn-outline:hover {background:#f0f6ff}
+#healthSection .btn-success {background:linear-gradient(135deg,#047857,#10b981);color:#fff;box-shadow:0 4px 14px rgba(16,185,129,.3)}
+#healthSection .btn-success:hover {transform:translateY(-1px);box-shadow:0 6px 18px rgba(16,185,129,.4)}
+#healthSection .btn-amber {background:linear-gradient(135deg,#d97706,#f59e0b);color:#fff;box-shadow:0 4px 14px rgba(245,158,11,.3)}
+#healthSection .btn-amber:hover {transform:translateY(-1px)}
+#healthSection .btn-lg {padding:13px 32px;font-size:15px;border-radius:11px}
+#healthSection .btn-sm {padding:5px 12px;font-size:12px}
+
+/* ── ACTION BAR ── */
+#healthSection .action-bar {display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:20px 0}
+
+/* ── RESULT CARD ── */
+#healthSection .result-wrap {background:linear-gradient(160deg,var(--primary-dark) 0%,var(--primary) 60%,#1d4ed8 100%);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:0 8px 32px rgba(30,58,95,.3)}
+#healthSection .result-wrap h2 {color:#fff;font-size:16px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+#healthSection .result-meta {font-size:12px;color:rgba(255,255,255,.65);margin-bottom:16px;line-height:1.7}
+#healthSection .result-meta span {display:inline-block;background:rgba(255,255,255,.12);padding:2px 10px;border-radius:5px;margin:2px 2px 2px 0;font-weight:600;color:rgba(255,255,255,.9)}
+#healthSection .rtable {width:100%;border-collapse:collapse;font-size:13px}
+#healthSection .rtable th {background:rgba(255,255,255,.12);padding:9px 12px;text-align:left;font-weight:600;color:rgba(255,255,255,.9);font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+#healthSection .rtable td {padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.9)}
+#healthSection .rtable tbody tr:hover td {background:rgba(255,255,255,.05)}
+#healthSection .rt-sub td {border-top:1px solid rgba(255,255,255,.15)!important;font-weight:700;color:#fff}
+#healthSection .rt-disc td {color:#6ee7b7}
+#healthSection .rt-total td {background:rgba(255,215,0,.12);border-top:2px solid rgba(255,215,0,.4)!important;font-weight:800;font-size:15px;color:#ffd700}
+
+/* ── COMMISSION CARDS ── */
+#healthSection .commission-section {background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:0 8px 32px rgba(0,0,0,.25)}
+#healthSection .comm-header {display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+#healthSection .comm-title {font-size:16px;font-weight:800;color:#fff;display:flex;align-items:center;gap:10px}
+#healthSection .comm-title-icon {width:36px;height:36px;background:linear-gradient(135deg,#d97706,#f59e0b);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
+#healthSection .comm-toggle {display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:rgba(255,255,255,.7);font-weight:600;user-select:none}
+#healthSection .toggle-switch {width:44px;height:24px;background:rgba(255,255,255,.2);border-radius:12px;position:relative;transition:.3s;flex-shrink:0}
+#healthSection .toggle-switch.on {background:var(--accent)}
+#healthSection .toggle-switch::after {content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+#healthSection .toggle-switch.on::after {transform:translateX(20px)}
+#healthSection #commRealToggle {display:none}
+
+#healthSection .comm-tag {display:inline-block;background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.4);color:#fcd34d;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:16px}
+#healthSection .comm-band {font-size:12px;color:rgba(255,255,255,.5);margin-bottom:16px}
+#healthSection .comm-band strong {color:rgba(255,255,255,.9)}
+
+#healthSection .stat-cards {display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+#healthSection .stat-card {border-radius:12px;padding:18px 16px;text-align:center;position:relative;overflow:hidden}
+#healthSection .stat-card::before {content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:.15}
+#healthSection .stat-card.blue {background:linear-gradient(135deg,#1d4ed8,#3b82f6)}
+#healthSection .stat-card.blue::before {background:#93c5fd}
+#healthSection .stat-card.green {background:linear-gradient(135deg,#047857,#10b981)}
+#healthSection .stat-card.green::before {background:#6ee7b7}
+#healthSection .stat-card.gold {background:linear-gradient(135deg,#92400e,#d97706)}
+#healthSection .stat-card.gold::before {background:#fcd34d}
+#healthSection .stat-pct {font-size:11px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+#healthSection .stat-amt {font-size:26px;font-weight:900;color:#fff;line-height:1;margin-bottom:4px;letter-spacing:-1px}
+#healthSection .stat-label {font-size:11.5px;color:rgba(255,255,255,.6);font-weight:600}
+#healthSection .stat-badge {display:inline-block;background:rgba(255,255,255,.15);padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;color:#fff;margin-top:6px}
+#healthSection .comm-total-bar {background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.2);border-radius:10px;padding:14px 18px;margin-top:16px;display:flex;justify-content:space-between;align-items:center}
+#healthSection .comm-total-label {font-size:13px;color:rgba(255,255,255,.7);font-weight:600}
+#healthSection .comm-total-val {font-size:22px;font-weight:900;color:#ffd700}
+
+/* ── MISC ── */
+#healthSection .hidden {display:none!important}
+#healthSection .info-pill {display:inline-block;background:#dbeafe;color:#1e40af;border-radius:5px;padding:2px 9px;font-size:11px;font-weight:700}
+#healthSection .warn-box {background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1.5px solid #fcd34d;border-radius:10px;padding:12px 16px;font-size:12.5px;color:#92400e;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start}
+#healthSection .warn-icon {font-size:16px;flex-shrink:0;margin-top:1px}
+#healthSection .zone-grid {grid-template-columns:220px 1fr}
+/* ── MOBILE ── */
+@media(max-width:640px){
+  #healthSection .header-inner {padding:14px 16px;gap:12px}
+  #healthSection .logo-badge {width:46px;height:46px;border-radius:10px}
+  #healthSection .logo-badge svg {width:24px;height:24px}
+  #healthSection .header-text h1 {font-size:16px}
+  #healthSection .header-text p {font-size:11px}
+  #healthSection .header-pills {display:none}
+
+  #healthSection .container {padding:0 12px 32px}
+  #healthSection .card {padding:16px 14px;border-radius:11px;margin-bottom:12px}
+  #healthSection .card-title {font-size:12px;margin-bottom:12px;gap:8px}
+  #healthSection .step-badge {width:22px;height:22px;font-size:10px}
+
+  #healthSection .form-grid {grid-template-columns:1fr;gap:10px;margin-bottom:10px}
+  #healthSection .zone-grid {grid-template-columns:1fr}
+  #healthSection input[type=text], #healthSection input[type=number], #healthSection select {padding:10px 12px;font-size:14px}
+
+  #healthSection .choice-group {gap:6px}
+  #healthSection .choice-pill {padding:9px 12px;font-size:13px}
+
+  #healthSection .member-block {padding:12px 12px}
+  #healthSection .member-header {flex-wrap:wrap;gap:6px}
+  #healthSection .btn-sm {padding:6px 12px;font-size:12px}
+
+  /* action bar: stack buttons */
+  #healthSection .action-bar {flex-direction:column;align-items:stretch;gap:10px;margin:16px 0}
+  #healthSection .action-bar .btn {justify-content:center;padding:14px 20px;font-size:14px}
+  #healthSection .btn-lg {padding:14px 20px;font-size:14px;border-radius:10px}
+
+  /* result table: allow horizontal scroll */
+  #healthSection .result-wrap {padding:16px 12px;border-radius:11px}
+  #healthSection .result-wrap h2 {font-size:14px}
+  #healthSection .result-meta {font-size:11px}
+  #healthSection .result-meta span {font-size:10px;padding:2px 7px}
+  #healthSection .rtable-scroll {overflow-x:auto;-webkit-overflow-scrolling:touch}
+  #healthSection .rtable {font-size:12px;min-width:340px}
+  #healthSection .rtable th, #healthSection .rtable td {padding:7px 8px}
+  #healthSection .rt-total td {font-size:13px}
+
+  /* commission */
+  #healthSection .commission-section {padding:16px 14px;border-radius:11px}
+  #healthSection .comm-header {flex-wrap:wrap;gap:10px}
+  #healthSection .comm-title {font-size:14px}
+  #healthSection .comm-title-icon {width:30px;height:30px;font-size:15px;border-radius:7px}
+  #healthSection .stat-cards {grid-template-columns:1fr;gap:10px}
+  #healthSection .stat-amt {font-size:22px}
+  #healthSection .comm-total-bar {flex-direction:column;align-items:flex-start;gap:6px}
+  #healthSection .comm-total-val {font-size:20px}
+
+  /* warn box */
+  #healthSection .warn-box {font-size:12px;padding:10px 12px}
+}
+@media print{
+  #healthSection body {background:#fff}
+  #healthSection .no-print {display:none!important}
+  #healthSection .container {padding:0}
+  #healthSection .site-header {margin-bottom:16px}
+  #healthSection .card, #healthSection .result-wrap, #healthSection .commission-section {box-shadow:none;page-break-inside:avoid}
+}
+

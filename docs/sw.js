@@ -3,14 +3,23 @@
    Caches everything on first load → works 100% offline
 ═══════════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'nia-calc-v1';
+const CACHE_NAME = 'nia-calc-v2';
 
 // All files to cache on install
 const PRECACHE = [
   './index.html',
   './manifest.json',
   './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-512.png',
+  './css/global.css',
+  './css/health.css',
+  './css/motor.css',
+  './css/fire.css',
+  './js/health.js',
+  './js/motor.js',
+  './js/nav.js',
+  './js/fire.js',
+  './js/pwa.js'
 ];
 
 /* ── INSTALL: cache all files immediately ── */
