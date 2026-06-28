@@ -897,6 +897,40 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
 
 #motorSection { min-height: 100vh; }
 #motorSection body { display: contents; }
+
+/* PC Policy Type Bar */
+#motorSection .pc-policy-type-bar {
+  background: linear-gradient(135deg, #eef4ff, #f8fafc);
+  border-bottom: 2px solid #bfdbfe;
+  padding: 18px 28px 20px;
+}
+#motorSection .pc-pt-inner { max-width: 1120px; margin: 0 auto; }
+#motorSection .pc-pt-label {
+  font-size: .65rem; font-weight: 700; color: #64748b;
+  text-transform: uppercase; letter-spacing: .2em; margin-bottom: 12px;
+}
+#motorSection .pc-pt-tabs { display: flex; gap: 12px; flex-wrap: wrap; }
+#motorSection .pc-pt-btn {
+  display: flex; align-items: center; gap: 10px; padding: 12px 18px;
+  background: #fff; border: 1.5px solid #e2e8f0; border-radius: 14px;
+  cursor: pointer; transition: all .22s; box-shadow: 0 2px 6px rgba(15,23,42,.06);
+  text-align: left;
+}
+#motorSection .pc-pt-btn:hover:not(.active) {
+  border-color: var(--th-vivid); background: var(--th-soft);
+}
+#motorSection .pc-pt-btn.active {
+  border-color: var(--th-vivid); background: var(--th-soft);
+  box-shadow: 0 0 0 2px var(--th-vivid), 0 4px 14px var(--th-glow);
+}
+#motorSection .pc-pt-icon { font-size: 1.5rem; line-height: 1; }
+#motorSection .pc-pt-name { font-size: .88rem; font-weight: 800; color: var(--ink); display: block; line-height: 1.2; }
+#motorSection .pc-pt-sub  { font-size: .63rem; color: #64748b; font-weight: 500; display: block; margin-top: 2px; }
+#motorSection .pc-pt-note {
+  margin-top: 10px; font-size: .72rem; color: #1e40af; font-weight: 500;
+  background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 6px 12px;
+  display: inline-block;
+}
 </style>
 
 <!-- ═══════════════════════════════════════════════════════
@@ -1657,7 +1691,7 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
   <div class="card">
     <div class="card-header"><div class="s-num">2</div><h2>Coverage Type</h2></div>
     <div class="card-body">
-      <div class="cov-tabs two-col">
+      <div class="cov-tabs">
         <div class="cov-tab">
           <input type="radio" name="twCov" id="twCov_pkg" value="PKG" checked onchange="twCovChange()">
           <label class="cov-tab-label" for="twCov_pkg">
@@ -1670,6 +1704,13 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
           <label class="cov-tab-label" for="twCov_tp">
             <span class="tab-icon">⚖️</span><span class="tab-name">TP Only</span>
             <span class="tab-desc">Liability Only<br>Act / MACT</span>
+          </label>
+        </div>
+        <div class="cov-tab">
+          <input type="radio" name="twCov" id="twCov_saod" value="SAOD" onchange="twCovChange()">
+          <label class="cov-tab-label" for="twCov_saod">
+            <span class="tab-icon">🔧</span><span class="tab-name">Stand Alone OD</span>
+            <span class="tab-desc">Own Damage Only<br>No TP · No PA</span>
           </label>
         </div>
       </div>
@@ -1771,10 +1812,12 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
 
       <!-- PA Cover -->
       <p class="sub-label">Personal Accident Covers</p>
-      <label class="check-block">
-        <input type="checkbox" id="twCompPA" checked>
-        <div class="cbt"><strong>Owner-Driver PA — ₹15 Lakh CSI</strong><span>₹275 flat · Individual registered owner with valid DL (GR-36A)</span></div>
-      </label>
+      <div id="twCompPABlock">
+        <label class="check-block">
+          <input type="checkbox" id="twCompPA" checked>
+          <div class="cbt"><strong>Owner-Driver PA — ₹15 Lakh CSI</strong><span>₹275 flat · Individual registered owner with valid DL (GR-36A)</span></div>
+        </label>
+      </div>
       <div class="check-block neutral" style="align-items:center;margin-top:8px" id="twPillionBlock">
         <input type="checkbox" id="twPillionPA" style="margin-top:0">
         <div class="cbt" style="flex:1"><strong>Pillion Rider / Unnamed Person PA</strong><span>₹7 per ₹10,000 SI · Max SI ₹2,00,000 (GR-36B, Endt.16)</span></div>
@@ -1787,13 +1830,15 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
       <div class="sec-div"></div>
 
       <!-- LL -->
-      <p class="sub-label">Legal Liability</p>
-      <div class="check-block neutral" style="align-items:center">
-        <input type="checkbox" id="twLL" style="margin-top:0">
-        <div class="cbt" style="flex:1"><strong>LL to Paid Driver / Cleaner / Conductor</strong><span>₹50 per person · Net premium (Endt.28)</span></div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
-          <label style="font-size:.62rem;font-weight:700;color:var(--ink-lite);text-transform:uppercase">Persons</label>
-          <input type="number" id="twLLPersons" value="1" min="1" max="5" style="width:56px;border:1.5px solid var(--border);border-radius:6px;padding:4px 7px;font-size:.8rem;font-weight:600;text-align:center;outline:none;">
+      <div id="twLLBlock">
+        <p class="sub-label">Legal Liability</p>
+        <div class="check-block neutral" style="align-items:center">
+          <input type="checkbox" id="twLL" style="margin-top:0">
+          <div class="cbt" style="flex:1"><strong>LL to Paid Driver / Cleaner / Conductor</strong><span>₹50 per person · Net premium (Endt.28)</span></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+            <label style="font-size:.62rem;font-weight:700;color:var(--ink-lite);text-transform:uppercase">Persons</label>
+            <input type="number" id="twLLPersons" value="1" min="1" max="5" style="width:56px;border:1.5px solid var(--border);border-radius:6px;padding:4px 7px;font-size:.8rem;font-weight:600;text-align:center;outline:none;">
+          </div>
         </div>
       </div>
 
@@ -1832,20 +1877,20 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
     <div class="card-body">
       <div id="twTpNotice" class="hidden" style="padding:8px 12px;background:#FFF8E6;border:1.5px solid #E2C47A;border-radius:8px;font-size:.74rem;color:#7A5C00;font-weight:600;margin-bottom:12px">⚠️ Add-on covers are not available under TP Only policy.</div>
       <div class="addon-grid">
-        <div class="addon-card" id="tw_card_nilDep" data-maxyr="5" data-allow="PKG">
-          <div class="addon-top"><label class="addon-lbl"><input type="checkbox" id="tw_nilDep" onchange="twCardToggle('nilDep')"><span><span class="aname">Zero Depreciation (Nil Dep)</span><div class="ameta"><span class="atag t-pkg">PKG</span><span class="atag t-age">≤5 yrs · 20% of net OD</span><span class="atag t-off hidden" id="tw_dtag_nilDep">Age Exceeded</span></div></span></label></div>
+        <div class="addon-card" id="tw_card_nilDep" data-maxyr="5" data-allow="PKG,SAOD">
+          <div class="addon-top"><label class="addon-lbl"><input type="checkbox" id="tw_nilDep" onchange="twCardToggle('nilDep')"><span><span class="aname">Zero Depreciation (Nil Dep)</span><div class="ameta"><span class="atag t-pkg">PKG/SAOD</span><span class="atag t-age">≤5 yrs · 20% of net OD</span><span class="atag t-off hidden" id="tw_dtag_nilDep">Age Exceeded</span></div></span></label></div>
         </div>
-        <div class="addon-card" id="tw_card_engineProtect" data-maxyr="5" data-allow="PKG">
-          <div class="addon-top"><label class="addon-lbl"><input type="checkbox" id="tw_engineProtect" onchange="twCardToggle('engineProtect')"><span><span class="aname">Engine Protector</span><div class="ameta"><span class="atag t-pkg">PKG</span><span class="atag t-age">≤5 yrs · 8% of net OD</span><span class="atag t-off hidden" id="tw_dtag_engineProtect">Age Exceeded</span></div></span></label></div>
+        <div class="addon-card" id="tw_card_engineProtect" data-maxyr="5" data-allow="PKG,SAOD">
+          <div class="addon-top"><label class="addon-lbl"><input type="checkbox" id="tw_engineProtect" onchange="twCardToggle('engineProtect')"><span><span class="aname">Engine Protector</span><div class="ameta"><span class="atag t-pkg">PKG/SAOD</span><span class="atag t-age">≤5 yrs · 8% of net OD</span><span class="atag t-off hidden" id="tw_dtag_engineProtect">Age Exceeded</span></div></span></label></div>
         </div>
-        <div class="addon-card" id="tw_card_rti" data-maxyr="3" data-allow="PKG">
-          <div class="addon-top"><label class="addon-lbl"><input type="checkbox" id="tw_rti" onchange="twCardToggle('rti')"><span><span class="aname">Return to Invoice (RTI)</span><div class="ameta"><span class="atag t-pkg">PKG</span><span class="atag t-age">≤3 yrs · 8% of net OD</span><span class="atag t-off hidden" id="tw_dtag_rti">Age Exceeded</span></div></span></label></div>
+        <div class="addon-card" id="tw_card_rti" data-maxyr="3" data-allow="PKG,SAOD">
+          <div class="addon-top"><label class="addon-lbl"><input type="checkbox" id="tw_rti" onchange="twCardToggle('rti')"><span><span class="aname">Return to Invoice (RTI)</span><div class="ameta"><span class="atag t-pkg">PKG/SAOD</span><span class="atag t-age">≤3 yrs · 8% of net OD</span><span class="atag t-off hidden" id="tw_dtag_rti">Age Exceeded</span></div></span></label></div>
         </div>
-        <div class="addon-card" id="tw_card_rsa" data-maxyr="999" data-allow="PKG">
-          <div class="addon-top"><label class="addon-lbl"><input type="checkbox" id="tw_rsa" onchange="twCardToggle('rsa')"><span><span class="aname">Roadside Assistance (RSA)</span><div class="ameta"><span class="atag t-pkg">PKG</span><span class="atag t-age">₹150 flat</span></div></span></label></div>
+        <div class="addon-card" id="tw_card_rsa" data-maxyr="999" data-allow="PKG,SAOD">
+          <div class="addon-top"><label class="addon-lbl"><input type="checkbox" id="tw_rsa" onchange="twCardToggle('rsa')"><span><span class="aname">Roadside Assistance (RSA)</span><div class="ameta"><span class="atag t-pkg">PKG/SAOD</span><span class="atag t-age">₹150 flat</span></div></span></label></div>
         </div>
-        <div class="addon-card hidden" id="tw_card_batteryProtect" data-maxyr="3" data-allow="PKG">
-          <div class="addon-top"><label class="addon-lbl"><input type="checkbox" id="tw_batteryProtect" onchange="twCardToggle('batteryProtect')"><span><span class="aname">Battery Protect (EV)</span><div class="ameta"><span class="atag t-pkg">PKG · EV only</span><span class="atag t-age">≤3 yrs · 0.5% of IDV</span><span class="atag t-off hidden" id="tw_dtag_batteryProtect">Age Exceeded</span></div></span></label></div>
+        <div class="addon-card hidden" id="tw_card_batteryProtect" data-maxyr="3" data-allow="PKG,SAOD">
+          <div class="addon-top"><label class="addon-lbl"><input type="checkbox" id="tw_batteryProtect" onchange="twCardToggle('batteryProtect')"><span><span class="aname">Battery Protect (EV)</span><div class="ameta"><span class="atag t-pkg">PKG/SAOD · EV only</span><span class="atag t-age">≤3 yrs · 0.5% of IDV</span><span class="atag t-off hidden" id="tw_dtag_batteryProtect">Age Exceeded</span></div></span></label></div>
         </div>
       </div>
     </div>
@@ -1898,6 +1943,26 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
      PRIVATE CAR SECTION
 ═══════════════════════════════════════════════ -->
 <div id="pcSection">
+
+  <!-- PC: Policy Type Selector -->
+  <div class="pc-policy-type-bar">
+    <div class="pc-pt-inner">
+      <div class="pc-pt-label">Policy Type</div>
+      <div class="pc-pt-tabs">
+        <button class="pc-pt-btn active" id="pcPtRenewal" onclick="pcSetPolicyType('renewal')">
+          <span class="pc-pt-icon">🔄</span>
+          <span class="pc-pt-name">Renewal</span>
+          <span class="pc-pt-sub">Existing vehicle · 1 yr OD + 1 yr TP</span>
+        </button>
+        <button class="pc-pt-btn" id="pcPtNew" onclick="pcSetPolicyType('new')">
+          <span class="pc-pt-icon">🆕</span>
+          <span class="pc-pt-name">Brand New Vehicle</span>
+          <span class="pc-pt-sub">1 yr OD + 3 yr TP (New vehicle policy)</span>
+        </button>
+      </div>
+      <div class="pc-pt-note" id="pcPtNote">Renewal: standard annual policy — 1 year OD and 1 year TP premium applies.</div>
+    </div>
+  </div>
 
   <!-- PC: Customer Details -->
   <div class="card">
@@ -2120,7 +2185,7 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
       </div>
       <div class="qp-col" id="pcQColTP">
         <p class="qp-col-ttl">TP / PA / LL</p>
-        <div class="qrow"><span class="qlbl">Third Party (TP)</span><span class="qval">₹ <span id="pc_lbl_tp">0.00</span></span></div>
+        <div class="qrow"><span class="qlbl" id="pcTpRowLabel">Third Party (TP)</span><span class="qval">₹ <span id="pc_lbl_tp">0.00</span></span></div>
         <div class="qrow disc" id="pc_hevRow" style="display:none"><span class="qlbl">HEV 7.5% Disc.</span><span class="qval">− ₹ <span id="pc_lbl_hevDisc">0.00</span></span></div>
         <div class="qrow"><span class="qlbl">Compulsory PA</span><span class="qval">₹ <span id="pc_lbl_pa">0.00</span></span></div>
         <div class="qrow"><span class="qlbl">LL — Paid Driver</span><span class="qval">₹ <span id="pc_lbl_ll">0.00</span></span></div>
@@ -3992,20 +4057,28 @@ function setMode(m){
 ══════════════════════════════════════════════ */
 const TW_BANNERS={
   PKG:'Package Policy: Own Damage + TP Liability + Compulsory PA. Full coverage.',
-  TP:'TP Only / Liability Policy: Third Party + Compulsory PA. No Own Damage.'
+  TP:'TP Only / Liability Policy: Third Party + Compulsory PA. No Own Damage.',
+  SAOD:'Stand Alone OD: Own Damage only. TP, Owner-Driver PA and LL covers are disabled (not included in premium).'
 };
 const twCovType=()=>{var el=document.querySelector('input[name=twCov]:checked');return el?el.value:'PKG';};
 
 function twCovChange(){
   const ct=twCovType();
   const b=$('twCovBanner'); if(b) b.textContent=TW_BANNERS[ct];
-  const pill=$('twQpPill'); if(pill) pill.textContent=ct==='PKG'?'Package':'TP Only';
+  const pill=$('twQpPill'); if(pill) pill.textContent=ct==='PKG'?'Package':ct==='TP'?'TP Only':'Stand Alone OD';
   sd('twIdvField', ct!=='TP');
   sd('twOdDiscBlock', ct!=='TP');
   sd('twAccLabel', ct!=='TP');
   sd('twAccBlock', ct!=='TP');
   sd('twPillionBlock', ct!=='TP');
   ct==='TP' ? show('twTpNotice') : hide('twTpNotice');
+  // SAOD: disable (grey out) TP-related items — show them but mark as N/A
+  const saod = ct==='SAOD';
+  const compPABlock=$('twCompPABlock');
+  if(compPABlock){ compPABlock.style.opacity=saod?'0.38':''; compPABlock.style.pointerEvents=saod?'none':''; }
+  const llBlock=$('twLLBlock');
+  if(llBlock){ llBlock.style.opacity=saod?'0.38':''; llBlock.style.pointerEvents=saod?'none':''; }
+  if(saod){ const p=$('twCompPA'); if(p) p.checked=false; const ll=$('twLL'); if(ll) ll.checked=false; }
   twRefreshAddons();
 }
 
@@ -4130,10 +4203,10 @@ function calculateTW(){
   // Additional towing (over inbuilt ₹300), max ₹300 @ 5%
   const towPrem=ct!=='TP'?Math.min(getV('twTowingAmt'),300)*0.05:0;
 
-  // Add-on covers (PKG only)
+  // Add-on covers (PKG and SAOD)
   let _twAdLines=[];
   let twAddons=0;
-  if(ct==='PKG'){
+  if(ct==='PKG'||ct==='SAOD'){
     const nilDepCb=$('tw_nilDep'); const nilDepCard=$('tw_card_nilDep');
     if(nilDepCb&&nilDepCb.checked&&nilDepCard&&!nilDepCard.classList.contains('cov-hidden')&&!nilDepCard.classList.contains('age-disabled')){
       const v=Math.round(netOD*0.20); twAddons+=v; _twAdLines.push({l:'Zero Depreciation (20% of net OD)',a:v});
@@ -4192,7 +4265,7 @@ function calculateTW(){
     custName:($('twCustName')&&$('twCustName').value)||'',
     regNo:($('twRegNo')&&$('twRegNo').value)||'',
     makeModel:($('twMakeModel')&&$('twMakeModel').value)||'',
-    covType:ct==='PKG'?'Package Policy':'TP Only',
+    covType:ct==='PKG'?'Package Policy':ct==='TP'?'TP Only':'Stand Alone OD',
     vehType:'Two Wheeler', spec:specText, zone:zoneText,
     idv:ct!=='TP'?Math.round(idv).toLocaleString('en-IN'):'N/A',
     age:$('twAgeDisplay')?$('twAgeDisplay').value:'—',
@@ -4226,6 +4299,16 @@ const PC_BANNERS={
   SAOD:'Standalone OD: Own Damage Only. No TP, no PA cover.'
 };
 const pcCovType=()=>{var el=document.querySelector('input[name=pcCov]:checked');return el?el.value:'PKG';};
+let _pcPolicyType='renewal';
+function pcSetPolicyType(type){
+  _pcPolicyType=type;
+  document.getElementById('pcPtRenewal').classList.toggle('active',type==='renewal');
+  document.getElementById('pcPtNew').classList.toggle('active',type==='new');
+  const note=document.getElementById('pcPtNote');
+  if(note) note.textContent=type==='new'
+    ?'Brand New Vehicle: 1 Year OD premium + 3 Year TP premium (as per IRDAI mandate for new vehicles).'
+    :'Renewal: standard annual policy — 1 year OD and 1 year TP premium applies.';
+}
 
 function pcCovChange(){
   const ct=pcCovType();
@@ -4326,10 +4409,12 @@ function calculatePC(){
   }
 
   let tp=0,hevDisc=0;
+  const isBrandNew=_pcPolicyType==='new';
   if(ct!=='SAOD'){
     if(vt==='EV') tp=kw==='under30'?1780:kw==='30to65'?2904:6712;
     else{tp=cc==='under1000'?2094:cc==='1000to1500'?3416:7897; if(vt==='CNG_FACTORY'||vt==='CNG_KIT')tp+=60;}
     if(vt==='HEV') hevDisc=tp*0.075;
+    if(isBrandNew) { tp=tp*3; hevDisc=hevDisc*3; }
   }
   const netTP=tp-hevDisc;
   const pa=ct!=='SAOD'&&$('pcCompPA').checked?275:0;
@@ -4395,6 +4480,7 @@ function calculatePC(){
   const setT=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
   const antiTheftDisp=$('pcAntiTheft')&&$('pcAntiTheft').checked;
   const antiTheftDispAmt=antiTheftDisp?(Math.max(0,baseOD-odDiscAmt)*0.025):0;
+  const tpLbl=$('pcTpRowLabel'); if(tpLbl) tpLbl.textContent=isBrandNew?'Third Party (3 Year TP)':'Third Party (TP)';
   setT('pc_lbl_baseOD',baseOD.toFixed(2));setT('pc_lbl_odDisc',odDiscAmt.toFixed(2));
   setT('pc_lbl_antiTheft',antiTheftDispAmt.toFixed(2));
   sd('pcAntiTheftRow',antiTheftDisp);
@@ -4441,7 +4527,7 @@ function calculatePC(){
     custName:($('pcCustName')&&$('pcCustName').value)||'',
     regNo:($('pcRegNo')&&$('pcRegNo').value)||'',
     makeModel:($('pcMakeModel')&&$('pcMakeModel').value)||'',
-    covType:ct==='PKG'?'Package Policy':ct==='TP'?'TP Only':'Standalone OD',
+    covType:ct==='PKG'?(isBrandNew?'Package — 1yr OD + 3yr TP (New)':'Package Policy'):ct==='TP'?(isBrandNew?'TP Only — 3yr (New)':'TP Only'):'Standalone OD',
     vehType:'Private Car',
     spec:vEl?vEl.options[vEl.selectedIndex].text:'',
     zone:zEl?zEl.options[zEl.selectedIndex].text:'',
