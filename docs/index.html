@@ -1231,6 +1231,70 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
 .fire-coming-icon { font-size:60px; margin-bottom:16px; }
 .fire-coming-card h3 { font-size:1.3rem; font-weight:800; color:var(--ink); margin-bottom:10px; }
 .fire-coming-card p { font-size:.9rem; color:var(--ink-l); max-width:340px; margin:0 auto; line-height:1.7; }
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS FIXES
+   — 16px min font-size on all inputs (iOS zoom prevention)
+   — ≥44px touch targets for buttons & checkboxes
+   — Layout reflow for small viewports
+═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* NAV: tighter padding, 44px touch targets */
+  #globalNav { padding: 10px 14px; gap: 10px; }
+  #globalNav button { min-height: 44px; padding: 10px 12px; font-size: 12px; }
+  #pwaInstallBtn { min-height: 40px; padding: 10px 12px; font-size: 12px; }
+  #navTitle { font-size: 14px; }
+
+  /* LANDING: reduce excessive padding */
+  .hero-inner { padding: 22px 16px 26px; gap: 18px; }
+  .category-section { padding: 22px 14px 32px; }
+
+  /* MOTOR INPUTS: 16px prevents iOS auto-zoom on focus */
+  #motorSection .f-inp,
+  #motorSection .f-sel { font-size: 16px !important; }
+  #motorSection .sfield input { font-size: 16px !important; }
+  #motorSection .disc-g input { font-size: 16px !important; width: 64px; }
+  #motorSection .addon-sub { font-size: 16px !important; }
+
+  /* FIRE INPUTS: prevent iOS zoom */
+  .fire-inp { font-size: 16px !important; }
+
+  /* MOTOR sfield: allow narrower on tablets */
+  #motorSection .sfield { min-width: 130px; }
+
+  /* COVERAGE TABS: 3-col → 2-col */
+  #motorSection .cov-tabs { grid-template-columns: 1fr 1fr; }
+
+  /* MODE BUTTONS: 44px minimum height */
+  #motorSection .mode-btn { min-height: 44px; }
+
+  /* CHECKBOXES: larger tap targets */
+  #motorSection .check-block input[type=checkbox] { width: 20px; height: 20px; }
+  #motorSection .addon-lbl input[type=checkbox] { width: 20px; height: 20px; }
+
+  /* TINY LABELS: bump up slightly */
+  .hstat-lbl { font-size: 10px !important; letter-spacing: 0.5px; }
+  .coming-soon-badge, .active-badge { font-size: 9px; }
+}
+
+@media (max-width: 480px) {
+  /* NAV: minimal padding on phones */
+  #globalNav { padding: 8px 10px; gap: 6px; }
+  #globalNav button { padding: 10px; font-size: 11px; }
+
+  /* LANDING HERO: stack badge + text vertically */
+  .hero-inner { flex-direction: column; align-items: flex-start; gap: 14px; padding: 18px 14px 20px; }
+  .category-section { padding: 16px 12px 24px; }
+
+  /* MOTOR sfield: no fixed min-width on phone */
+  #motorSection .sfield { min-width: 0; flex: 1 1 100%; }
+
+  /* COVERAGE TABS: single column on phones */
+  #motorSection .cov-tabs { grid-template-columns: 1fr; }
+
+  /* MODE TOGGLE: compact but tappable */
+  #motorSection .mode-btn { padding: 11px 14px; font-size: .82rem; }
+}
 </style>
 
 <!-- jsPDF for health PDF export -->
