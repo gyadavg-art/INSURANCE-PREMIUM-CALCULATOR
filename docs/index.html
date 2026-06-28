@@ -51,231 +51,308 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
 }
 
 /* ══════════════════════════════════════════════
-   LANDING PAGE — Light & Bright Theme
+   LANDING PAGE — Sambhal UP-38 Theme
 ══════════════════════════════════════════════ */
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+@keyframes badgeSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes shimmerGold { 0%{background-position:-200% center} 100%{background-position:200% center} }
+
+:root {
+  --navy:  #0d1b3e;
+  --navy2: #1a2f5e;
+  --gold:  #c9a227;
+  --gold2: #e8c547;
+  --saffron: #f97316;
+  --green-ind: #138808;
+  --white: #ffffff;
+}
+
+.orb { display: none; }
+
 #landingScreen {
   min-height: 100vh;
-  background: linear-gradient(160deg, #eef4ff 0%, #f0faf6 50%, #fef9ee 100%);
+  background: #f4f6fb;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  display: flex; flex-direction: column;
+}
+
+/* ── HERO HEADER (full bleed navy) ── */
+.landing-hero-header {
+  background: linear-gradient(135deg, #07112b 0%, #0d1b3e 45%, #162c5c 100%);
   padding: 0;
   position: relative;
   overflow: hidden;
 }
-
-/* Soft decorative blobs */
-#landingScreen::before {
-  content: '';
-  position: absolute; top: -120px; right: -120px;
-  width: 560px; height: 560px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(37,99,168,0.12), transparent 70%);
-  pointer-events: none; z-index: 0;
+.landing-hero-header::before {
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,162,39,0.12), transparent 70%);
+  pointer-events: none;
 }
-#landingScreen::after {
-  content: '';
-  position: absolute; bottom: -80px; left: -80px;
-  width: 420px; height: 420px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(16,185,129,0.1), transparent 70%);
-  pointer-events: none; z-index: 0;
+.landing-hero-header::after {
+  content: ''; position: absolute; bottom: -40px; left: -40px;
+  width: 240px; height: 240px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(249,115,22,0.10), transparent 70%);
+  pointer-events: none;
 }
-.orb { display: none; } /* hide dark orbs */
 
-/* ── TOP NAV BAR (landing) ── */
-.landing-topbar {
-  position: relative; z-index: 10;
+/* gold top stripe */
+.hero-gold-stripe {
+  height: 4px;
+  background: linear-gradient(90deg, var(--saffron) 0%, var(--gold) 40%, var(--gold2) 60%, var(--saffron) 100%);
+  background-size: 200% 100%;
+  animation: shimmerGold 3s linear infinite;
+}
+
+.hero-inner {
   max-width: 1100px; margin: 0 auto;
-  padding: 22px 32px;
-  display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid rgba(30,58,95,0.08);
+  padding: 36px 32px 40px;
+  display: flex; align-items: center; gap: 40px;
+  position: relative; z-index: 2;
 }
-.landing-brand { display: flex; align-items: center; gap: 12px; }
-.brand-logo {
-  width: 46px; height: 46px; border-radius: 13px;
-  background: linear-gradient(135deg, #1e3a5f 0%, #2563a8 100%);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 19px; color: #fff;
-  box-shadow: 0 4px 16px rgba(37,99,168,0.3);
-}
-.brand-name { font-size: 15px; font-weight: 800; color: #1e3a5f; letter-spacing: -0.3px; }
-.brand-sub  { font-size: 10px; color: #64748b; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
-.topbar-pills { display: flex; gap: 8px; }
-.topbar-pill {
-  background: #fff; border: 1px solid #e2e8f0;
-  color: #475569; padding: 5px 14px; border-radius: 20px;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-@media(max-width:600px){ .topbar-pills { display: none; } }
 
-/* ── HERO ── */
-.landing-hero {
-  position: relative; z-index: 10;
+/* ── BADGE ── */
+.sambhal-badge {
+  flex-shrink: 0;
+  width: 190px; height: 190px;
+  filter: drop-shadow(0 8px 32px rgba(201,162,39,0.40));
+  animation: fadeUp 0.7s ease both;
+}
+@media(max-width:640px){ .sambhal-badge { width: 130px; height: 130px; } }
+
+/* ── HERO TEXT ── */
+.hero-text-block {
+  flex: 1;
+  animation: fadeUp 0.7s ease 0.1s both;
+}
+.hero-org-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(201,162,39,0.15); border: 1px solid rgba(201,162,39,0.4);
+  color: var(--gold2); padding: 5px 14px; border-radius: 30px;
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.hero-org-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold2); animation: pulse 2s infinite; }
+.hero-main-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+  font-weight: 900; line-height: 1.1; color: #fff;
+  letter-spacing: -0.5px; margin-bottom: 6px;
+}
+.hero-main-title .gold-accent { color: var(--gold2); }
+.hero-sub-title {
+  font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+  color: rgba(255,255,255,0.55); font-weight: 500;
+  margin-bottom: 20px; letter-spacing: 0.2px;
+}
+.hero-info-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.hero-chip {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.75); padding: 5px 12px; border-radius: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.2px;
+}
+.hero-chip-icon { font-size: 13px; }
+
+.hero-stats-strip {
+  display: flex; gap: 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
   max-width: 1100px; margin: 0 auto;
-  padding: 56px 32px 0;
+  padding: 0 32px;
+  position: relative; z-index: 2;
+}
+.hstat {
+  flex: 1; padding: 16px 20px;
+  border-right: 1px solid rgba(255,255,255,0.08);
   text-align: center;
 }
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: #eff6ff; border: 1px solid #bfdbfe;
-  color: #1d4ed8; padding: 6px 16px; border-radius: 30px;
-  font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
-  margin-bottom: 22px;
-}
-.hero-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: #3b82f6; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+.hstat:last-child { border-right: none; }
+.hstat-num { font-size: 1.4rem; font-weight: 900; color: var(--gold2); line-height: 1; letter-spacing: -0.5px; }
+.hstat-lbl { font-size: 9px; color: rgba(255,255,255,0.45); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
 
-.hero-title {
-  font-size: clamp(2rem, 5vw, 3.4rem);
-  font-weight: 900; line-height: 1.1; color: #0f172a;
-  letter-spacing: -1.5px; margin-bottom: 18px;
-}
-.hero-title .accent {
-  background: linear-gradient(135deg, #1e3a5f 0%, #2563a8 50%, #0ea5e9 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.hero-desc {
-  font-size: 1.05rem; color: #64748b; max-width: 520px;
-  margin: 0 auto 14px; line-height: 1.75; font-weight: 400;
-}
-.hero-hindi {
-  font-size: 0.92rem; color: #94a3b8;
-  margin-bottom: 48px; font-weight: 500; letter-spacing: 0.3px;
+/* gold bottom stripe */
+.hero-gold-stripe-bottom {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--saffron) 70%, transparent);
 }
 
-/* ── STATS ROW ── */
-.stats-row {
-  display: flex; align-items: center; justify-content: center;
-  gap: 0; margin-bottom: 52px;
-  position: relative; z-index: 10;
-  background: #fff; border: 1px solid #e2e8f0;
-  border-radius: 16px; padding: 20px 32px;
-  max-width: 640px; margin-left: auto; margin-right: auto;
-  box-shadow: 0 4px 24px rgba(30,58,95,0.08);
-}
-.stat-item { text-align: center; flex: 1; }
-.stat-num { font-size: 1.55rem; font-weight: 900; color: #1e3a5f; letter-spacing: -1px; line-height: 1; }
-.stat-num .stat-unit { font-size: 0.85rem; opacity: 0.6; font-weight: 700; }
-.stat-lbl { font-size: 0.68rem; color: #94a3b8; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; margin-top: 5px; }
-.stat-sep { width: 1px; height: 36px; background: #e2e8f0; flex-shrink: 0; }
-@media(max-width:480px){ .stats-row { gap: 0; padding: 16px; } .stat-sep { display: none; } }
-
-/* ── CATEGORY GRID ── */
+/* ── CARDS SECTION ── */
 .category-section {
-  position: relative; z-index: 10;
-  max-width: 1100px; margin: 0 auto;
-  padding: 0 32px 72px;
+  flex: 1;
+  max-width: 1100px; margin: 0 auto; width: 100%;
+  padding: 36px 28px 48px;
+  animation: fadeUp 0.7s ease 0.2s both;
 }
 .section-label {
-  text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 2px;
-  text-transform: uppercase; color: #94a3b8; margin-bottom: 24px;
+  text-align: center;
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: #94a3b8; margin-bottom: 22px;
+  display: flex; align-items: center; gap: 14px;
 }
-.category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-@media (max-width: 640px) { .category-grid { grid-template-columns: 1fr; gap: 14px; } }
+.section-label::before,.section-label::after {
+  content:''; flex:1; height:1px; background:#e2e8f0;
+}
+
+.category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+@media (max-width: 640px) { .category-grid { grid-template-columns: 1fr; gap: 12px; } }
 
 .category-card {
   position: relative; overflow: hidden; cursor: pointer;
-  border-radius: 22px; padding: 32px 28px 26px;
-  border: 1.5px solid #e2e8f0;
+  border-radius: 20px; padding: 0;
+  border: 1.5px solid rgba(255,255,255,0.6);
   background: #ffffff;
   transition: all 0.28s cubic-bezier(0.4,0,0.2,1);
-  box-shadow: 0 2px 12px rgba(30,58,95,0.06);
+  box-shadow: 0 2px 14px rgba(13,27,62,0.07);
+  display: flex; flex-direction: column;
 }
-.category-card::before {
-  content: ''; position: absolute; inset: 0; border-radius: 22px; opacity: 0;
-  transition: opacity 0.28s;
-  background: var(--card-hover-bg, linear-gradient(135deg, #eff6ff, #f0fdf4));
-}
-.category-card:hover:not(.disabled)::before { opacity: 1; }
 .category-card:hover:not(.disabled) {
-  transform: translateY(-6px);
-  border-color: var(--card-accent, #2563a8);
-  box-shadow: 0 16px 48px rgba(30,58,95,0.14), 0 0 0 1px var(--card-accent, #2563a8);
+  transform: translateY(-5px);
+  border-color: var(--card-accent, #1e3a5f);
+  box-shadow: 0 20px 52px rgba(13,27,62,0.15), 0 0 0 1px var(--card-accent, #1e3a5f);
 }
-.category-card.disabled { cursor: not-allowed; opacity: 0.6; }
-.category-card.disabled:hover { transform: none; box-shadow: 0 2px 12px rgba(30,58,95,0.06); border-color: #e2e8f0; }
+.category-card.disabled { cursor: not-allowed; }
+.category-card.disabled:hover { transform: none; box-shadow: 0 2px 14px rgba(13,27,62,0.07); }
 
 /* Card colour themes */
-.card-motor  { --card-accent:#2563a8; --card-hover-bg: linear-gradient(135deg,#eff6ff,#e0f2fe); }
-.card-health { --card-accent:#059669; --card-hover-bg: linear-gradient(135deg,#f0fdf4,#ecfdf5); }
-.card-fire   { --card-accent:#dc2626; --card-hover-bg: linear-gradient(135deg,#fff1f2,#fef2f2); }
-.card-other  { --card-accent:#7c3aed; --card-hover-bg: linear-gradient(135deg,#faf5ff,#f3e8ff); }
+.card-motor  { --card-accent:#1a4eb5; }
+.card-health { --card-accent:#059669; }
+.card-fire   { --card-accent:#dc2626; }
+.card-other  { --card-accent:#7c3aed; }
 
-/* Card corner accent stripe */
-.card-blob {
-  position: absolute; top: 0; right: 0;
-  width: 120px; height: 120px;
-  background: radial-gradient(circle at top right, var(--card-blob-color, rgba(37,99,168,0.08)), transparent 70%);
-  pointer-events: none; border-radius: 0 22px 0 0;
+/* Top accent bar */
+.card-top-bar {
+  height: 5px;
+  background: var(--card-bar, linear-gradient(90deg, #1a4eb5, #3b82f6));
+  border-radius: 20px 20px 0 0;
 }
-.card-motor  .card-blob { --card-blob-color: rgba(37,99,168,0.10); }
-.card-health .card-blob { --card-blob-color: rgba(5,150,105,0.10); }
-.card-fire   .card-blob { --card-blob-color: rgba(220,38,38,0.08); }
-.card-other  .card-blob { --card-blob-color: rgba(124,58,237,0.08); }
+.card-motor  .card-top-bar { background: linear-gradient(90deg, #0d1b3e, #1a4eb5, #3b82f6); }
+.card-health .card-top-bar { background: linear-gradient(90deg, #065f46, #059669, #10b981); }
+.card-fire   .card-top-bar { background: linear-gradient(90deg, #7f1d1d, #dc2626, #f97316); }
+.card-other  .card-top-bar { background: linear-gradient(90deg, #4c1d95, #7c3aed, #a855f7); }
 
-/* Card icon container */
+.card-body-wrap { padding: 22px 24px 20px; flex: 1; }
+.card-blob { display: none; }
+
 .card-icon-wrap {
-  width: 64px; height: 64px; border-radius: 18px; margin-bottom: 18px;
+  width: 56px; height: 56px; border-radius: 14px; margin-bottom: 14px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 30px; position: relative; z-index: 1;
-  transition: transform 0.28s;
+  font-size: 26px; transition: transform 0.28s;
 }
 .card-motor  .card-icon-wrap { background: linear-gradient(135deg,#dbeafe,#bfdbfe); border: 1.5px solid #93c5fd; }
 .card-health .card-icon-wrap { background: linear-gradient(135deg,#d1fae5,#a7f3d0); border: 1.5px solid #6ee7b7; }
 .card-fire   .card-icon-wrap { background: linear-gradient(135deg,#fee2e2,#fecaca); border: 1.5px solid #fca5a5; }
 .card-other  .card-icon-wrap { background: linear-gradient(135deg,#ede9fe,#ddd6fe); border: 1.5px solid #c4b5fd; }
-.category-card:hover:not(.disabled) .card-icon-wrap { transform: scale(1.1) rotate(-5deg); }
+.category-card:hover:not(.disabled) .card-icon-wrap { transform: scale(1.12) rotate(-6deg); }
 
 .card-content { position: relative; z-index: 1; }
-.card-title-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 5px; }
-.card-title-row h2 { font-size: 1.2rem; font-weight: 800; color: #0f172a; letter-spacing: -0.3px; }
-.card-hindi { font-size: 0.78rem; color: #94a3b8; margin-bottom: 10px; font-weight: 500; }
-.card-desc-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.card-title-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 3px; }
+.card-title-row h2 { font-size: 1.12rem; font-weight: 800; color: #0f172a; letter-spacing: -0.3px; }
+.card-hindi { font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; font-weight: 500; }
+.card-desc-pills { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
 .card-pill {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
-  padding: 3px 10px; border-radius: 20px;
-  background: #f1f5f9; border: 1px solid #e2e8f0; color: #475569;
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.2px;
+  padding: 3px 9px; border-radius: 20px;
+  background: #f8fafc; border: 1px solid #e2e8f0; color: #64748b;
 }
 .card-motor:hover  .card-pill { background: #dbeafe; border-color: #93c5fd; color: #1d4ed8; }
 .card-health:hover .card-pill { background: #d1fae5; border-color: #6ee7b7; color: #065f46; }
+.card-fire:hover   .card-pill { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
 
-/* Arrow icon */
+/* Card CTA bottom */
+.card-cta {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 24px; margin-top: auto;
+  border-top: 1px solid #f1f5f9;
+  background: #fafbfc;
+  transition: all 0.24s;
+}
+.card-cta-text { font-size: 11.5px; font-weight: 700; color: #64748b; letter-spacing: 0.3px; }
 .card-arrow {
-  width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
+  width: 30px; height: 30px; border-radius: 9px;
   display: flex; align-items: center; justify-content: center;
   background: #f1f5f9; border: 1px solid #e2e8f0;
-  color: #94a3b8; font-size: 15px;
-  transition: all 0.28s; margin-top: 2px;
+  color: #94a3b8; font-size: 14px; transition: all 0.24s;
 }
-.category-card:hover:not(.disabled) .card-arrow {
-  background: var(--card-accent, #2563a8); border-color: var(--card-accent, #2563a8);
-  color: #fff; transform: translateX(4px);
-}
+.category-card:hover:not(.disabled) .card-cta { background: var(--card-accent); }
+.category-card:hover:not(.disabled) .card-cta-text { color: rgba(255,255,255,0.85); }
+.category-card:hover:not(.disabled) .card-arrow { background: rgba(255,255,255,0.2); border-color: transparent; color: #fff; transform: translateX(3px); }
 
 /* Badges */
 .coming-soon-badge {
   display: inline-flex; align-items: center; gap: 4px;
   background: #fef3c7; border: 1px solid #fde68a;
-  color: #92400e; font-size: 9px; font-weight: 800; padding: 4px 10px;
-  border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px;
-  white-space: nowrap;
+  color: #92400e; font-size: 8px; font-weight: 800; padding: 3px 8px;
+  border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap;
 }
 .active-badge {
   display: inline-flex; align-items: center; gap: 4px;
   background: #d1fae5; border: 1px solid #6ee7b7;
-  color: #065f46; font-size: 9px; font-weight: 800; padding: 4px 10px;
-  border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px;
-  white-space: nowrap;
+  color: #065f46; font-size: 8px; font-weight: 800; padding: 3px 8px;
+  border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap;
 }
-.badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+.badge-dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
 
 /* ── FOOTER BAR ── */
 .landing-footer {
-  position: relative; z-index: 10;
-  border-top: 1px solid #e2e8f0;
-  padding: 20px 32px;
+  background: var(--navy);
+  padding: 16px 32px;
   text-align: center;
-  font-size: 11px; color: #94a3b8; font-weight: 500; letter-spacing: 0.3px;
-  background: #fff;
+  font-size: 10.5px; color: rgba(255,255,255,0.38); font-weight: 500; letter-spacing: 0.5px;
 }
+.landing-footer strong { color: var(--gold); font-weight: 600; }
+
+/* topbar — hide, we use hero header instead */
+.landing-topbar, .landing-hero { display: none; }
+.stats-row, .hero-eyebrow, .hero-title, .hero-desc, .hero-hindi { display: none; }
+
+/* ── NEW HERO TEXT CLASSES ── */
+.hero-agency-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold2); margin-bottom: 12px; opacity: 0.88;
+}
+.hero-heading {
+  font-size: clamp(1.7rem, 3.8vw, 2.7rem);
+  font-weight: 900; line-height: 1.1; color: #fff;
+  letter-spacing: -0.5px; margin: 0 0 8px;
+}
+.hero-heading-gold { color: var(--gold2); }
+.hero-sub {
+  font-size: clamp(0.82rem, 1.4vw, 1rem);
+  color: rgba(255,255,255,0.52); font-weight: 500;
+  margin-bottom: 10px; letter-spacing: 0.2px;
+}
+.hero-hindi-tag {
+  font-size: 0.82rem; color: rgba(255,255,255,0.38); font-weight: 400;
+}
+
+/* Stats strip items */
+.hstat-item {
+  flex: 1; padding: 14px 16px; text-align: center;
+}
+.hstat-sep {
+  width: 1px; background: rgba(255,255,255,0.08); align-self: stretch; margin: 8px 0;
+}
+.hstat-num { font-size: 1.3rem; font-weight: 900; color: var(--gold2); line-height: 1; letter-spacing: -0.5px; }
+.hstat-lbl { font-size: 9px; color: rgba(255,255,255,0.42); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+/* New card body classes */
+.card-icon-row {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+}
+.card-icon-big { font-size: 36px; }
+.card-title { font-size: 1.15rem; font-weight: 800; color: #0f172a; letter-spacing: -0.3px; margin: 0 0 3px; }
+.card-hindi-sm { font-size: 0.78rem; color: #94a3b8; margin: 0 0 8px; font-weight: 500; }
+.card-desc-text { font-size: 11px; color: #64748b; line-height: 1.5; margin: 0; }
+.card-cta-pills { display: flex; gap: 5px; }
+.card-pill-sm {
+  font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 12px;
+  background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b;
+}
+.card-cta-arrow {
+  font-size: 12px; font-weight: 700; color: #1d4ed8; transition: transform 0.2s;
+}
+.category-card:hover:not(.disabled) .card-cta-arrow { transform: translateX(4px); color: inherit; }
+.category-card:hover:not(.disabled) .card-cta { background: var(--card-bg-hover, #f0f6ff); }
 
 /* ── TOAST ── */
 #csToast {
@@ -1183,147 +1260,294 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
 ═══════════════════════════════════════════════════════ -->
 <div id="landingScreen">
 
-  <!-- Floating orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+  <!-- ── HERO HEADER ── -->
+  <div class="landing-hero-header">
+    <div class="hero-gold-stripe"></div>
 
-  <!-- Top bar -->
-  <div class="landing-topbar">
-    <div class="landing-brand">
-      <div class="brand-logo">N</div>
-      <div>
-        <div class="brand-name">New India Assurance</div>
-        <div class="brand-sub">Premium Calculator Suite</div>
+    <div class="hero-inner">
+      <!-- Sambhal UP-38 Badge SVG -->
+      <div class="sambhal-badge">
+        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="190" height="190">
+          <defs>
+            <!-- Arc paths for text -->
+            <path id="sb-arc-top"    d="M 22,150 A 128,128 0 0,1 278,150" fill="none"/>
+            <path id="sb-arc-top2"   d="M 42,150 A 108,108 0 0,1 258,150" fill="none"/>
+            <path id="sb-arc-bot"    d="M 22,150 A 128,128 0 0,0 278,150" fill="none"/>
+            <path id="sb-arc-bot2"   d="M 50,150 A 100,100 0 0,0 250,150" fill="none"/>
+            <!-- Shield clip -->
+            <clipPath id="shieldClip">
+              <path d="M150,62 L195,78 L195,138 Q195,178 150,200 Q105,178 105,138 L105,78 Z"/>
+            </clipPath>
+          </defs>
+
+          <!-- === OUTER RING: orange === -->
+          <circle cx="150" cy="150" r="146" fill="#e8621a"/>
+          <!-- White spacer -->
+          <circle cx="150" cy="150" r="136" fill="#ffffff"/>
+          <!-- Gold ring -->
+          <circle cx="150" cy="150" r="133" fill="#c9a227"/>
+          <!-- Navy body -->
+          <circle cx="150" cy="150" r="128" fill="#1a2b5e"/>
+          <!-- Inner gold ring -->
+          <circle cx="150" cy="150" r="122" fill="none" stroke="#c9a227" stroke-width="2"/>
+          <circle cx="150" cy="150" r="119" fill="none" stroke="#c9a227" stroke-width="0.8"/>
+
+          <!-- === ARC TEXT: SAMBHAL (top, large) === -->
+          <text font-family="'Arial Black',Arial,sans-serif" font-size="22" font-weight="900" fill="#ffffff" letter-spacing="6">
+            <textPath href="#sb-arc-top" startOffset="50%" text-anchor="middle">SAMBHAL</textPath>
+          </text>
+
+          <!-- === ARC TEXT: UTTAR PRADESH (smaller, just below SAMBHAL) === -->
+          <text font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#e8c547" letter-spacing="2.5">
+            <textPath href="#sb-arc-top2" startOffset="50%" text-anchor="middle">UTTAR PRADESH</textPath>
+          </text>
+
+          <!-- === ARC TEXT: NEW INDIA (bottom, large) === -->
+          <text font-family="'Arial Black',Arial,sans-serif" font-size="20" font-weight="900" fill="#ffffff" letter-spacing="5">
+            <textPath href="#sb-arc-bot" startOffset="50%" text-anchor="middle">NEW INDIA</textPath>
+          </text>
+
+          <!-- === ARC TEXT: PROGRESS | HERITAGE | DEVELOPMENT === -->
+          <text font-family="Arial,sans-serif" font-size="8.5" font-weight="600" fill="#e8c547" letter-spacing="0.8">
+            <textPath href="#sb-arc-bot2" startOffset="50%" text-anchor="middle">PROGRESS | HERITAGE | DEVELOPMENT</textPath>
+          </text>
+
+          <!-- === LEFT LAUREL WREATH (green leaves) === -->
+          <g transform="translate(32,150)" opacity="0.92">
+            <!-- stem -->
+            <line x1="0" y1="30" x2="0" y2="-30" stroke="#3a7d1e" stroke-width="1.5"/>
+            <!-- leaves left side -->
+            <ellipse cx="-7" cy="22" rx="8" ry="4" fill="#4a9e28" transform="rotate(-40,-7,22)"/>
+            <ellipse cx="-8" cy="10" rx="8" ry="4" fill="#5cb832" transform="rotate(-50,-8,10)"/>
+            <ellipse cx="-7" cy="-2" rx="7" ry="3.5" fill="#4a9e28" transform="rotate(-55,-7,-2)"/>
+            <ellipse cx="-5" cy="-14" rx="6" ry="3" fill="#5cb832" transform="rotate(-60,-5,-14)"/>
+            <ellipse cx="-3" cy="-25" rx="5" ry="2.5" fill="#4a9e28" transform="rotate(-65,-3,-25)"/>
+            <!-- leaves right side -->
+            <ellipse cx="7" cy="22" rx="8" ry="4" fill="#5cb832" transform="rotate(40,7,22)"/>
+            <ellipse cx="8" cy="10" rx="8" ry="4" fill="#4a9e28" transform="rotate(50,8,10)"/>
+            <ellipse cx="7" cy="-2" rx="7" ry="3.5" fill="#5cb832" transform="rotate(55,7,-2)"/>
+            <ellipse cx="5" cy="-14" rx="6" ry="3" fill="#4a9e28" transform="rotate(60,5,-14)"/>
+            <ellipse cx="3" cy="-25" rx="5" ry="2.5" fill="#5cb832" transform="rotate(65,3,-25)"/>
+          </g>
+
+          <!-- === RIGHT LAUREL WREATH === -->
+          <g transform="translate(268,150)" opacity="0.92">
+            <line x1="0" y1="30" x2="0" y2="-30" stroke="#3a7d1e" stroke-width="1.5"/>
+            <ellipse cx="-7" cy="22" rx="8" ry="4" fill="#4a9e28" transform="rotate(-40,-7,22)"/>
+            <ellipse cx="-8" cy="10" rx="8" ry="4" fill="#5cb832" transform="rotate(-50,-8,10)"/>
+            <ellipse cx="-7" cy="-2" rx="7" ry="3.5" fill="#4a9e28" transform="rotate(-55,-7,-2)"/>
+            <ellipse cx="-5" cy="-14" rx="6" ry="3" fill="#5cb832" transform="rotate(-60,-5,-14)"/>
+            <ellipse cx="-3" cy="-25" rx="5" ry="2.5" fill="#4a9e28" transform="rotate(-65,-3,-25)"/>
+            <ellipse cx="7" cy="22" rx="8" ry="4" fill="#5cb832" transform="rotate(40,7,22)"/>
+            <ellipse cx="8" cy="10" rx="8" ry="4" fill="#4a9e28" transform="rotate(50,8,10)"/>
+            <ellipse cx="7" cy="-2" rx="7" ry="3.5" fill="#5cb832" transform="rotate(55,7,-2)"/>
+            <ellipse cx="5" cy="-14" rx="6" ry="3" fill="#4a9e28" transform="rotate(60,5,-14)"/>
+            <ellipse cx="3" cy="-25" rx="5" ry="2.5" fill="#5cb832" transform="rotate(65,3,-25)"/>
+          </g>
+
+          <!-- === SHIELD / CREST === -->
+          <!-- Shield border (gold) -->
+          <path d="M150,60 L198,78 L198,140 Q198,184 150,206 Q102,184 102,140 L102,78 Z"
+                fill="#c9a227" stroke="#c9a227" stroke-width="2"/>
+          <!-- Shield fill (dark navy) -->
+          <path d="M150,65 L194,82 L194,140 Q194,180 150,201 Q106,180 106,140 L106,82 Z"
+                fill="#12205a"/>
+
+          <!-- India map inside shield (outline style, gold/yellow) -->
+          <g transform="translate(150,132) scale(0.52)" clip-path="url(#shieldClip)">
+            <!-- India full outline -->
+            <path d="
+              M0,-105 C-5,-108 -18,-105 -25,-98 C-32,-91 -38,-80 -42,-68
+              C-46,-56 -50,-45 -48,-33 C-45,-20 -52,-15 -55,-5
+              C-58,5 -55,16 -52,25 C-48,34 -50,42 -45,50
+              C-40,58 -32,60 -28,68 C-22,78 -25,88 -18,95
+              C-11,102 -2,105 6,108 C14,111 20,118 28,120
+              C36,122 42,116 50,112 C58,108 66,106 72,100
+              C78,94 78,84 82,76 C86,68 92,62 92,52
+              C92,42 86,34 84,24 C82,14 86,4 82,-6
+              C78,-16 70,-20 65,-30 C60,-40 62,-52 55,-60
+              C48,-68 36,-70 28,-78 C20,-86 18,-98 8,-104
+              C0,-110 5,-102 0,-105 Z
+            " fill="#c9a227" stroke="#e8d060" stroke-width="1.5" opacity="0.95"/>
+            <!-- Kashmir bulge top -->
+            <path d="M0,-105 C-5,-112 -15,-115 -20,-108 C-25,-101 -20,-92 -12,-90 C-5,-88 2,-96 0,-105 Z"
+                  fill="#c9a227" stroke="#e8d060" stroke-width="1" opacity="0.95"/>
+            <!-- UP highlight (center-north) -->
+            <path d="M-8,-30 C-15,-35 -25,-32 -30,-25 C-35,-18 -32,-8 -26,-4 C-20,0 -10,-2 -4,-8 C2,-14 -2,-25 -8,-30 Z"
+                  fill="#f0c030" opacity="0.7"/>
+            <!-- Dot for Sambhal -->
+            <circle cx="-12" cy="-18" r="4" fill="#ffffff" opacity="0.9"/>
+          </g>
+
+          <!-- UP-38 label on shield -->
+          <rect x="114" y="178" width="72" height="22" rx="4" fill="#c9a227"/>
+          <text x="150" y="194" text-anchor="middle"
+                font-family="'Arial Black',Arial,sans-serif" font-size="13" font-weight="900"
+                fill="#12205a" letter-spacing="2">UP - 38</text>
+
+          <!-- Ashoka Chakra below shield -->
+          <circle cx="150" cy="215" r="10" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+          <circle cx="150" cy="215" r="2" fill="#1a3a8a"/>
+          <!-- 12 spokes -->
+          <g stroke="#1a3a8a" stroke-width="0.8">
+            <line x1="150" y1="205" x2="150" y2="207"/>
+            <line x1="150" y1="223" x2="150" y2="225"/>
+            <line x1="140" y1="215" x2="142" y2="215"/>
+            <line x1="158" y1="215" x2="160" y2="215"/>
+            <line x1="142.9" y1="207.9" x2="144.3" y2="209.3"/>
+            <line x1="155.7" y1="220.7" x2="157.1" y2="222.1"/>
+            <line x1="157.1" y1="207.9" x2="155.7" y2="209.3"/>
+            <line x1="144.3" y1="220.7" x2="142.9" y2="222.1"/>
+            <line x1="140" y1="210" x2="142" y2="211"/>
+            <line x1="158" y1="219" x2="160" y2="220"/>
+            <line x1="140" y1="220" x2="142" y2="219"/>
+            <line x1="158" y1="211" x2="160" y2="210"/>
+          </g>
+          <!-- Tricolor arc under chakra -->
+          <path d="M137,222 Q150,232 163,222" stroke="#f97316" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M137,227 Q150,237 163,227" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M138,231 Q150,241 162,231" stroke="#138808" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Small map silhouettes on left/right of shield (grey outline) -->
+          <g transform="translate(60,148) scale(0.18)" opacity="0.55">
+            <path d="M0,-105 C-5,-108 -18,-105 -25,-98 C-32,-91 -38,-80 -42,-68 C-46,-56 -50,-45 -48,-33 C-45,-20 -52,-15 -55,-5 C-58,5 -55,16 -52,25 C-48,34 -50,42 -45,50 C-40,58 -32,60 -28,68 C-22,78 -25,88 -18,95 C-11,102 -2,105 6,108 C14,111 20,118 28,120 C36,122 42,116 50,112 C58,108 66,106 72,100 C78,94 78,84 82,76 C86,68 92,62 92,52 C92,42 86,34 84,24 C82,14 86,4 82,-6 C78,-16 70,-20 65,-30 C60,-40 62,-52 55,-60 C48,-68 36,-70 28,-78 C20,-86 18,-98 8,-104 C0,-110 5,-102 0,-105 Z"
+                  fill="#aab8d0" stroke="#8898b0" stroke-width="4"/>
+          </g>
+          <g transform="translate(240,148) scale(0.18)" opacity="0.55">
+            <path d="M0,-105 C-5,-108 -18,-105 -25,-98 C-32,-91 -38,-80 -42,-68 C-46,-56 -50,-45 -48,-33 C-45,-20 -52,-15 -55,-5 C-58,5 -55,16 -52,25 C-48,34 -50,42 -45,50 C-40,58 -32,60 -28,68 C-22,78 -25,88 -18,95 C-11,102 -2,105 6,108 C14,111 20,118 28,120 C36,122 42,116 50,112 C58,108 66,106 72,100 C78,94 78,84 82,76 C86,68 92,62 92,52 C92,42 86,34 84,24 C82,14 86,4 82,-6 C78,-16 70,-20 65,-30 C60,-40 62,-52 55,-60 C48,-68 36,-70 28,-78 C20,-86 18,-98 8,-104 C0,-110 5,-102 0,-105 Z"
+                  fill="#aab8d0" stroke="#8898b0" stroke-width="4"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Hero text -->
+      <div class="hero-text-block">
+        <div class="hero-agency-tag">&#9679; New India Assurance &nbsp;·&nbsp; Sambhal Branch</div>
+        <h1 class="hero-heading">
+          Insurance Premium<br>
+          <span class="hero-heading-gold">Calculator Suite</span>
+        </h1>
+        <p class="hero-sub">IRDAI Tariff 2025 &nbsp;·&nbsp; Motor · Health · Fire &nbsp;·&nbsp; Built for NIA Agents</p>
+        <p class="hero-hindi-tag">बीमा प्रीमियम तुरंत गणना करें — मोटर, स्वास्थ्य, अग्नि एवं अन्य</p>
       </div>
     </div>
-    <div class="topbar-pills">
-      <span class="topbar-pill">&#9679; GST: NIL</span>
-      <span class="topbar-pill">&#9679; Tariff 2025</span>
+
+    <!-- Stats strip -->
+    <div class="hero-stats-strip">
+      <div class="hstat-item">
+        <div class="hstat-num">4+</div>
+        <div class="hstat-lbl">Product Lines</div>
+      </div>
+      <div class="hstat-sep"></div>
+      <div class="hstat-item">
+        <div class="hstat-num">100%</div>
+        <div class="hstat-lbl">Tariff Accurate</div>
+      </div>
+      <div class="hstat-sep"></div>
+      <div class="hstat-item">
+        <div class="hstat-num">NIL</div>
+        <div class="hstat-lbl">GST on Health</div>
+      </div>
+      <div class="hstat-sep"></div>
+      <div class="hstat-item">
+        <div class="hstat-num">PDF</div>
+        <div class="hstat-lbl">Quote Export</div>
+      </div>
+      <div class="hstat-sep"></div>
+      <div class="hstat-item">
+        <div class="hstat-num">UP-38</div>
+        <div class="hstat-lbl">Sambhal Division</div>
+      </div>
     </div>
+    <div class="hero-gold-stripe hero-gold-stripe-bottom"></div>
   </div>
 
-  <!-- Hero -->
-  <div class="landing-hero">
-    <div class="hero-eyebrow">
-      <div class="hero-eyebrow-dot"></div>
-      Official NIA Agent Tool &nbsp;&middot;&nbsp; UP38 Sambhal
-    </div>
-    <h1 class="hero-title">
-      Calculate Insurance<br>
-      <span class="accent">Premium Instantly</span>
-    </h1>
-    <p class="hero-desc">
-      Accurate, tariff-based premium quotations for all major insurance products. Built for NIA agents.
-    </p>
-    <p class="hero-hindi">&#2348;&#2368;&#2350;&#2366; &#2346;&#2381;&#2352;&#2368;&#2350;&#2367;&#2351;&#2350; &#2340;&#2369;&#2352;&#2306;&#2340; &#2327;&#2339;&#2344;&#2366; &#2325;&#2352;&#2375;&#2306; &mdash; &#2350;&#2379;&#2335;&#2352;, &#2360;&#2381;&#2357;&#2366;&#2360;&#2381;&#2341;&#2381;&#2351;, &#2309;&#2327;&#2381;&#2344;&#2367; &#2319;&#2357;&#2306; &#2309;&#2344;&#2381;&#2351;</p>
-
-    <!-- Stats -->
-    <div class="stats-row">
-      <div class="stat-item">
-        <div class="stat-num">4<span class="stat-unit">+</span></div>
-        <div class="stat-lbl">Product Lines</div>
-      </div>
-      <div class="stat-sep"></div>
-      <div class="stat-item">
-        <div class="stat-num">100<span class="stat-unit">%</span></div>
-        <div class="stat-lbl">Tariff Accurate</div>
-      </div>
-      <div class="stat-sep"></div>
-      <div class="stat-item">
-        <div class="stat-num">0<span class="stat-unit"> GST</span></div>
-        <div class="stat-lbl">Health Plans</div>
-      </div>
-      <div class="stat-sep"></div>
-      <div class="stat-item">
-        <div class="stat-num">PDF</div>
-        <div class="stat-lbl">Quote Export</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Category Cards -->
+  <!-- ── CATEGORY CARDS ── -->
   <div class="category-section">
-    <p class="section-label">&#9135;&#9135; Select a product category to begin &#9135;&#9135;</p>
+    <p class="section-label">— Select a product category to begin —</p>
     <div class="category-grid">
 
       <!-- Motor -->
       <div class="category-card card-motor" onclick="showSection('motor')">
-        <div class="card-blob"></div>
-        <div class="card-icon-wrap">&#128665;</div>
-        <div class="card-content">
-          <div class="card-title-row">
-            <h2>Motor Insurance</h2>
-            <div>
-              <div class="active-badge"><span class="badge-dot"></span> Live</div>
-              <div class="card-arrow" style="margin-top:8px">&#8594;</div>
-            </div>
+        <div class="card-top-bar" style="background:linear-gradient(90deg,#1d4ed8,#3b82f6)"></div>
+        <div class="card-body-wrap">
+          <div class="card-icon-row">
+            <span class="card-icon-big">🚗</span>
+            <div class="active-badge"><span class="badge-dot"></span> Live</div>
           </div>
-          <div class="card-hindi">&#2350;&#2379;&#2335;&#2352; &#2348;&#2368;&#2350;&#2366;</div>
-          <div class="card-desc-pills">
-            <span class="card-pill">&#127949;&#65039; Two Wheeler</span>
-            <span class="card-pill">&#128665; Private Car</span>
-            <span class="card-pill">&#128665; Commercial Vehicle</span>
-            <span class="card-pill">NCB &amp; Add-ons</span>
-          </div>
+          <h2 class="card-title">Motor Insurance</h2>
+          <p class="card-hindi-sm">मोटर बीमा</p>
+          <p class="card-desc-text">Two Wheeler · Private Car · Commercial Vehicle · NCB &amp; Add-ons</p>
+        </div>
+        <div class="card-cta" style="--card-accent:#eff6ff">
+          <span class="card-cta-pills">
+            <span class="card-pill-sm">TW</span>
+            <span class="card-pill-sm">PC</span>
+            <span class="card-pill-sm">CV</span>
+          </span>
+          <span class="card-cta-arrow">Open →</span>
         </div>
       </div>
 
       <!-- Health -->
       <div class="category-card card-health" onclick="showSection('health')">
-        <div class="card-blob"></div>
-        <div class="card-icon-wrap">&#127973;</div>
-        <div class="card-content">
-          <div class="card-title-row">
-            <h2>Health Insurance</h2>
-            <div>
-              <div class="active-badge"><span class="badge-dot"></span> Live</div>
-              <div class="card-arrow" style="margin-top:8px">&#8594;</div>
-            </div>
+        <div class="card-top-bar" style="background:linear-gradient(90deg,#059669,#10b981)"></div>
+        <div class="card-body-wrap">
+          <div class="card-icon-row">
+            <span class="card-icon-big">🏥</span>
+            <div class="active-badge" style="--badge-col:#059669"><span class="badge-dot" style="background:#059669"></span> Live</div>
           </div>
-          <div class="card-hindi">&#2360;&#2381;&#2357;&#2366;&#2360;&#2381;&#2341;&#2381;&#2351; &#2348;&#2368;&#2350;&#2366;</div>
-          <div class="card-desc-pills">
-            <span class="card-pill">&#127808; Yuva Bharat</span>
-            <span class="card-pill">&#127973; NI Floater Mediclaim</span>
-            <span class="card-pill">PDF Quote</span>
-            <span class="card-pill">Commission</span>
-          </div>
+          <h2 class="card-title">Health Insurance</h2>
+          <p class="card-hindi-sm">स्वास्थ्य बीमा</p>
+          <p class="card-desc-text">Yuva Bharat · NI Floater Mediclaim · PDF Quote · Commission</p>
+        </div>
+        <div class="card-cta" style="--card-accent:#ecfdf5">
+          <span class="card-cta-pills">
+            <span class="card-pill-sm" style="background:#d1fae5;color:#065f46">Yuva</span>
+            <span class="card-pill-sm" style="background:#d1fae5;color:#065f46">Floater</span>
+          </span>
+          <span class="card-cta-arrow" style="color:#059669">Open →</span>
         </div>
       </div>
 
       <!-- Fire -->
       <div class="category-card card-fire" onclick="showSection('fire')">
-        <div class="card-blob"></div>
-        <div class="card-icon-wrap">&#128293;</div>
-        <div class="card-content">
-          <div class="card-title-row">
-            <h2>Fire Insurance</h2>
-            <div class="active-badge">&#9679; Active</div>
+        <div class="card-top-bar" style="background:linear-gradient(90deg,#dc2626,#f97316)"></div>
+        <div class="card-body-wrap">
+          <div class="card-icon-row">
+            <span class="card-icon-big">🔥</span>
+            <div class="active-badge" style="--badge-col:#dc2626"><span class="badge-dot" style="background:#dc2626"></span> Live</div>
           </div>
-          <div class="card-hindi">&#2309;&#2327;&#2381;&#2344;&#2367; &#2348;&#2368;&#2350;&#2366;</div>
-          <div class="card-desc-pills">
-            <span class="card-pill">&#127968; Property</span>
-            <span class="card-pill">&#127970; Commercial</span>
-            <span class="card-pill">&#127981; Industrial</span>
-          </div>
+          <h2 class="card-title">Fire Insurance</h2>
+          <p class="card-hindi-sm">अग्नि बीमा</p>
+          <p class="card-desc-text">Shop Keeper · Cold Storage · Stand Alone Godowns · Griha Raksha</p>
+        </div>
+        <div class="card-cta" style="--card-accent:#fff7ed">
+          <span class="card-cta-pills">
+            <span class="card-pill-sm" style="background:#fee2e2;color:#991b1b">Shop</span>
+            <span class="card-pill-sm" style="background:#fee2e2;color:#991b1b">Cold</span>
+          </span>
+          <span class="card-cta-arrow" style="color:#dc2626">Open →</span>
         </div>
       </div>
 
       <!-- Other -->
       <div class="category-card card-other disabled" onclick="showComingSoon('Other')">
-        <div class="card-blob"></div>
-        <div class="card-icon-wrap">&#128203;</div>
-        <div class="card-content">
-          <div class="card-title-row">
-            <h2>Other / Misc</h2>
-            <div class="coming-soon-badge">&#9201; Coming Soon</div>
+        <div class="card-top-bar" style="background:linear-gradient(90deg,#64748b,#94a3b8)"></div>
+        <div class="card-body-wrap">
+          <div class="card-icon-row">
+            <span class="card-icon-big" style="opacity:0.5">📋</span>
+            <div class="coming-soon-badge">⏱ Soon</div>
           </div>
-          <div class="card-hindi">&#2309;&#2344;&#2381;&#2351; &#2348;&#2368;&#2350;&#2366;</div>
-          <div class="card-desc-pills">
-            <span class="card-pill">&#9875; Marine</span>
-            <span class="card-pill">&#128274; Burglary</span>
-            <span class="card-pill">&#9881;&#65039; Engineering</span>
-          </div>
+          <h2 class="card-title" style="color:#94a3b8">Other / Misc</h2>
+          <p class="card-hindi-sm" style="color:#cbd5e1">अन्य बीमा</p>
+          <p class="card-desc-text" style="color:#cbd5e1">Marine · Burglary · Engineering · Misc</p>
+        </div>
+        <div class="card-cta" style="--card-accent:#f8fafc;border-top:1px solid #e2e8f0">
+          <span class="card-cta-pills">
+            <span class="card-pill-sm" style="background:#f1f5f9;color:#94a3b8">Soon</span>
+          </span>
+          <span class="card-cta-arrow" style="color:#94a3b8">⏱</span>
         </div>
       </div>
 
@@ -1332,8 +1556,8 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
 
   <!-- Footer -->
   <div class="landing-footer">
-    New India Assurance Co. Ltd. &nbsp;&middot;&nbsp; UP38 Sambhal &nbsp;&middot;&nbsp;
-    Tariff rates as per IRDAI 2025 &nbsp;&middot;&nbsp; For agent use only
+    <strong>New India Assurance Co. Ltd.</strong> &nbsp;·&nbsp; UP-38 Sambhal Branch &nbsp;·&nbsp;
+    Tariff rates as per IRDAI 2025 &nbsp;·&nbsp; For authorised agent use only
   </div>
 
 </div>
@@ -1902,7 +2126,7 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
       <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
       Calculate Premium
     </button>
-    <button class="btn-print" onclick="calculateTW(); window.print()">
+    <button class="btn-print" onclick="motorOpenPrint()">
       🖨️ Print Quote
     </button>
   </div>
@@ -2163,7 +2387,7 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
       <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
       Calculate Premium
     </button>
-    <button class="btn-print" onclick="calculatePC(); window.print()">🖨️ Print Quote</button>
+    <button class="btn-print" onclick="motorOpenPrint()">🖨️ Print Quote</button>
   </div>
 
   <!-- PC Quote Panel -->
@@ -2536,7 +2760,7 @@ body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0
       <svg width="17" height="17" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
       Calculate Premium
     </button>
-    <button class="btn-print" onclick="calculateCV(); window.print()">🖨️ Print Quote</button>
+    <button class="btn-print" onclick="motorOpenPrint()">🖨️ Print Quote</button>
   </div>
 
   <!-- CV Quote Panel -->
@@ -3588,393 +3812,324 @@ function renderCommission() {
 
 // =============================================================================
 // PDF GENERATION — two-column layout matching NIA sample quotation
-// jsPDF Helvetica: Latin only — use Rs. not rupee sign; no arrows/stars
+// =============================================================================
+// SHARED PRINT HELPERS
+// =============================================================================
+function _printBadgeSVG() {
+  return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="68" height="68">
+  <defs>
+    <path id="pb-arc-top"  d="M 22,150 A 128,128 0 0,1 278,150" fill="none"/>
+    <path id="pb-arc-top2" d="M 42,150 A 108,108 0 0,1 258,150" fill="none"/>
+    <path id="pb-arc-bot"  d="M 22,150 A 128,128 0 0,0 278,150" fill="none"/>
+    <path id="pb-arc-bot2" d="M 50,150 A 100,100 0 0,0 250,150" fill="none"/>
+  </defs>
+  <circle cx="150" cy="150" r="146" fill="#e8621a"/>
+  <circle cx="150" cy="150" r="136" fill="#fff"/>
+  <circle cx="150" cy="150" r="133" fill="#c9a227"/>
+  <circle cx="150" cy="150" r="128" fill="#1a2b5e"/>
+  <circle cx="150" cy="150" r="122" fill="none" stroke="#c9a227" stroke-width="2"/>
+  <circle cx="150" cy="150" r="119" fill="none" stroke="#c9a227" stroke-width="0.8"/>
+  <text font-family="Arial Black,Arial,sans-serif" font-size="22" font-weight="900" fill="#fff" letter-spacing="6"><textPath href="#pb-arc-top" startOffset="50%" text-anchor="middle">SAMBHAL</textPath></text>
+  <text font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#e8c547" letter-spacing="2.5"><textPath href="#pb-arc-top2" startOffset="50%" text-anchor="middle">UTTAR PRADESH</textPath></text>
+  <text font-family="Arial Black,Arial,sans-serif" font-size="20" font-weight="900" fill="#fff" letter-spacing="5"><textPath href="#pb-arc-bot" startOffset="50%" text-anchor="middle">NEW INDIA</textPath></text>
+  <text font-family="Arial,sans-serif" font-size="8.5" font-weight="600" fill="#e8c547" letter-spacing="0.8"><textPath href="#pb-arc-bot2" startOffset="50%" text-anchor="middle">PROGRESS | HERITAGE | DEVELOPMENT</textPath></text>
+  <g transform="translate(32,150)" opacity="0.9">
+    <line x1="0" y1="28" x2="0" y2="-28" stroke="#3a7d1e" stroke-width="1.5"/>
+    <ellipse cx="-7" cy="20" rx="8" ry="4" fill="#4a9e28" transform="rotate(-40,-7,20)"/>
+    <ellipse cx="-8" cy="8" rx="8" ry="4" fill="#5cb832" transform="rotate(-50,-8,8)"/>
+    <ellipse cx="-7" cy="-4" rx="7" ry="3.5" fill="#4a9e28" transform="rotate(-55,-7,-4)"/>
+    <ellipse cx="-5" cy="-16" rx="6" ry="3" fill="#5cb832" transform="rotate(-60,-5,-16)"/>
+    <ellipse cx="7" cy="20" rx="8" ry="4" fill="#5cb832" transform="rotate(40,7,20)"/>
+    <ellipse cx="8" cy="8" rx="8" ry="4" fill="#4a9e28" transform="rotate(50,8,8)"/>
+    <ellipse cx="7" cy="-4" rx="7" ry="3.5" fill="#5cb832" transform="rotate(55,7,-4)"/>
+    <ellipse cx="5" cy="-16" rx="6" ry="3" fill="#4a9e28" transform="rotate(60,5,-16)"/>
+  </g>
+  <g transform="translate(268,150)" opacity="0.9">
+    <line x1="0" y1="28" x2="0" y2="-28" stroke="#3a7d1e" stroke-width="1.5"/>
+    <ellipse cx="-7" cy="20" rx="8" ry="4" fill="#4a9e28" transform="rotate(-40,-7,20)"/>
+    <ellipse cx="-8" cy="8" rx="8" ry="4" fill="#5cb832" transform="rotate(-50,-8,8)"/>
+    <ellipse cx="-7" cy="-4" rx="7" ry="3.5" fill="#4a9e28" transform="rotate(-55,-7,-4)"/>
+    <ellipse cx="-5" cy="-16" rx="6" ry="3" fill="#5cb832" transform="rotate(-60,-5,-16)"/>
+    <ellipse cx="7" cy="20" rx="8" ry="4" fill="#5cb832" transform="rotate(40,7,20)"/>
+    <ellipse cx="8" cy="8" rx="8" ry="4" fill="#4a9e28" transform="rotate(50,8,8)"/>
+    <ellipse cx="7" cy="-4" rx="7" ry="3.5" fill="#5cb832" transform="rotate(55,7,-4)"/>
+    <ellipse cx="5" cy="-16" rx="6" ry="3" fill="#4a9e28" transform="rotate(60,5,-16)"/>
+  </g>
+  <path d="M150,62 L195,78 L195,138 Q195,178 150,200 Q105,178 105,138 L105,78 Z" fill="#c9a227" stroke="#c9a227" stroke-width="2"/>
+  <path d="M150,67 L191,83 L191,138 Q191,176 150,197 Q109,176 109,138 L109,83 Z" fill="#12205a"/>
+  <g transform="translate(150,130) scale(0.48)">
+    <path d="M0,-95 C-5,-98 -17,-95 -23,-88 C-30,-81 -35,-70 -38,-58 C-42,-46 -46,-35 -44,-23 C-41,-10 -48,-5 -51,4 C-54,13 -51,22 -48,30 C-44,38 -46,46 -41,53 C-36,60 -28,62 -24,70 C-18,80 -21,90 -14,97 C-7,104 2,107 10,110 C18,113 24,120 32,122 C40,124 46,118 54,114 C62,110 70,108 76,102 C82,96 82,86 86,78 C90,70 96,64 96,54 C96,44 90,36 88,26 C86,16 90,6 86,-4 C82,-14 74,-18 69,-28 C64,-38 66,-50 59,-58 C52,-66 40,-68 32,-76 C24,-84 22,-96 12,-102 C4,-108 9,-100 0,-95 Z" fill="#c9a227" stroke="#e8d060" stroke-width="1.5" opacity="0.92"/>
+    <path d="M0,-95 C-5,-102 -15,-105 -20,-98 C-25,-91 -20,-82 -12,-80 C-5,-78 2,-86 0,-95 Z" fill="#c9a227" stroke="#e8d060" stroke-width="1" opacity="0.92"/>
+    <circle cx="-10" cy="-18" r="4" fill="#fff" opacity="0.85"/>
+  </g>
+  <rect x="116" y="177" width="68" height="20" rx="3" fill="#c9a227"/>
+  <text x="150" y="192" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="12" font-weight="900" fill="#12205a" letter-spacing="2">UP - 38</text>
+  <circle cx="150" cy="214" r="9" fill="none" stroke="#fff" stroke-width="1.5"/>
+  <circle cx="150" cy="214" r="2" fill="#1a3a8a"/>
+  <path d="M137,220 Q150,230 163,220" stroke="#f97316" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M137,225 Q150,235 163,225" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M138,229 Q150,239 162,229" stroke="#138808" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>`;
+}
+
+function _printCSS() {
+  return `
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#1a1a2e;background:#f4f6fb}
+  .page{max-width:820px;margin:20px auto;background:#fff;box-shadow:0 2px 24px rgba(0,0,0,.13)}
+  /* HEADER */
+  .q-header{background:linear-gradient(135deg,#0d1b3e 0%,#162c5c 100%);display:flex;align-items:center;justify-content:space-between;padding:20px 28px}
+  .q-logo-wrap{display:flex;align-items:center;gap:16px}
+  .q-brand h1{color:#fff;font-size:1.35em;font-weight:700;letter-spacing:0.3px;line-height:1.2}
+  .q-brand p{color:rgba(255,255,255,.55);font-size:.72em;letter-spacing:1.8px;margin-top:4px;text-transform:uppercase}
+  .q-title-right{text-align:right}
+  .q-type{color:rgba(255,255,255,.5);font-size:.68em;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;margin-bottom:4px}
+  .q-title{color:#fff;font-size:1.45em;font-style:italic;font-weight:300;letter-spacing:.5px}
+  /* META BAR */
+  .q-meta{background:#f9f5ea;border-bottom:1px solid #e6dfc8;display:flex}
+  .q-meta-cell{flex:1;padding:10px 20px;border-right:1px solid #e6dfc8}
+  .q-meta-cell:last-child{border-right:none}
+  .q-meta-cell .mlabel{font-size:.6em;color:#9c8f7e;text-transform:uppercase;letter-spacing:1.2px;font-weight:700;display:block;margin-bottom:3px}
+  .q-meta-cell .mval{font-size:.88em;font-weight:700;color:#2d2416}
+  /* PARTIES */
+  .q-parties{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 28px;border-bottom:1px solid #f1f5f9}
+  .q-party-label{font-size:.6em;color:#94a3b8;text-transform:uppercase;letter-spacing:1.8px;font-weight:700;margin-bottom:5px}
+  .q-customer-name{font-size:1.5em;font-weight:800;color:#0f172a;letter-spacing:-.3px}
+  .q-contact{font-size:.8em;color:#64748b;margin-top:4px}
+  .q-agency-wrap{text-align:right}
+  .q-agency-name{font-size:1.2em;font-weight:800;color:#1a2b5e;letter-spacing:-.2px}
+  .q-agency-sub{font-size:.76em;color:#64748b;margin-top:4px}
+  /* INFO BOXES */
+  .q-info-row{display:flex;background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:2px solid #1a2b5e}
+  .q-info-box{flex:1;padding:11px 20px;border-right:1px solid #e2e8f0}
+  .q-info-box:last-child{border-right:none}
+  .q-info-label{display:block;font-size:.6em;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px}
+  .q-info-val{font-size:.95em;font-weight:800;color:#1a2b5e}
+  .q-info-sub{font-size:.75em;font-weight:500;color:#64748b}
+  .q-veh-desc{padding:7px 28px;font-size:.76em;color:#64748b;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+  /* SECTION HEADING */
+  .q-section-head{padding:14px 28px 8px}
+  .sh-title{font-size:.68em;font-weight:900;letter-spacing:4px;text-transform:uppercase;color:#1a2b5e}
+  .sh-bar{height:2.5px;width:56px;background:#f97316;margin-top:6px;border-radius:2px}
+  /* MEMBER TABLE (Health) */
+  .q-table{width:100%;border-collapse:collapse;font-size:.87em}
+  .q-table thead tr{background:#1a2b5e}
+  .q-table thead th{color:#fff;font-size:.72em;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:9px 16px;white-space:nowrap}
+  .q-table thead th.th-right{text-align:right}
+  .q-table thead th.th-center{text-align:center}
+  .q-table tbody tr:nth-child(odd){background:#f8fbff}
+  .q-table tbody tr:nth-child(even){background:#fff}
+  .q-table tbody tr.subtotal-row td{background:#eef4ff;font-weight:700;color:#1a2b5e;border-top:1px solid #c7d9f8}
+  .q-table tbody tr.disc-row td{color:#059669}
+  .q-table tbody tr.disc-row td.td-amt{font-weight:700;color:#dc2626}
+  .q-table tbody td{padding:9px 16px;border-bottom:1px solid #f1f5f9}
+  .q-table tbody td.td-name{font-weight:700;color:#0f172a}
+  .q-table tbody td.td-center{text-align:center;color:#64748b}
+  .q-table tbody td.td-disc{color:#f97316;font-weight:600}
+  .q-table tbody td.td-right{text-align:right;font-weight:700;color:#1a2b5e}
+  /* TWO-COL MOTOR */
+  .q-two-col{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid #1a2b5e;font-size:.87em}
+  .q-single-col{border-top:2px solid #1a2b5e;font-size:.87em}
+  .q-col-od{border-right:1px solid #cbd5e1}
+  .col-head{background:#1a2b5e;color:#fff;padding:8px 14px;font-size:.72em;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
+  .col-head-sub{font-size:.85em;font-weight:500;opacity:.7;letter-spacing:.5px}
+  .q-col-table{width:100%;border-collapse:collapse}
+  .q-col-table td{padding:7px 14px;border-bottom:1px solid #f1f5f9;font-size:.9em}
+  .q-col-table td.val{text-align:right;font-variant-numeric:tabular-nums;min-width:80px;white-space:nowrap}
+  .q-col-table tr.disc-row td{color:#059669}
+  .q-col-table tr.net-row td{font-weight:800;background:#eef4ff;color:#1a2b5e;border-top:1px solid #c7d9f8}
+  .q-col-table tr.sub-head td{background:#f1f5f9;color:#475569;font-size:.72em;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px}
+  .val-sub{font-size:.82em;color:#94a3b8;font-weight:500}
+  /* TOTAL BOX */
+  .q-total-box{background:linear-gradient(135deg,#0d1b3e,#1a3060);display:flex;align-items:center;justify-content:space-between;margin:14px 0 0;padding:0}
+  .q-total-left{padding:18px 28px}
+  .q-total-main-lbl{color:#fff;font-size:.78em;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+  .q-total-sub{color:#f97316;font-size:.72em;font-weight:600;margin-top:5px}
+  .q-total-right{padding:16px 28px;text-align:right}
+  .q-total-amt{color:#fff;font-size:2.1em;font-weight:900;letter-spacing:-1px}
+  .q-total-save{color:rgba(255,255,255,.5);font-size:.7em;margin-top:4px}
+  /* COVERAGE */
+  .q-coverage{padding:10px 28px 14px;display:flex;flex-wrap:wrap;gap:6px}
+  .q-pill{display:inline-flex;align-items:center;gap:5px;background:#f8fafc;border:1px solid #e2e8f0;color:#1a2b5e;padding:5px 13px;border-radius:20px;font-size:.78em;font-weight:600}
+  .q-pill::before{content:'✓';color:#059669;font-weight:800;font-size:.9em}
+  /* NOTES */
+  .q-notes{padding:10px 28px 12px;font-size:.68em;color:#64748b;line-height:1.9;border-top:1px solid #f1f5f9}
+  /* FOOTER BAR */
+  .q-footer-bar{background:#0d1b3e;color:rgba(255,255,255,.4);text-align:center;padding:9px;font-size:.67em;letter-spacing:.3px}
+  @media print{
+    body{background:#fff!important}
+    .page{box-shadow:none!important;margin:0!important;max-width:100%!important}
+    @page{size:A4 portrait;margin:1cm}
+  }`;
+}
+
+// =============================================================================
+// HEALTH QUOTATION — opens print window matching sample
 // =============================================================================
 function generatePDF() {
   if (!quoteResult) { alert('Please calculate premium first.'); return; }
-  if (typeof window.jspdf === 'undefined') { alert('PDF library not loaded. Check internet connection.'); return; }
-  const {jsPDF} = window.jspdf;
-  const doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
-  const PW=210, PH=297;
+  const qr = quoteResult;
 
-  const agent       = document.getElementById('agentName').value.trim()  || 'Agent';
-  const agentCode   = document.getElementById('agentCode').value.trim();
-  const custName    = document.getElementById('custName').value.trim()   || 'Customer';
-  const custContact = document.getElementById('custContact').value.trim();
-  const today       = new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
-  const qr          = quoteResult;
+  const agentName    = (document.getElementById('agentName')?.value||'').trim() || 'Agent';
+  const agentCode    = (document.getElementById('agentCode')?.value||'').trim();
+  const custName     = (document.getElementById('custName')?.value||'').trim()  || 'Valued Customer';
+  const custContact  = (document.getElementById('custContact')?.value||'').trim();
 
-  // ASCII-safe currency helper
-  const Rs = n => 'Rs. ' + Math.round(n).toLocaleString('en-IN');
+  const today    = new Date();
+  const validity = new Date(today); validity.setDate(validity.getDate()+30);
+  const fmtD = dt => dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  const cur  = n  => '₹'+Math.round(n).toLocaleString('en-IN');
+  const seq  = String(today.getMonth()+1).padStart(2,'0')+String(today.getDate()).padStart(2,'0');
+  const yr   = String(today.getFullYear()).slice(-2);
+  const quoteRef = `NIA/SBL/H/${yr}-${seq}`;
 
-  // ── palette ───────────────────────────────────────────
-  const NAVY   = [12, 20, 48];
-  const SDARK  = [28, 52, 110];     // sidebar bg
-  const SLINE  = [55, 88, 155];     // sidebar divider
-  const SLAB   = [145,175,220];     // sidebar label colour
-  const SSUB   = [180,205,240];     // sidebar subtitle
-  const ORANGE = [215, 82, 12];     // main accent
-  const LORANGE= [255,245,230];     // notes bg
-  const BORNG  = [235,175,105];     // notes border
-  const TEAL   = [8, 145, 178];
-  const WHITE  = [255,255,255];
-  const LGRAY  = [247,249,252];
-  const MGRAY  = [210,222,238];
-  const DGRAY  = [90,106,127];
-  const DGREEN = [6, 95, 70];
-  const LGREEN = [220,252,231];
-  const RED    = [185,28,28];
-  const LRED   = [254,226,226];
-  const DGOLD  = [120,53,15];
-  const LGOLD  = [254,243,199];
+  // Plan details
+  const planLabel = qr.plan ? `${qr.plan} — Yuva Bharat` : 'NI Floater Mediclaim';
+  const siLabel   = qr.siLabel || '—';
+  const zoneLabel = qr.zoneLabel || '—';
+  const termLabel = `${qr.term} Year${qr.term>1?'s':''} Annual`;
+  const hasHP     = !!qr.plan && qr.memberRows.some(r=>(r.hpNet||0)!==0);
+  const cols      = qr.plan ? 4 : 3; // member | age | [discount] | premium
 
-  const fill = c => doc.setFillColor(...c);
-  const txt  = c => doc.setTextColor(...c);
-  const drw  = c => doc.setDrawColor(...c);
-  const lw   = w => doc.setLineWidth(w);
-  const bf   = (sz, st='bold') => { doc.setFont('helvetica', st); doc.setFontSize(sz); };
-
-  // Layout constants
-  const SB  = 55;   // sidebar width
-  const RX  = 60;   // right content start x
-  const REM = 7;    // right edge margin
-  const RW  = PW - RX - REM;  // right content width = 143
-  const RM  = RX + RW;        // right edge x = 203
-
-  // ════════════════════════════════════════════════════
-  // SIDEBAR
-  // ════════════════════════════════════════════════════
-  fill(SDARK); doc.rect(0, 0, SB, PH, 'F');
-
-  // NIA circle logo
-  const lcy = 22, lcr = 13;
-  fill(ORANGE);  doc.circle(SB/2, lcy, lcr, 'F');
-  drw([255,255,255]); lw(0.6); doc.circle(SB/2, lcy, lcr, 'S');
-  bf(11, 'bold'); txt(WHITE);
-  doc.text('NIA', SB/2, lcy + 4, {align:'center'});
-
-  bf(9, 'bold'); txt(WHITE);
-  doc.text('New India', SB/2, lcy + lcr + 9, {align:'center'});
-  bf(7, 'normal'); txt(SSUB);
-  doc.text('Assurance Co. Ltd.', SB/2, lcy + lcr + 15, {align:'center'});
-
-  drw(SLINE); lw(0.3);
-  doc.line(5, 53, SB-5, 53);
-
-  let sy = 58;
-  const sbBox = (label, value, subtitle) => {
-    const vlen = value.length;
-    const vsz  = vlen > 12 ? 9.5 : vlen > 9 ? 11 : 12.5;
-    bf(5, 'bold');  txt(SLAB); doc.text(label, 6, sy + 4.5);
-    bf(vsz,'bold'); txt(WHITE); doc.text(value, 6, sy + 12, {maxWidth: SB-10});
-    let bh = 15;
-    if (subtitle) {
-      bf(5.5,'normal'); txt(SSUB);
-      doc.text(subtitle, 6, sy + 18, {maxWidth: SB-10});
-      bh = 22;
-    }
-    sy += bh;
-    drw(SLINE); lw(0.2); doc.line(4, sy, SB-4, sy);
-    sy += 4;
-  };
-
-  if (qr.plan) sbBox('PLAN', qr.plan, qr.product);
-  else         sbBox('PRODUCT', 'NI Floater', 'Mediclaim Policy');
-  sbBox('SUM INSURED', qr.siLabel || '-', qr.coverage==='floater' ? 'Family Floater' : 'Individual');
-  sbBox('ZONE', qr.zoneLabel || '-', null);
-  sbBox('POLICY TERM', qr.term + ' Year' + (qr.term>1?'s':''), (qr.mode||'Annual') + ' Payment Mode');
-  sbBox('QUOTE DATE', today, 'Valid for 30 Days');
-  sbBox('GST', 'NIL', 'Effective 22 Sept 2025');
-
-  // bottom italic note in sidebar
-  doc.setFont('helvetica','italic'); doc.setFontSize(6); txt([95,120,158]);
-  doc.text('Indicative quotation only.', SB/2, PH-18, {align:'center'});
-  doc.text('Subject to underwriting.', SB/2, PH-13, {align:'center'});
-
-  // ════════════════════════════════════════════════════
-  // RIGHT AREA — HEADER
-  // ════════════════════════════════════════════════════
-  bf(15,'bold'); txt(NAVY);
-  doc.text('HEALTH INSURANCE QUOTATION', RX, 13);
-  bf(8,'normal'); txt(DGRAY);
-  doc.text(today, RM, 13, {align:'right'});
-  fill(ORANGE); doc.rect(RX, 16, RW, 1.5, 'F');
-
-  let y = 22;
-
-  // ════════════════════════════════════════════════════
-  // AGENT + CUSTOMER BOXES
-  // ════════════════════════════════════════════════════
-  const bxW = (RW - 4) / 2;
-  const bxH = 22;
-
-  // Agent (orange header)
-  fill(ORANGE); doc.rect(RX, y, bxW, 6.5, 'F');
-  bf(7,'bold'); txt(WHITE); doc.text('AGENT', RX+4, y+4.5);
-  fill(LGRAY); drw(MGRAY); lw(0.2);
-  doc.rect(RX, y+6.5, bxW, bxH-6.5, 'FD');
-  bf(9,'bold'); txt(NAVY);
-  doc.text(agent + (agentCode ? ' ['+agentCode+']' : ''), RX+4, y+13, {maxWidth:bxW-6});
-  bf(6.5,'normal'); txt(DGRAY);
-  doc.text('License No. ' + (agentCode||'-'), RX+4, y+19);
-
-  // Customer (teal header)
-  const cx2 = RX + bxW + 4;
-  fill(TEAL); doc.rect(cx2, y, bxW, 6.5, 'F');
-  bf(7,'bold'); txt(WHITE); doc.text('CUSTOMER', cx2+4, y+4.5);
-  fill(LGRAY); drw(MGRAY); lw(0.2);
-  doc.rect(cx2, y+6.5, bxW, bxH-6.5, 'FD');
-  bf(9,'bold'); txt(NAVY);
-  doc.text(custName, cx2+4, y+13, {maxWidth:bxW-6});
-  bf(6.5,'normal'); txt(DGRAY);
-  doc.text('Contact: ' + (custContact||'-'), cx2+4, y+19);
-
-  y += bxH + 7;
-
-  // ════════════════════════════════════════════════════
-  // COVERAGE HIGHLIGHTS
-  // ════════════════════════════════════════════════════
-  bf(8,'bold'); txt(NAVY);
-  doc.text('COVERAGE HIGHLIGHTS', RX, y+5);
-  bf(8,'bold'); // ensure font set before getTextWidth
-  fill(ORANGE);
-  doc.rect(RX, y+6.5, doc.getTextWidth('COVERAGE HIGHLIGHTS'), 1, 'F');
-  y += 10;
-
-  const CH = {
-    yb: {
-      Basic:    ['Inpatient Hospitalisation','Pre & Post Hospitalisation','Day Care Procedures','Emergency Ambulance','Domiciliary Treatment'],
-      Gold:     ['Inpatient Hospitalisation','AYUSH Treatment','Organ Donor','Day Care Procedures','50% Cumulative Bonus'],
-      Platinum: ['Inpatient Hospitalisation','Maternity & Newborn Cover','AYUSH Treatment','Organ Donor','50% Cumulative Bonus'],
-    },
-    nif: ['Family Floater Cover','Inpatient Hospitalisation','Pre & Post Hospitalisation','Day Care Procedures','Ambulance Charges'],
-  };
-  const hl = qr.plan ? (CH.yb[qr.plan]||CH.yb.Basic) : CH.nif;
-
-  bf(7.5,'bold');
-  let px = RX, ry = y;
-  const pillH = 8;
-  hl.forEach(title => {
-    const pillW = doc.getTextWidth(title) + 14;
-    if (px + pillW > RM) { px = RX; ry += pillH + 3; }
-    fill([245,247,253]); drw(MGRAY); lw(0.2);
-    doc.roundedRect(px, ry, pillW, pillH, 2, 2, 'FD');
-    fill(ORANGE); doc.circle(px+4.5, ry+4, 1.2, 'F');
-    txt(NAVY); doc.text(title, px+9, ry+5.3);
-    px += pillW + 3;
-  });
-  y = ry + pillH + 7;
-
-  // ════════════════════════════════════════════════════
-  // PREMIUM BREAKDOWN HEADING
-  // ════════════════════════════════════════════════════
-  bf(8,'bold'); txt(NAVY);
-  doc.text('PREMIUM BREAKDOWN', RX, y+5);
-  fill(ORANGE);
-  doc.rect(RX, y+6.5, doc.getTextWidth('PREMIUM BREAKDOWN'), 1, 'F');
-  y += 10;
-
-  // ════════════════════════════════════════════════════
-  // MEMBER TABLE
-  // MEMBER | AGE | DISCOUNT | NET PREMIUM  (YB with HP)
-  // MEMBER | AGE | NET PREMIUM              (YB no HP)
-  // MEMBER | AGE | PREMIUM                  (NIF)
-  // MEMBER | AGE | BASE PREMIUM | CATARACT | TOTAL (NIF+cat)
-  // ════════════════════════════════════════════════════
-  const hasHP  = !!qr.plan && qr.memberRows.some(r=>(r.hpDiscounts||[]).length>0);
-  const hasCat = !qr.plan  && qr.cataract  && qr.memberRows.some(r=>r.catPrem);
-
-  let headCols, colW;
-  if (qr.plan && hasHP) {
-    headCols = ['MEMBER','AGE','DISCOUNT','NET PREMIUM'];
-    colW     = [RW*0.40, RW*0.13, RW*0.22, RW*0.25];
-  } else if (!qr.plan && hasCat) {
-    headCols = ['MEMBER','AGE','BASE PREMIUM','CATARACT','TOTAL'];
-    colW     = [RW*0.28, RW*0.13, RW*0.20, RW*0.19, RW*0.20];
-  } else {
-    headCols = ['MEMBER','AGE','NET PREMIUM'];
-    colW     = [RW*0.47, RW*0.13, RW*0.40];
-  }
-
-  const hpNets = qr.memberRows.map(r=>r.hpNet||0);
-
-  const mBody = qr.memberRows.map((r,i) => {
-    const name = r.name || ('Member '+(i+1));
+  // Member table rows
+  let memberRows = '';
+  qr.memberRows.forEach((r,i)=>{
+    const name = r.name||`Member ${i+1}`;
+    const age  = r.age||'—';
+    let discTxt = '—', discClass = '';
     if (qr.plan && hasHP) {
-      const hp  = r.hpNet||0;
-      const amt = Math.abs(Math.round(r.base*hp/100));
-      const dTxt = hp===0 ? '-'
-        : (hp<0?'-':'+')+Math.abs(hp)+'%  (Rs.'+amt.toLocaleString('en-IN')+')';
-      return [name, String(r.age), dTxt, Rs(r.afterHP)];
-    } else if (!qr.plan && hasCat) {
-      return [name, String(r.age), Rs(r.base),
-              r.catPrem ? Rs(r.catPrem) : '-',
-              Rs(r.base+(r.catPrem||0))];
-    } else {
-      return [name, String(r.age), Rs(r.afterHP||r.base)];
-    }
-  });
-
-  const mCS = {};
-  headCols.forEach((_,i) => {
-    mCS[i] = {cellWidth:colW[i], halign: i===1?'center': i>=2?'right':'left'};
-  });
-
-  doc.autoTable({
-    head: [headCols],
-    body: mBody,
-    startY: y, margin:{left:RX, right:REM}, tableWidth:RW,
-    styles:{fontSize:8.5, cellPadding:{top:4.5,bottom:4.5,left:6,right:6},
-            lineColor:MGRAY, lineWidth:0.2, valign:'middle', overflow:'linebreak'},
-    headStyles:{fillColor:[35,75,160], textColor:WHITE, fontStyle:'bold', fontSize:8,
-                cellPadding:{top:4,bottom:4,left:6,right:6}},
-    columnStyles: mCS,
-    didParseCell(d) {
-      if (d.section==='body') {
-        const isEven = d.row.index%2===0;
-        d.cell.styles.fillColor = isEven ? [249,251,255] : WHITE;
-
-        // member name bold
-        if (d.column.index===0) {
-          d.cell.styles.fontStyle='bold'; d.cell.styles.textColor=NAVY;
-        }
-        // discount column: orange if discount, red if loading, gray if none
-        if (qr.plan && hasHP && d.column.index===2) {
-          const hp=hpNets[d.row.index]||0;
-          if (hp<0) { d.cell.styles.textColor=ORANGE; d.cell.styles.fontStyle='bold'; }
-          else if (hp>0) { d.cell.styles.textColor=RED; d.cell.styles.fontStyle='bold'; }
-          else { d.cell.styles.textColor=DGRAY; }
-        }
-        // net premium column: orange bold (matching sample)
-        const lastC = headCols.length-1;
-        if (d.column.index===lastC) {
-          d.cell.styles.textColor=ORANGE; d.cell.styles.fontStyle='bold';
-        }
+      const hp=r.hpNet||0;
+      if (hp!==0){
+        const amt=Math.abs(Math.round((r.base||0)*Math.abs(hp)/100));
+        discTxt=`${hp<0?'-':'+'}${Math.abs(hp)}% (₹${amt.toLocaleString('en-IN')})`;
+        discClass=hp<0?' td-disc':'';
       }
     }
+    const netAmt = cur(r.afterHP!=null?r.afterHP:r.base);
+    memberRows += `<tr>
+      <td class="td-name">${name}</td>
+      <td class="td-center">${age}</td>
+      ${qr.plan?`<td class="${discClass||'td-dash'}">${discTxt}</td>`:''}
+      <td class="td-right">${netAmt}</td>
+    </tr>`;
   });
 
-  y = doc.lastAutoTable.finalY;
-
-  // ════════════════════════════════════════════════════
-  // SUMMARY ROWS (sub-total, discounts)
-  // ════════════════════════════════════════════════════
-  const srows=[], srt=[];
-  const addS=(l,v,t)=>{srows.push([l,v]);srt.push(t);};
-
+  // Summary rows
+  let summaryRows = '';
   if (qr.plan) {
     if (qr.memberRows.length>1||qr.floaterDisc||qr.loyalty||qr.termDisc)
-      addS('Sub-total (All Members)', Rs(qr.subtotal), 'sub');
+      summaryRows+=`<tr class="subtotal-row"><td colspan="${cols-1}">Sub-total · all members</td><td class="td-right">${cur(qr.subtotal)}</td></tr>`;
     if (qr.floaterDisc) {
-      const n=qr.mems.length,p=qr.floaterDisc*100;
-      addS('(-) Family Floater Discount | '+n+' Members | -'+p+'%',
-           '- Rs. '+Math.round(qr.subtotal*qr.floaterDisc).toLocaleString('en-IN'), 'disc');
+      const n=qr.mems.length, p=Math.round(qr.floaterDisc*100);
+      summaryRows+=`<tr class="disc-row"><td colspan="${cols-1}">Family Floater Discount · ${n} members  −${p}%</td><td class="td-right td-amt">−${cur(Math.round(qr.subtotal*qr.floaterDisc)).replace('₹','')}</td></tr>`;
     }
     if (qr.loyalty)
-      addS('(-) Loyalty Discount (-2.5%) | Existing NIA Policy >= Rs.5,000',
-           '- Rs. '+Math.round(qr.afterFloater*0.025).toLocaleString('en-IN'), 'disc');
-    if (qr.termDisc)
-      addS('(-) Long-Term Discount | '+qr.term+' Years | -'+(qr.termDisc*100)+'%',
-           '- Rs. '+Math.round(qr.afterLoyalty*qr.termDisc).toLocaleString('en-IN'), 'disc');
-    if (qr.maternity)
-      addS('(+) Optional: Enhanced Maternity ('+qr.matLabel+')', Rs(qr.matPrem), 'opt');
-  } else {
-    addS('Sub-total (All Members)', Rs(qr.combined), 'sub');
-    if (qr.floaterDisc) {
-      const n=qr.mems.length,p=qr.floaterDisc*100;
-      addS('(-) Family Floater Discount | '+n+' Members | -'+p+'%',
-           '- Rs. '+Math.round(qr.combined*qr.floaterDisc).toLocaleString('en-IN'), 'disc');
+      summaryRows+=`<tr class="disc-row"><td colspan="${cols-1}">Loyalty Discount (−2.5%)</td><td class="td-right td-amt">−${cur(Math.round(qr.afterFloater*0.025)).replace('₹','')}</td></tr>`;
+    if (qr.termDisc) {
+      const p=Math.round(qr.termDisc*100);
+      summaryRows+=`<tr class="disc-row"><td colspan="${cols-1}">Long-Term Discount (−${p}%) · ${qr.term} Years</td><td class="td-right td-amt">−${cur(Math.round(qr.afterLoyalty*qr.termDisc)).replace('₹','')}</td></tr>`;
     }
-    if (qr.termDisc)
-      addS('(-) Long-Term Discount | '+qr.term+' Years | -'+(qr.termDisc*100)+'%',
-           '- Rs. '+Math.round(qr.afterFloater*qr.termDisc).toLocaleString('en-IN'), 'disc');
+  } else {
+    summaryRows+=`<tr class="subtotal-row"><td colspan="${cols-1}">Sub-total · all members</td><td class="td-right">${cur(qr.combined)}</td></tr>`;
+    if (qr.floaterDisc) {
+      const n=qr.mems.length, p=Math.round(qr.floaterDisc*100);
+      summaryRows+=`<tr class="disc-row"><td colspan="${cols-1}">Family Floater Discount · ${n} members  −${p}%</td><td class="td-right td-amt">−${cur(Math.round(qr.combined*qr.floaterDisc)).replace('₹','')}</td></tr>`;
+    }
   }
 
-  if (srows.length) {
-    doc.autoTable({
-      body: srows,
-      startY: y, margin:{left:RX,right:REM}, tableWidth:RW,
-      styles:{fontSize:8.5, cellPadding:{top:3.5,bottom:3.5,left:6,right:6},
-              lineColor:MGRAY, lineWidth:0.18, valign:'middle'},
-      columnStyles:{0:{cellWidth:RW*0.66}, 1:{cellWidth:RW*0.34,halign:'right'}},
-      didParseCell(d){
-        const type=srt[d.row.index],isAmt=d.column.index===1;
-        if(type==='sub'){
-          d.cell.styles.fillColor=[238,244,255]; d.cell.styles.textColor=NAVY;
-          d.cell.styles.fontStyle='bold'; d.cell.styles.fontSize=9;
-          d.cell.styles.cellPadding={top:4,bottom:4,left:6,right:6};
-        } else if(type==='disc'){
-          d.cell.styles.fillColor=WHITE; d.cell.styles.fontStyle=isAmt?'bold':'normal';
-          d.cell.styles.textColor=isAmt?DGREEN:DGRAY;
-          doc.setFont('helvetica','italic');
-          d.cell.styles.cellPadding={top:3.5,bottom:3.5,left:14,right:6};
-        } else if(type==='opt'){
-          d.cell.styles.fillColor=LGOLD; d.cell.styles.textColor=DGOLD;
-          d.cell.styles.fontStyle=isAmt?'bold':'normal';
-        }
-      }
-    });
-    y = doc.lastAutoTable.finalY;
-  }
+  const totalVal = qr.plan ? qr.grandTotal : qr.afterTerm;
+  const savings  = qr.plan && qr.subtotal>totalVal ? (qr.subtotal-totalVal) : 0;
 
-  // ════════════════════════════════════════════════════
-  // TOTAL ANNUAL PREMIUM BOX  (split: label left | orange amount right)
-  // ════════════════════════════════════════════════════
-  y += 4;
-  const totalVal   = qr.plan ? qr.grandTotal : qr.afterTerm;
-  const totalLabel = 'TOTAL ' + (qr.plan ? (qr.mode||'ANNUAL').toUpperCase() : 'ANNUAL') + ' PREMIUM';
-  const tH  = 18;
-  const tLW = RW * 0.56;  // label section width
-  const tAW = RW * 0.44;  // amount section width
+  // Coverage highlights
+  const CH={
+    Basic:   ['Inpatient Hospitalisation','Pre & Post Hospitalisation','Day Care Procedures','Emergency Ambulance','Domiciliary Treatment'],
+    Gold:    ['Inpatient Hospitalisation','AYUSH Treatment','Organ Donor','Day Care Procedures','50% Cumulative Bonus'],
+    Platinum:['Inpatient Hospitalisation','Maternity & Newborn Cover','AYUSH Treatment','Organ Donor','50% Cumulative Bonus'],
+    nif:     ['Family Floater Cover','Inpatient Hospitalisation','Pre & Post Hospitalisation','Day Care Procedures','Ambulance Charges'],
+  };
+  const hl = qr.plan ? (CH[qr.plan]||CH.Basic) : CH.nif;
+  const pillsHTML = hl.map(h=>`<span class="q-pill">${h}</span>`).join('');
 
-  // outer border
-  drw(ORANGE); lw(1); doc.rect(RX, y, RW, tH, 'D');
-  // orange amount fill
-  fill(ORANGE); doc.rect(RX+tLW, y, tAW, tH, 'F');
-  // divider
-  drw(ORANGE); lw(0.8); doc.line(RX+tLW, y, RX+tLW, y+tH);
-
-  bf(9.5,'bold'); txt(NAVY);
-  doc.text(totalLabel, RX+5, y+8);
-  bf(7,'normal'); txt(DGRAY);
-  doc.text('(incl. all discounts)', RX+5, y+14);
-
-  bf(13.5,'bold'); txt(WHITE);
-  doc.text(Rs(totalVal), RX+tLW+tAW/2, y+11.5, {align:'center'});
-
-  y += tH + 6;
-
-  // ════════════════════════════════════════════════════
-  // NOTES BOX  (cream background)
-  // ════════════════════════════════════════════════════
   const notes = [
-    '* GST: Nil effective 22 Sept 2025 per IRDAI notification.',
-    '* Health Parameter Discount applies to members aged 18+ only, under Yuva Bharat plan.',
-    '* Final premium subject to insurer underwriting, medical history, and policy issuance.',
+    '* GST Nil effective 22 Sept 2025 per IRDAI notification.',
+    '* Health Parameter Discount applies to members aged 18+ under the Yuva Bharat plan.',
+    '* Final premium subject to insurer underwriting, medical history and policy issuance.',
     '* This quotation does not constitute a contract of insurance.',
   ];
-  if (qr.zoneLabel&&qr.zoneLabel.includes('Zone 2')&&!qr.plan)
-    notes.splice(2,0,'* Co-payment: 20% if Zone 2 insured treated at Zone 1 (Maharashtra/Gujarat) hospital.');
 
-  const nLH = 4.8, nPad = 5;
-  const nH = notes.length * nLH + nPad * 2;
-  fill(LORANGE); drw(BORNG); lw(0.3);
-  doc.roundedRect(RX, y, RW, nH, 2, 2, 'FD');
-  bf(6.5,'normal'); txt([100,60,20]);
-  notes.forEach((n,i) => doc.text(n, RX+nPad, y+nPad+3+i*nLH));
+  const html = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<title>Health Insurance Premium Quotation</title>
+<style>${_printCSS()}</style>
+</head><body>
+<div class="page">
+  <div class="q-header">
+    <div class="q-logo-wrap">${_printBadgeSVG()}<div class="q-brand"><h1>The New India Assurance</h1><p>Sambhal &nbsp;&middot;&nbsp; UP 38 &nbsp;&middot;&nbsp; Agency Office</p></div></div>
+    <div class="q-title-right"><div class="q-type">Health Insurance</div><div class="q-title">Premium Quotation</div></div>
+  </div>
+  <div class="q-meta">
+    <div class="q-meta-cell"><span class="mlabel">Quote Ref</span><div class="mval">${quoteRef}</div></div>
+    <div class="q-meta-cell"><span class="mlabel">Quote Date</span><div class="mval">${fmtD(today)}</div></div>
+    <div class="q-meta-cell"><span class="mlabel">Valid Till</span><div class="mval">${fmtD(validity)}</div></div>
+    <div class="q-meta-cell"><span class="mlabel">GST</span><div class="mval">NIL</div></div>
+  </div>
+  <div class="q-parties">
+    <div>
+      <div class="q-party-label">Prepared For</div>
+      <div class="q-customer-name">${custName}</div>
+      <div class="q-contact">Contact &mdash; ${custContact||'—'}</div>
+    </div>
+    <div class="q-agency-wrap">
+      <div class="q-party-label">Prepared By</div>
+      <div class="q-agency-name">Sambhal (UP 38) Agency</div>
+      <div class="q-agency-sub">The New India Assurance Co. Ltd. &nbsp;&middot;&nbsp; IRDAI Reg. 190</div>
+    </div>
+  </div>
+  <div class="q-info-row">
+    <div class="q-info-box"><span class="q-info-label">Plan</span><div class="q-info-val">${planLabel}</div></div>
+    <div class="q-info-box"><span class="q-info-label">Sum Insured</span><div class="q-info-val">${siLabel} <span class="q-info-sub">${qr.coverage==='floater'?'Floater':'Individual'}</span></div></div>
+    <div class="q-info-box"><span class="q-info-label">Zone</span><div class="q-info-val">${zoneLabel}</div></div>
+    <div class="q-info-box"><span class="q-info-label">Policy Term</span><div class="q-info-val">${termLabel}</div></div>
+  </div>
+  <div class="q-section-head"><div class="sh-title">Premium Breakdown</div><div class="sh-bar"></div></div>
+  <table class="q-table">
+    <thead><tr>
+      <th style="text-align:left;width:38%">Member</th>
+      <th class="th-center" style="width:12%">Age</th>
+      ${qr.plan?'<th style="text-align:left;width:26%">Discount</th>':''}
+      <th class="th-right" style="width:24%">Net Premium</th>
+    </tr></thead>
+    <tbody>${memberRows}${summaryRows}</tbody>
+  </table>
+  <div class="q-total-box">
+    <div class="q-total-left">
+      <div class="q-total-main-lbl">Total Annual Premium</div>
+      <div class="q-total-sub">Inclusive of all discounts &nbsp;&middot;&nbsp; GST NIL</div>
+    </div>
+    <div class="q-total-right">
+      <div class="q-total-amt">${cur(totalVal)}</div>
+      <div class="q-total-save">per year${savings>0?` &nbsp;&middot;&nbsp; you save ${cur(savings)}<br>(vs individual pricing)`:''}</div>
+    </div>
+  </div>
+  <div class="q-section-head" style="padding-top:12px"><div class="sh-title">Coverage Highlights</div><div class="sh-bar"></div></div>
+  <div class="q-coverage">${pillsHTML}</div>
+  <div class="q-notes">${notes.map(n=>`<div>${n}</div>`).join('')}</div>
+  <div class="q-footer-bar">Computer-generated quotation &nbsp;&middot;&nbsp; The New India Assurance &mdash; Sambhal (UP 38) &nbsp;&middot;&nbsp; ${fmtD(today)}</div>
+</div>
+<script>window.onload=()=>setTimeout(()=>window.print(),600);<\/script>
+</body></html>`;
 
-  // ════════════════════════════════════════════════════
-  // FOOTER BAR
-  // ════════════════════════════════════════════════════
-  fill(LGRAY); drw(MGRAY); lw(0.2);
-  doc.rect(RX, PH-11, RW, 11, 'FD');
-  bf(6.5,'normal'); txt(DGRAY);
-  doc.text(
-    'Computer-generated quotation | ' + agent + ' | New India Assurance Co. Ltd. | ' + today,
-    RX + RW/2, PH-5, {align:'center', maxWidth: RW-4}
-  );
+  const w = window.open('','_blank','width=880,height=960');
+  if (!w) { alert('Please allow popups to print the quotation.'); return; }
+  w.document.write(html);
+  w.document.close();
+}
 
-  doc.save('Quote_'+custName.replace(/\s+/g,'_')+'_'+today.replace(/\s/g,'')+'.pdf');
+// =============================================================================
+// =============================================================================
+// MOTOR QUOTATION — buildPrintDoc opens print window matching sample
+// =============================================================================
+function buildPrintDoc_REMOVED_PLACEHOLDER() {
 }
 
 // =============================================================================
@@ -4957,208 +5112,100 @@ function buildPrintDoc(d){
   const ag=getAgent();
   const today=new Date();
   const validity=new Date(today); validity.setDate(validity.getDate()+30);
-  const fmtDate=dt=>dt.toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'});
-  const cur=n=>n==null||n===''?'—':'₹'+Number(n).toLocaleString('en-IN',{minimumFractionDigits:0,maximumFractionDigits:2});
-  const pct=n=>n?n+'%':'—';
-  const row=(l,v,bold,disc)=>`<tr class="${disc?'disc-row':''}${bold?' bold-row':''}"><td>${l}</td><td class="val">${v}</td></tr>`;
-  const subHead=t=>`<tr class="sub-head"><td colspan="2">${t}</td></tr>`;
+  const fmtD=dt=>dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  const cur=n=>n==null?'—':'₹'+Number(n).toLocaleString('en-IN',{minimumFractionDigits:0,maximumFractionDigits:2});
+  const seq=String(today.getMonth()+1).padStart(2,'0')+String(today.getDate()).padStart(2,'0');
+  const yr=String(today.getFullYear()).slice(-2);
+  const quoteRef='NIA/SBL/M/'+yr+'-'+seq;
+  const policyLabel=d.mode+' — '+(d.covType||'Package');
 
-  // ── Build OD rows (base OD + add-ons all in one column) ──
   let odRows='', tpRows='';
   const showOD=d.od&&d.od.show;
   const showTP=d.tp&&d.tp.show;
+  const idvNum=d.idv&&d.idv!=='N/A'?Number(String(d.idv).replace(/,/g,'')):0;
 
   if(showOD){
     const o=d.od;
-    odRows+=row('Base OD (on IDV ₹'+d.idv+')',cur(o.base));
-    if(o.gvwLoad) odRows+=row('GVW Loading',cur(o.gvwLoad));
-    if(o.otLoad)  odRows+=row('Overturning Risk Loading',cur(o.otLoad));
-    if(o.elec)    odRows+=row('Elec. Accessories (4%)',cur(o.elec));
-    if(o.nonElec) odRows+=row('Non-Elec. Accessories (3%)',cur(o.nonElec));
-    if(o.tow)     odRows+=row('Additional Towing',cur(o.tow));
-    if(o.geo)     odRows+=row('Geo. Extension (OD)',cur(o.geo));
-    if(o.discOD)  odRows+=row('OD Discount',cur(-Math.abs(o.discOD)),false,true);
-    if(o.antiTheft) odRows+=row('Anti-theft Disc. (2.5%)',cur(-Math.abs(o.antiTheft)),false,true);
-    if(o.discNCB) odRows+=row('NCB ('+d.ncbPct+'%)',cur(-Math.abs(o.discNCB)),false,true);
-    if(o.imt23)   odRows+=row('IMT-23 Add-on (15%)',cur(o.imt23));
+    odRows+=`<tr><td>Base OD <span class="val-sub">IDV ${idvNum?cur(idvNum):''}</span></td><td class="val">${cur(o.base)}</td></tr>`;
+    if(o.gvwLoad)  odRows+=`<tr><td>GVW Loading</td><td class="val">${cur(o.gvwLoad)}</td></tr>`;
+    if(o.otLoad)   odRows+=`<tr><td>Overturning Loading</td><td class="val">${cur(o.otLoad)}</td></tr>`;
+    if(o.elec)     odRows+=`<tr><td>Elec. Accessories (4%)</td><td class="val">${cur(o.elec)}</td></tr>`;
+    if(o.nonElec)  odRows+=`<tr><td>Non-Elec. Accessories (3%)</td><td class="val">${cur(o.nonElec)}</td></tr>`;
+    if(o.tow)      odRows+=`<tr><td>Additional Towing</td><td class="val">${cur(o.tow)}</td></tr>`;
+    if(o.acc)      odRows+=`<tr><td>Accessories</td><td class="val">${cur(o.acc)}</td></tr>`;
+    if(o.discOD)   odRows+=`<tr class="disc-row"><td>OD Discount</td><td class="val">-${cur(Math.abs(o.discOD)).slice(1)}</td></tr>`;
+    if(o.antiTheft)odRows+=`<tr class="disc-row"><td>Anti-theft Disc. (2.5%)</td><td class="val">-${cur(Math.abs(o.antiTheft)).slice(1)}</td></tr>`;
+    if(o.discNCB)  odRows+=`<tr class="disc-row"><td>NCB (${d.ncbPct}%)</td><td class="val">-${cur(Math.abs(o.discNCB)).slice(1)}</td></tr>`;
+    if(o.imt23)    odRows+=`<tr><td>IMT-23 Add-on (15%)</td><td class="val">${cur(o.imt23)}</td></tr>`;
     if(o.spFactor!=null){
-      odRows+=row('Net OD (annual)',cur(o.net));
-      odRows+=row('Short Period ('+Math.round(o.spFactor*100)+'% · '+d.policyMonths+' mths)',pct(Math.round(o.spFactor*100)));
-      odRows+=row('Net OD (short period)',cur(o.netSP),true);
-    } else {
-      odRows+=row('Net OD Premium',cur(o.net||o.netSP),true);
+      odRows+=`<tr><td>Net OD (annual)</td><td class="val">${cur(o.net)}</td></tr>`;
+      odRows+=`<tr class="net-row"><td>NET OD PREMIUM</td><td class="val">${cur(o.netSP)}</td></tr>`;
+    }else{
+      odRows+=`<tr class="net-row"><td>NET OD PREMIUM</td><td class="val">${cur(o.net||o.netSP)}</td></tr>`;
     }
-    // Add-ons appended under OD column
     if(d.addons&&d.addons.items&&d.addons.items.length){
-      odRows+=subHead('Add-on Covers');
-      d.addons.items.forEach(it=>{ odRows+=row(it.l,cur(it.a)); });
-      odRows+=row('Total Add-ons',cur(d.addons.total),true);
+      odRows+=`<tr class="sub-head"><td colspan="2">ADD-ON COVERS</td></tr>`;
+      d.addons.items.forEach(it=>{odRows+=`<tr><td>${it.l}</td><td class="val">${cur(it.a)}</td></tr>`;});
+      odRows+=`<tr class="net-row"><td>TOTAL ADD-ONS</td><td class="val">${cur(d.addons.total)}</td></tr>`;
     }
   }
 
   if(showTP){
     const t=d.tp;
-    tpRows+=row('Base TP Premium',cur(t.base));
-    if(t.hev)     tpRows+=row('HEV/EV Concession',cur(-Math.abs(t.hev)),false,true);
-    if(t.pa)      tpRows+=row('PA — Owner-Driver (GR-36A)',cur(t.pa));
-    if(t.pillion) tpRows+=row('PA — Pillion (GR-36B)',cur(t.pillion));
-    if(t.ll)      tpRows+=row('LL — Paid Driver (IMT-28)',cur(t.ll));
-    if(t.llEmp)   tpRows+=row('LL — Employees',cur(t.llEmp));
-    if(t.geo)     tpRows+=row('Geo. Extension (TP)',cur(t.geo));
-    const netTP=(t.base||0)-(t.hev||0)+(t.pa||0)+(t.pillion||0)+(t.ll||0)+(t.llEmp||0)+(t.geo||0);
-    tpRows+=row('Net TP Premium',cur(netTP),true);
+    tpRows+=`<tr><td>Base TP Premium</td><td class="val">${cur(t.base)}</td></tr>`;
+    if(t.hev)     tpRows+=`<tr class="disc-row"><td>HEV/EV Concession</td><td class="val">-${cur(Math.abs(t.hev)).slice(1)}</td></tr>`;
+    if(t.pa)      tpRows+=`<tr><td>PA — Owner-Driver <span class="val-sub">GR-36A</span></td><td class="val">${cur(t.pa)}</td></tr>`;
+    if(t.pillion) tpRows+=`<tr><td>PA — Pillion <span class="val-sub">GR-36B</span></td><td class="val">${cur(t.pillion)}</td></tr>`;
+    if(t.ll)      tpRows+=`<tr><td>LL — Paid Driver <span class="val-sub">IMT-28</span></td><td class="val">${cur(t.ll)}</td></tr>`;
+    if(t.llEmp)   tpRows+=`<tr><td>LL — Employees</td><td class="val">${cur(t.llEmp)}</td></tr>`;
+    const netTP=(t.base||0)-(t.hev||0)+(t.pa||0)+(t.pillion||0)+(t.ll||0)+(t.llEmp||0);
+    tpRows+=`<tr class="net-row"><td>NET TP PREMIUM</td><td class="val">${cur(netTP)}</td></tr>`;
+    tpRows+=`<tr class="sub-head"><td colspan="2">TAXES</td></tr>`;
+    if(d.gst.split){
+      tpRows+=`<tr><td>GST on OD <span class="val-sub">18%</span></td><td class="val">${cur(d.gst.odGst)}</td></tr>`;
+      tpRows+=`<tr><td>GST on TP <span class="val-sub">5%</span></td><td class="val">${cur(d.gst.tpGst)}</td></tr>`;
+      tpRows+=`<tr class="net-row"><td>TOTAL GST</td><td class="val">${cur(d.gst.odGst+d.gst.tpGst)}</td></tr>`;
+    }else{
+      tpRows+=`<tr><td>GST <span class="val-sub">18%</span></td><td class="val">${cur(d.gst.total)}</td></tr>`;
+    }
   }
 
-  // ── GST & Total (full width) ──
-  let gstBlock='';
-  if(d.gst.split){
-    gstBlock+=`<tr><td>GST on OD @ 18%</td><td class="val">${cur(d.gst.odGst)}</td></tr>`;
-    gstBlock+=`<tr><td>GST on TP @ 5%</td><td class="val">${cur(d.gst.tpGst)}</td></tr>`;
-    gstBlock+=`<tr class="bold-row"><td>Total GST</td><td class="val">${cur(d.gst.odGst+d.gst.tpGst)}</td></tr>`;
-  } else {
-    gstBlock+=`<tr><td>GST @ 18%</td><td class="val">${cur(d.gst.total)}</td></tr>`;
-  }
+  const pillsHTML=(d.cov||[]).map(c=>`<span class="q-pill">${c}</span>`).join('');
+  const vehDesc=[d.vehType,d.spec,d.zone].filter(Boolean).join(' · ');
 
-  // ── Premium section HTML: two-column or single-column ──
-  let premiumSection='';
-  if(showOD&&showTP){
-    // Package: side-by-side
-    premiumSection=`
-    <div class="two-col-prem">
-      <div class="prem-col od-col">
-        <div class="col-head">OD PREMIUM — Own Damage</div>
-        <table><tbody>${odRows}</tbody></table>
-      </div>
-      <div class="prem-col tp-col">
-        <div class="col-head">TP PREMIUM — Third Party (Statutory)</div>
-        <table><tbody>${tpRows}</tbody></table>
-      </div>
-    </div>`;
-  } else if(showOD){
-    premiumSection=`
-    <div class="single-col-prem">
-      <div class="col-head">OD PREMIUM — Own Damage</div>
-      <table><tbody>${odRows}</tbody></table>
-    </div>`;
-  } else if(showTP){
-    premiumSection=`
-    <div class="single-col-prem">
-      <div class="col-head">TP PREMIUM — Third Party (Statutory)</div>
-      <table><tbody>${tpRows}</tbody></table>
-    </div>`;
-  }
+  const premHtml=(()=>{
+    if(showOD&&showTP) return `<div class="q-two-col"><div class="q-col-od"><div class="col-head">OWN DAMAGE</div><table class="q-col-table"><tbody>${odRows}</tbody></table></div><div class="q-col-tp"><div class="col-head">THIRD PARTY <span class="col-head-sub">STATUTORY</span></div><table class="q-col-table"><tbody>${tpRows}</tbody></table></div></div>`;
+    if(showOD) return `<div class="q-single-col"><div class="col-head">OWN DAMAGE</div><table class="q-col-table"><tbody>${odRows}</tbody></table></div>`;
+    return `<div class="q-single-col"><div class="col-head">THIRD PARTY <span class="col-head-sub">STATUTORY</span></div><table class="q-col-table"><tbody>${tpRows}</tbody></table></div>`;
+  })();
 
-  // ── GST total band ──
-  const gstSection=`
-  <div class="gst-band">
-    <table><tbody>
-      ${gstBlock}
-      <tr class="grand-row"><td>TOTAL PREMIUM PAYABLE (incl. GST)</td><td class="val">₹${Number(d.grand).toLocaleString('en-IN')}</td></tr>
-    </tbody></table>
-  </div>`;
+  const html='<!DOCTYPE html>\n<html lang="en"><head><meta charset="UTF-8">\n<title>Motor Insurance Premium Quotation</title>\n<style>'+_printCSS()+'</style>\n</head><body>\n<div class="page">\n'+
+  '<div class="q-header"><div class="q-logo-wrap">'+_printBadgeSVG()+'<div class="q-brand"><h1>The New India Assurance</h1><p>Sambhal &middot; UP 38 &middot; Agency Office</p></div></div><div class="q-title-right"><div class="q-type">Motor Insurance</div><div class="q-title">Premium Quotation</div></div></div>\n'+
+  '<div class="q-meta"><div class="q-meta-cell"><span class="mlabel">Quote Ref</span><div class="mval">'+quoteRef+'</div></div><div class="q-meta-cell"><span class="mlabel">Quote Date</span><div class="mval">'+fmtD(today)+'</div></div><div class="q-meta-cell"><span class="mlabel">Valid Till</span><div class="mval">'+fmtD(validity)+'</div></div><div class="q-meta-cell"><span class="mlabel">Policy</span><div class="mval">'+policyLabel+'</div></div></div>\n'+
+  '<div class="q-parties"><div><div class="q-party-label">Prepared For</div><div class="q-customer-name">'+(d.custName||'Customer')+'</div>'+(d.regNo?'<div class="q-contact">Reg. No. &mdash; '+d.regNo+'</div>':'')+'</div><div class="q-agency-wrap"><div class="q-party-label">Prepared By</div><div class="q-agency-name">Sambhal (UP 38) Agency</div><div class="q-agency-sub">The New India Assurance Co. Ltd. &middot; IRDAI Reg. 190</div></div></div>\n'+
+  '<div class="q-info-row"><div class="q-info-box"><span class="q-info-label">Make / Model</span><div class="q-info-val">'+(d.makeModel||'—')+'</div></div><div class="q-info-box"><span class="q-info-label">IDV</span><div class="q-info-val">'+(d.idv&&d.idv!=='N/A'?'₹'+d.idv:'N/A (TP Only)')+'</div></div><div class="q-info-box"><span class="q-info-label">NCB</span><div class="q-info-val">'+(d.ncbPct?d.ncbPct+'%':'—')+'</div></div><div class="q-info-box"><span class="q-info-label">Zone</span><div class="q-info-val">'+(d.zone||'—')+'</div></div></div>\n'+
+  (vehDesc?'<div class="q-veh-desc">'+vehDesc+'</div>\n':'')+
+  '<div class="q-section-head"><div class="sh-title">Premium Breakdown</div><div class="sh-bar"></div></div>\n'+
+  premHtml+'\n'+
+  '<div class="q-total-box"><div class="q-total-left"><div class="q-total-main-lbl">Total Premium Payable</div><div class="q-total-sub">Inclusive of GST &middot; OD + Add-ons + Third Party</div></div><div class="q-total-right"><div class="q-total-amt">₹'+Number(d.grand).toLocaleString('en-IN')+'</div><div class="q-total-save">per year &middot; incl. all taxes</div></div></div>\n'+
+  '<div class="q-section-head" style="padding-top:10px"><div class="sh-title">Coverage Includes</div><div class="sh-bar"></div></div>\n'+
+  '<div class="q-coverage">'+pillsHTML+'</div>\n'+
+  '<div class="q-notes"><div>* TP premium is statutory (IRDAI) and non-negotiable.</div><div>* Add-on covers available on comprehensive policies only.</div><div>* Final premium subject to vehicle inspection and underwriting.</div><div>* GST applicable as per prevailing tax laws.</div><div>* This quotation does not constitute a contract of insurance.</div></div>\n'+
+  '<div class="q-footer-bar">Computer-generated quotation &middot; The New India Assurance &mdash; Sambhal (UP 38) &middot; '+fmtD(today)+'</div>\n'+
+  '</div><script>window.onload=()=>setTimeout(()=>window.print(),600);<\/script>\n</body></html>';
 
-  // Coverage pills
-  const pills=(d.cov||[]).map(c=>`<span class="pill">${c}</span>`).join('');
-
-  const html=`<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Motor Insurance Quotation</title>
-<style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Segoe UI',Arial,sans-serif;font-size:12.5px;color:#1a1a2e;background:#f5f7fa}
-  .page{max-width:800px;margin:20px auto;background:#fff;box-shadow:0 2px 15px rgba(0,0,0,.12)}
-  /* Header */
-  .hdr{background:#1e3a5f;color:#fff;padding:16px 22px;display:flex;justify-content:space-between;align-items:flex-start}
-  .hdr-left h1{font-size:1.25em;letter-spacing:.8px;margin-bottom:3px}
-  .hdr-left p{font-size:.8em;opacity:.85;line-height:1.6}
-  .hdr-right{text-align:right;font-size:.8em;opacity:.9;line-height:1.7}
-  .badge{display:inline-block;background:#f97316;color:#fff;border-radius:4px;padding:2px 10px;font-size:.73em;font-weight:700;letter-spacing:1px;margin-top:5px}
-  /* Info grid */
-  .info-grid{display:grid;grid-template-columns:1fr 1fr;border-bottom:2px solid #1e3a5f}
-  .info-box{padding:10px 18px;border-right:1px solid #e2e8f0;border-bottom:1px solid #f1f5f9}
-  .info-box:nth-child(even){border-right:none}
-  .info-box label{font-size:.68em;text-transform:uppercase;letter-spacing:.6px;color:#64748b;display:block;margin-bottom:2px}
-  .info-box span{font-weight:600;font-size:.92em}
-  /* Two-column premium */
-  .two-col-prem{display:grid;grid-template-columns:1fr 1fr;border-top:2px solid #1e3a5f}
-  .single-col-prem{border-top:2px solid #1e3a5f}
-  .prem-col{border-right:2px solid #1e3a5f}
-  .prem-col:last-child{border-right:none}
-  .col-head{background:#1e3a5f;color:#fff;padding:7px 12px;font-size:.78em;font-weight:700;letter-spacing:.6px;text-transform:uppercase}
-  .sub-head td{background:#e8f0fe;color:#1e3a5f;font-size:.74em;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:5px 10px}
-  table{width:100%;border-collapse:collapse}
-  td{padding:5px 10px;border-bottom:1px solid #f1f5f9;font-size:.87em}
-  td.val{text-align:right;font-variant-numeric:tabular-nums;min-width:90px}
-  .bold-row td{font-weight:700;background:#f8fafc;border-top:1px solid #e2e8f0}
-  .disc-row td{color:#059669}
-  /* GST band */
-  .gst-band{border-top:2px solid #1e3a5f}
-  .gst-band td{padding:6px 12px;font-size:.88em}
-  .grand-row td{background:#1e3a5f;color:#fff;font-weight:700;font-size:1.05em;padding:10px 12px}
-  .grand-row td.val{font-size:1.15em}
-  /* Coverage */
-  .cov-section{padding:10px 18px;background:#f8fafc;border-top:1px solid #e2e8f0}
-  .cov-section label{font-size:.68em;text-transform:uppercase;letter-spacing:.6px;color:#64748b;display:block;margin-bottom:5px}
-  .pill{display:inline-block;background:#e8f0fe;color:#1e3a5f;border:1px solid #b6c9f0;border-radius:20px;padding:2px 10px;font-size:.76em;margin:2px}
-  /* Validity */
-  .validity{background:#fef9c3;border-left:4px solid #f59e0b;padding:8px 16px;font-size:.8em}
-  /* Disclaimer */
-  .disclaimer{padding:10px 18px 12px;font-size:.7em;color:#64748b;border-top:1px solid #e2e8f0;line-height:1.6}
-  .ftr{background:#1e3a5f;color:#fff;text-align:center;padding:7px;font-size:.7em;opacity:.85}
-  @media print{body{background:#fff}.page{box-shadow:none;margin:0}}
-</style>
-</head>
-<body>
-<div class="page">
-
-  <div class="hdr">
-    <div class="hdr-left">
-      <h1>MOTOR INSURANCE QUOTATION</h1>
-      <p>${ag.agency||'Insurance Agency'}</p>
-      ${ag.licence?`<p>Licence No: ${ag.licence}</p>`:''}
-      ${ag.mobile?`<p>Mob: ${ag.mobile}</p>`:''}
-    </div>
-    <div class="hdr-right">
-      <div><strong>${ag.agent||'Insurance Agent'}</strong></div>
-      <div>Quote Date: ${d.date}</div>
-      <div>Valid Till: ${fmtDate(validity)}</div>
-      <div class="badge">${d.mode} — ${d.covType||''}</div>
-    </div>
-  </div>
-
-  <div class="info-grid">
-    <div class="info-box"><label>Customer Name</label><span>${d.custName||'—'}</span></div>
-    <div class="info-box"><label>Registration No.</label><span>${d.regNo||'—'}</span></div>
-    <div class="info-box"><label>Make / Model</label><span>${d.makeModel||'—'}</span></div>
-    <div class="info-box"><label>Vehicle Type</label><span>${d.vehType||'—'} · ${d.spec||'—'}</span></div>
-    <div class="info-box"><label>Zone</label><span>${d.zone||'—'}</span></div>
-    ${d.idv&&d.idv!=='N/A'?`<div class="info-box"><label>IDV (Insured Declared Value)</label><span>₹${d.idv}</span></div>`:'<div class="info-box"><label>IDV</label><span>N/A (TP Only)</span></div>'}
-    ${d.ncbPct?`<div class="info-box"><label>NCB Applied</label><span>${d.ncbPct}%</span></div>`:''}
-    ${d.policyMonths&&d.policyMonths<12?`<div class="info-box"><label>Policy Duration</label><span>${d.policyMonths} Month${d.policyMonths>1?'s':''} (Short Period)</span></div>`:''}
-  </div>
-
-  ${premiumSection}
-  ${gstSection}
-
-  ${pills?`<div class="cov-section"><label>Coverage Includes</label>${pills}</div>`:''}
-
-  <p class="validity">&#9432; This quotation is valid for <strong>30 days</strong> from ${d.date}. Final premium subject to inspection and underwriting.</p>
-
-  <div class="disclaimer">
-    <strong>Disclaimer:</strong> Computer-generated quotation for reference only — not a contract of insurance. TP premium is statutory (IRDAI) and non-negotiable. Add-on covers available on comprehensive policies only. GST applicable as per prevailing tax laws.
-  </div>
-
-  <div class="ftr">${ag.agency||'Motor Insurance'} &mdash; ${ag.agent||''} &mdash; IRDAI Reg. No. 190</div>
-
-</div>
-</body>
-</html>`;
-
-  const el=$('printDoc');
-  if(el) el.innerHTML=html;
+  _motorPrintHTML = html;
 }
+
+let _motorPrintHTML = '';
+function motorOpenPrint() {
+  if (!_motorPrintHTML) { alert('Please calculate premium first.'); return; }
+  const w = window.open('','_blank','width=880,height=960');
+  if (!w) { alert('Please allow popups to print the quotation.'); return; }
+  w.document.write(_motorPrintHTML);
+  w.document.close();
+}
+
 
 // ─── ANIMATE COUNTER ──────────────────────────────────────────────────────
 function animateCounter(id,target){
