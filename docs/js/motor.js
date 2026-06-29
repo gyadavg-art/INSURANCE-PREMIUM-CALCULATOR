@@ -196,7 +196,7 @@ function calculateTW(){
     }
   }
 
-  const pa=$('twCompPA').checked?275:0;
+  const pa=$('twCompPA').checked?400:0;
 
   // Pillion PA: ₹7 per ₹10,000 SI (max SI ₹2L)
   const pillionCb=$('twPillionPA');
@@ -240,6 +240,8 @@ function calculateTW(){
     if(battCb&&battCb.checked&&battCard&&!battCard.classList.contains('cov-hidden')&&!battCard.classList.contains('age-disabled')){
       const v=Math.round(idv*0.005); twAddons+=v; _twAdLines.push({l:'Battery Protect EV (0.5% of IDV)',a:v});
     }
+    const sacCb=$('tw_warRisk');
+    if(sacCb&&sacCb.checked){const v=Math.max(75,Math.round((netOD+twAddons)*0.05));twAddons+=v;_twAdLines.push({l:'War Risk Cover (5% of net OD+addons, min ₹75)',a:v});}
   }
 
   const netBase=netOD+tp+pa+pillionPrem+ll+accPrem+elecPrem+towPrem+twAddons;
@@ -432,7 +434,7 @@ function calculatePC(){
     if(isBrandNew) { tp=tp*3; hevDisc=hevDisc*3; }
   }
   const netTP=tp-hevDisc;
-  const pa=ct!=='SAOD'&&$('pcCompPA').checked?275:0;
+  const pa=ct!=='SAOD'&&$('pcCompPA').checked?325:0;
   const llCb=$('pcLL');
   const llPersons=parseInt($('pcLLPersons').value)||1;
   const ll=ct!=='SAOD'&&llCb&&llCb.checked?50*llPersons:0;
@@ -479,6 +481,7 @@ function calculatePC(){
     else if(vt==='HEV'){const ht=$('pc_hevType').value;bp=ht==='basic'?({1:0.20,2:0.25,3:0.30}[br]||0):({1:0.43,2:0.50,3:0.57}[br]||0);}
     const _a=((bp/100)*idv)*(1-dsc('batteryProtect')/100);addons+=_a;if(_a>0)_adLines.push({l:vt==='HEV'?'Hybrid Protect':'Battery Protect (EV)',a:_a});cov.push(vt==='HEV'?'Hybrid Protect':'Battery Protect');
   }
+  if(aOn('warRisk')){const v=Math.max(250,Math.round((netOD+addons)*0.05));addons+=v;_adLines.push({l:'War Risk Cover (5% of net OD+addons, min ₹250)',a:v});cov.push('War Risk Cover');}
 
   const wrap=$('pcAddonsWrap');
   if(wrap){
@@ -523,7 +526,7 @@ function calculatePC(){
       odPct=0; tpPct=15;
       basis='TP Only';
     }
-    const commOD=(odPct/100)*netOD;
+    const commOD=(odPct/100)*(netOD+addons);
     const commTP=(tpPct/100)*netTP;
     const commTotal=commOD+commTP;
     const sT=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
@@ -861,6 +864,7 @@ function calculateCV(){
     if(aOn2('keyProtect')){addons+=375;_adLines.push({l:'Key Protect Cover',a:375});cov.push('Key Protect');}
     if(aOn2('tyreAlloy')){const yrBr=Math.min(Math.ceil(yrF||1),3);const r=[0.45,0.52,0.60][yrBr-1]||0;const _a=((r/100)*idv)*(1-dsc2('tyreAlloy')/100);addons+=_a;_adLines.push({l:'Tyre & Alloy Cover',a:_a});cov.push('Tyre & Alloy');}
   }
+  if(aOn2('warRisk')){const v=Math.max(500,Math.round((netOD_sp+addons)*0.05));addons+=v;_adLines.push({l:'War Risk Cover (5% of net OD+addons, min ₹500)',a:v});cov.push('War Risk Cover');}
 
   const wrap=$('cvAddonsWrap');
   if(wrap){
@@ -923,10 +927,10 @@ function calculateCV(){
         odPct=10; tpPct=2.5; basis='GVW >7,500 kg';
         if(exactGVW<=30000){ incentivePct=4; incentiveLabel='4% on Net OD+TP (GCV >7,500 & ≤30,000 kg)'; }
       }
-      const commOD=(odPct/100)*netOD_sp;
+      const commOD=(odPct/100)*(netOD_sp+addons);
       const commTP=(tpPct/100)*netTP_sp;
       const commBase=commOD+commTP;
-      const incentive=(incentivePct/100)*(netOD_sp+netTP_sp);
+      const incentive=(incentivePct/100)*(netOD_sp+addons+netTP_sp);
       const commGrand=commBase+incentive;
       sT('cvCommODPct',odPct); sT('cvCommTPPct',tpPct);
       sT('cvCommOD',commOD.toFixed(2)); sT('cvCommTP',commTP.toFixed(2));
