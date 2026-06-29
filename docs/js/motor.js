@@ -434,7 +434,7 @@ function calculatePC(){
     if(isBrandNew) { tp=tp*3; hevDisc=hevDisc*3; }
   }
   const netTP=tp-hevDisc;
-  const pa=ct!=='SAOD'&&$('pcCompPA').checked?324:0;
+  const pa=ct!=='SAOD'&&$('pcCompPA').checked?325:0;
   const llCb=$('pcLL');
   const llPersons=parseInt($('pcLLPersons').value)||1;
   const ll=ct!=='SAOD'&&llCb&&llCb.checked?50*llPersons:0;
