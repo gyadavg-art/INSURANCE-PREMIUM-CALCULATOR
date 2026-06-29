@@ -1044,9 +1044,9 @@ function buildPrintDoc(d){
   })();
 
   const html='<!DOCTYPE html>\n<html lang="en"><head><meta charset="UTF-8">\n<title>Motor Insurance Premium Quotation</title>\n<style>'+_printCSS()+'</style>\n</head><body>\n<div class="page">\n'+
-  '<div class="q-header"><div class="q-logo-wrap">'+_printBadgeSVG()+'<div class="q-brand"><h1>The New India Assurance</h1><p>Sambhal &middot; UP 38 &middot; Agency Office</p></div></div><div class="q-title-right"><div class="q-type">Motor Insurance</div><div class="q-title">Premium Quotation</div></div></div>\n'+
+  '<div class="q-header"><div class="q-logo-wrap"><div class="q-brand"><h1>The New India</h1><p>Sambhal &middot; UP 38 &middot; Agency Office</p></div></div><div class="q-title-right"><div class="q-type">Motor Insurance</div><div class="q-title">Premium Quotation</div></div></div>\n'+
   '<div class="q-meta"><div class="q-meta-cell"><span class="mlabel">Quote Ref</span><div class="mval">'+quoteRef+'</div></div><div class="q-meta-cell"><span class="mlabel">Quote Date</span><div class="mval">'+fmtD(today)+'</div></div><div class="q-meta-cell"><span class="mlabel">Valid Till</span><div class="mval">'+fmtD(validity)+'</div></div><div class="q-meta-cell"><span class="mlabel">Policy</span><div class="mval">'+policyLabel+'</div></div></div>\n'+
-  '<div class="q-parties"><div><div class="q-party-label">Prepared For</div><div class="q-customer-name">'+(d.custName||'Customer')+'</div>'+(d.regNo?'<div class="q-contact">Reg. No. &mdash; '+d.regNo+'</div>':'')+'</div><div class="q-agency-wrap"><div class="q-party-label">Prepared By</div><div class="q-agency-name">Sambhal (UP 38) Agency</div><div class="q-agency-sub">The New India Assurance Co. Ltd. &middot; IRDAI Reg. 190</div></div></div>\n'+
+  '<div class="q-parties"><div><div class="q-party-label">Prepared For</div><div class="q-customer-name">'+(d.custName||'Customer')+'</div>'+(d.regNo?'<div class="q-contact">Reg. No. &mdash; '+d.regNo+'</div>':'')+'</div><div class="q-agency-wrap"><div class="q-party-label">Prepared By</div><div class="q-agency-name">Sambhal (UP 38) Agency</div></div></div>\n'+
   '<div class="q-info-row"><div class="q-info-box"><span class="q-info-label">Make / Model</span><div class="q-info-val">'+(d.makeModel||'—')+'</div></div><div class="q-info-box"><span class="q-info-label">IDV</span><div class="q-info-val">'+(d.idv&&d.idv!=='N/A'?'₹'+d.idv:'N/A (TP Only)')+'</div></div><div class="q-info-box"><span class="q-info-label">NCB</span><div class="q-info-val">'+(d.ncbPct?d.ncbPct+'%':'—')+'</div></div><div class="q-info-box"><span class="q-info-label">Zone</span><div class="q-info-val">'+(d.zone||'—')+'</div></div></div>\n'+
   (vehDesc?'<div class="q-veh-desc">'+vehDesc+'</div>\n':'')+
   '<div class="q-section-head"><div class="sh-title">Premium Breakdown</div><div class="sh-bar"></div></div>\n'+
@@ -1055,7 +1055,7 @@ function buildPrintDoc(d){
   '<div class="q-section-head" style="padding-top:10px"><div class="sh-title">Coverage Includes</div><div class="sh-bar"></div></div>\n'+
   '<div class="q-coverage">'+pillsHTML+'</div>\n'+
   '<div class="q-notes"><div>* TP premium is statutory (IRDAI) and non-negotiable.</div><div>* Add-on covers available on comprehensive policies only.</div><div>* Final premium subject to vehicle inspection and underwriting.</div><div>* GST applicable as per prevailing tax laws.</div><div>* This quotation does not constitute a contract of insurance.</div></div>\n'+
-  '<div class="q-footer-bar">Computer-generated quotation &middot; The New India Assurance &mdash; Sambhal (UP 38) &middot; '+fmtD(today)+'</div>\n'+
+  '<div class="q-footer-bar">Computer-generated quotation &middot; The New India &mdash; Sambhal (UP 38) &middot; '+fmtD(today)+'</div>\n'+
   '</div><script>window.onload=()=>setTimeout(()=>window.print(),600);<\/script>\n</body></html>';
 
   _motorPrintHTML = html;
