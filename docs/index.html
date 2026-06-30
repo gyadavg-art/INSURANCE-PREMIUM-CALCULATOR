@@ -1494,22 +1494,11 @@
       <div class="sec-div"></div>
 
       <div id="cvGeoBlock">
-        <p class="sub-label">Geographical Extension (GR-4) — ₹400 OD + ₹100 TP per country</p>
+        <p class="sub-label">Geographical Extension (GR-4)</p>
         <label class="check-block neutral">
           <input type="checkbox" id="cvGeoExt" onchange="cvGeoToggle()">
-          <div class="cbt"><strong>Extend Coverage Beyond India</strong><span>Select countries below. Premium auto-calculated at ₹400 OD + ₹100 TP per country.</span></div>
+          <div class="cbt"><strong>Extend Coverage Beyond India</strong><span>Fixed rate: ₹400 OD + ₹100 TP · No OD discount applicable on geo extension premium.</span></div>
         </label>
-        <div id="cvGeoCountries" style="display:none;margin-top:8px;display:none">
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px">
-            <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;cursor:pointer"><input type="checkbox" class="cv-geo-country" value="Bangladesh" onchange="cvGeoCalc()"> Bangladesh</label>
-            <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;cursor:pointer"><input type="checkbox" class="cv-geo-country" value="Bhutan" onchange="cvGeoCalc()"> Bhutan</label>
-            <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;cursor:pointer"><input type="checkbox" class="cv-geo-country" value="Nepal" onchange="cvGeoCalc()"> Nepal</label>
-            <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;cursor:pointer"><input type="checkbox" class="cv-geo-country" value="Maldives" onchange="cvGeoCalc()"> Maldives</label>
-            <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;cursor:pointer"><input type="checkbox" class="cv-geo-country" value="Pakistan" onchange="cvGeoCalc()"> Pakistan</label>
-            <label style="display:flex;align-items:center;gap:5px;font-size:.82rem;cursor:pointer"><input type="checkbox" class="cv-geo-country" value="Sri Lanka" onchange="cvGeoCalc()"> Sri Lanka</label>
-          </div>
-          <p style="margin-top:6px;font-size:.76rem;color:var(--ink-lite)">Selected: <span id="cvGeoCountryCount">0</span> countr(ies) — OD: ₹<span id="cvGeoODCalc">0</span> · TP: ₹<span id="cvGeoTPCalc">0</span></p>
-        </div>
         <input type="hidden" id="cvGeoODPrem" value="0">
         <input type="hidden" id="cvGeoTPPrem" value="0">
       </div>

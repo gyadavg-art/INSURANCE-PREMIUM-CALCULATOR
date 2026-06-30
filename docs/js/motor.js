@@ -131,7 +131,7 @@ function twVehicleChange(){
 function twUpdateAge(){
   const r=$('twRegDate').value, p=$('twPolDate').value;
   if(r&&p){
-    const months=Math.max(0,Math.floor((new Date(p)-new Date(r))/(1000*60*60*24*30.44)));
+    const months=Math.max(0,Math.ceil((new Date(p)-new Date(r))/(1000*60*60*24*30.44)));
     const disp=$('twAgeDisplay'); if(disp) disp.value=months+' months ('+(months/12).toFixed(1)+' yrs)';
     let br=1;
     if(months<=60) br=1;
@@ -208,12 +208,15 @@ function calculateTW(){
   const llPersons=parseInt($('twLLPersons').value)||1;
   const ll=llCb&&llCb.checked?50*llPersons:0;
 
-  // Accessories (3%, min ₹50)
-  const accVal=getV('twAccVal');
-  const accPrem=ct!=='TP'&&accVal>0?Math.max(50,accVal*0.03):0;
+  // OD discount factor (OD disc + NCB combined) — applied to accessories
+  const odFactor=ct!=='TP'&&baseOD>0?netOD/baseOD:1;
 
-  // Electrical accessories (4%)
-  const elecPrem=ct!=='TP'?getV('twElecVal')*0.04:0;
+  // Accessories (3%, min ₹50, after OD discount)
+  const accVal=getV('twAccVal');
+  const accPrem=ct!=='TP'&&accVal>0?Math.max(50,accVal*0.03*odFactor):0;
+
+  // Electrical accessories (4%, after OD discount)
+  const elecPrem=ct!=='TP'?getV('twElecVal')*0.04*odFactor:0;
 
   // Additional towing (over inbuilt ₹300), max ₹300 @ 5%
   const towPrem=ct!=='TP'?Math.min(getV('twTowingAmt'),300)*0.05:0;
@@ -354,7 +357,7 @@ function pcVehicleChange(){
 function pcUpdateAge(){
   const r=$('pcRegDate').value, p=$('pcPolDate').value;
   if(r&&p){
-    const m=Math.max(0,Math.floor((new Date(p)-new Date(r))/(1000*60*60*24*30.44)));
+    const m=Math.max(0,Math.ceil((new Date(p)-new Date(r))/(1000*60*60*24*30.44)));
     const disp=$('pcAgeDisplay'); if(disp) disp.value=m+' months ('+(m/12).toFixed(1)+' yrs)';
     const yr=$('pcAgeYr'); if(yr) yr.value=(m/12).toFixed(3);
     let br=1;
@@ -490,8 +493,9 @@ function calculatePC(){
     const tr=$('pcAddonsTotalRow'); if(tr) tr.style.display=_adLines.length>0?'flex':'none';
   }
 
-  const elecPrem=getV('pcElecVal')*0.04;
-  const nonElecPrem=getV('pcNonElecVal')*0.04;
+  const pcOdFactor=ct!=='TP'&&baseOD>0?netOD/baseOD:1;
+  const elecPrem=ct!=='TP'?getV('pcElecVal')*0.04*pcOdFactor:0;
+  const nonElecPrem=ct!=='TP'?getV('pcNonElecVal')*0.04*pcOdFactor:0;
   const towPrem=Math.min(getV('pcTowingAmt'),1500)*0.05;
   const grand=Math.round((netOD+netTP+pa+ll+addons+elecPrem+nonElecPrem+towPrem)*1.18);
 
@@ -608,7 +612,7 @@ function cvUpdateAge(){
   const r=$('cvRegDate').value, p=$('cvPolDate').value;
   const warn=$('cvAgeWarn');
   if(r&&p){
-    const m=Math.max(0,Math.floor((new Date(p)-new Date(r))/(1000*60*60*24*30.44)));
+    const m=Math.max(0,Math.ceil((new Date(p)-new Date(r))/(1000*60*60*24*30.44)));
     const disp=$('cvAgeDisplay'); if(disp) disp.value=m+' months ('+(m/12).toFixed(1)+' yrs)';
     const yr=$('cvAgeYr'); if(yr) yr.value=(m/12).toFixed(3);
     let br=1;
@@ -632,21 +636,8 @@ function cvUpdateAge(){
 
 function cvGeoToggle(){
   const on=$('cvGeoExt')&&$('cvGeoExt').checked;
-  const box=$('cvGeoCountries');
-  if(box) box.style.display=on?'block':'none';
-  if(!on){
-    document.querySelectorAll('.cv-geo-country').forEach(c=>c.checked=false);
-    cvGeoCalc();
-  }
-}
-function cvGeoCalc(){
-  const n=document.querySelectorAll('.cv-geo-country:checked').length;
-  const od=n*400, tp=n*100;
-  const cnt=$('cvGeoCountryCount'); if(cnt) cnt.textContent=n;
-  const oc=$('cvGeoODCalc'); if(oc) oc.textContent=od.toLocaleString('en-IN');
-  const tc=$('cvGeoTPCalc'); if(tc) tc.textContent=tp.toLocaleString('en-IN');
-  const oh=$('cvGeoODPrem'); if(oh) oh.value=od;
-  const th=$('cvGeoTPPrem'); if(th) th.value=tp;
+  const oh=$('cvGeoODPrem'); if(oh) oh.value=on?400:0;
+  const th=$('cvGeoTPPrem'); if(th) th.value=on?100:0;
 }
 
 function cvRefreshAddons(){
@@ -826,14 +817,15 @@ function calculateCV(){
   const imt23Cb=$('cvIMT23');
   const imt23Base=imt23Cb&&imt23Cb.checked?baseOD*0.15:0;
   const imt23=imt23Base*(1-Math.min(100,getV('cvOdDisc'))/100)*spF;
-  const elecPrem=ct!=='TP'?getV('cvElecVal')*0.04:0;
-  const nonElecPrem=ct!=='TP'?getV('cvNonElecVal')*0.04:0;
+  const cvOdFactor=ct!=='TP'&&baseOD>0?netOD/baseOD:1;
+  const elecPrem=ct!=='TP'?getV('cvElecVal')*0.04*cvOdFactor:0;
+  const nonElecPrem=ct!=='TP'?getV('cvNonElecVal')*0.04*cvOdFactor:0;
   const towAmt=getV('cvTowingAmt');
   const towPrem=ct!=='TP'?(Math.min(towAmt,10000)*0.05+Math.max(0,Math.min(towAmt,20000)-10000)*0.075):0;
   const netTP_sp=netTP*spF;
   const geoExt=$('cvGeoExt')&&$('cvGeoExt').checked;
-  const geoOD=geoExt&&ct!=='TP'?parseFloat($('cvGeoODPrem')?.value||0):0;
-  const geoTP=geoExt?parseFloat($('cvGeoTPPrem')?.value||0):0;
+  const geoOD=geoExt&&ct!=='TP'?400:0;  // fixed rate, no OD discount applied
+  const geoTP=geoExt?100:0;
 
   let addons=0; const cov=[]; const _adLines=[];
   if(ct!=='TP') cov.push('Own Damage Cover');
