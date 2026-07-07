@@ -826,6 +826,10 @@ function calculateCV(){
   const geoExt=$('cvGeoExt')&&$('cvGeoExt').checked;
   const geoOD=geoExt&&ct!=='TP'?400:0;  // fixed rate, no OD discount applied
   const geoTP=geoExt?100:0;
+  // Short-period factor applied to TP-category items (basic TP already in netTP_sp); geoTP charged in full
+  const llDrv_sp=llDrv*spF;
+  const llEmp_sp=llEmp*spF;
+  const pa_sp=pa*spF;
 
   let addons=0; const cov=[]; const _adLines=[];
   if(ct!=='TP') cov.push('Own Damage Cover');
@@ -868,20 +872,20 @@ function calculateCV(){
   let grand, gstOD=0, gstTP=0;
   if(isGoods){
     const odP=netOD_sp+imt23+elecPrem+nonElecPrem+towPrem+geoOD+addons;
-    const tpLiabilityP=netTP_sp+llDrv+llEmp+geoTP; // TP liability only — 5% GST
+    const tpLiabilityP=netTP_sp+llDrv_sp+llEmp_sp+geoTP; // TP liability only — 5% GST
     // PA is a personal accident cover → 18% GST even for Goods vehicles
-    gstOD=odP*0.18; gstTP=tpLiabilityP*0.05+pa*0.18;
-    const tpP=tpLiabilityP+pa;
+    gstOD=odP*0.18; gstTP=tpLiabilityP*0.05+pa_sp*0.18;
+    const tpP=tpLiabilityP+pa_sp;
     grand=Math.round(odP+tpP+gstOD+gstTP);
   } else {
-    const base=netOD_sp+netTP_sp+pa+llDrv+llEmp+addons+imt23+elecPrem+nonElecPrem+towPrem+geoOD+geoTP;
+    const base=netOD_sp+netTP_sp+pa_sp+llDrv_sp+llEmp_sp+addons+imt23+elecPrem+nonElecPrem+towPrem+geoOD+geoTP;
     grand=Math.round(base*1.18);
   }
 
   const setT=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
   setT('cv_lbl_tp',isShort?tp.toFixed(2)+' → ₹'+netTP_sp.toFixed(2):netTP_sp.toFixed(2));
-  setT('cv_lbl_hevDisc',hevDisc.toFixed(2));setT('cv_lbl_pa',pa.toFixed(2));
-  setT('cv_lbl_llDriver',llDrv.toFixed(2));setT('cv_lbl_llEmp',llEmp.toFixed(2));
+  setT('cv_lbl_hevDisc',hevDisc.toFixed(2));setT('cv_lbl_pa',pa_sp.toFixed(2));
+  setT('cv_lbl_llDriver',llDrv_sp.toFixed(2));setT('cv_lbl_llEmp',llEmp_sp.toFixed(2));
   setT('cv_lbl_addons',addons.toFixed(2));setT('cv_lbl_netOD',netOD.toFixed(2));
   setT('cv_lbl_imt23',imt23.toFixed(2));setT('cv_lbl_elec',elecPrem.toFixed(2));
   setT('cv_lbl_nonElec',nonElecPrem.toFixed(2));setT('cv_lbl_towing',towPrem.toFixed(2));
@@ -956,9 +960,9 @@ function calculateCV(){
     od:{show:ct!=='TP',base:(baseOD-gvwLoad-otLoad),gvwLoad,otLoad,discOD:finalOdDisc||0,discNCB:finalNcb||0,
         net:netOD||0,imt23,spFactor:isShort?spF:null,netSP:netOD_sp,
         elec:elecPrem,nonElec:nonElecPrem,tow:towPrem,geo:geoOD,acc:0},
-    tp:{show:true,base:tp,hev:hevDisc,pa,pillion:0,ll:llDrv,llEmp,geo:geoTP},
+    tp:{show:true,base:isShort?netTP_sp:tp,hev:isShort?0:hevDisc,pa:pa_sp,pillion:0,ll:llDrv_sp,llEmp:llEmp_sp,geo:geoTP},
     addons:{items:_adLines,total:addons},
-    gst:{split:isGoods,odGst:Math.round(gstOD),tpGst:Math.round(gstTP),total:isGoods?Math.round(gstOD+gstTP):grand-Math.round(netOD_sp+netTP_sp+pa+llDrv+llEmp+addons+imt23+elecPrem+nonElecPrem+towPrem+geoOD+geoTP)},
+    gst:{split:isGoods,odGst:Math.round(gstOD),tpGst:Math.round(gstTP),total:isGoods?Math.round(gstOD+gstTP):grand-Math.round(netOD_sp+netTP_sp+pa_sp+llDrv_sp+llEmp_sp+addons+imt23+elecPrem+nonElecPrem+towPrem+geoOD+geoTP)},
     grand, cov, policyMonths:effM
   });
 }

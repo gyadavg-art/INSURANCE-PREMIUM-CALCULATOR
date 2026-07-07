@@ -47,13 +47,13 @@
 
 /* VEHICLE SWITCHER */
 #motorSection .vehicle-switcher {background:linear-gradient(160deg,var(--th-soft) 0%,#f8fafc 60%,#fff 100%);padding:28px 28px 36px;position:relative;overflow:hidden;transition:background .5s;border-bottom:1.5px solid var(--border);}
-#motorSection .vehicle-switcher::before {content:'';position:absolute;width:340px;height:340px;border-radius:50%;filter:blur(80px);pointer-events:none;opacity:.18;background:radial-gradient(circle,var(--th-vivid),transparent 70%);top:-80px;right:-40px;}
+#motorSection .vehicle-switcher::before {content:'';position:absolute;width:340px;height:340px;border-radius:50%;filter:blur(90px);pointer-events:none;opacity:.22;background:radial-gradient(circle,var(--th-vivid),transparent 70%);top:-80px;right:-40px;}
 #motorSection .vs-inner {max-width:1120px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:18px;position:relative;z-index:2;}
 #motorSection .vs-chooser-label {font-size:.68rem;font-weight:700;color:var(--ink-lite);text-transform:uppercase;letter-spacing:.22em;}
-#motorSection .mode-toggle {display:flex;align-items:center;background:rgba(0,0,0,.3);border:1.5px solid rgba(255,255,255,.14);border-radius:60px;padding:5px;gap:4px;backdrop-filter:blur(10px);}
-#motorSection .mode-btn {padding:11px 36px;border-radius:50px;border:none;cursor:pointer;font-size:.95rem;font-weight:800;letter-spacing:.03em;transition:all .28s;background:transparent;color:rgba(255,255,255,.42);display:flex;align-items:center;gap:9px;}
-#motorSection .mode-btn.active {background:linear-gradient(135deg,var(--th-vivid),var(--th-mid));color:#fff;box-shadow:0 4px 20px var(--th-glow);animation:pulseGlow 2.5s ease-in-out infinite;}
-#motorSection .mode-btn:hover:not(.active) {color:rgba(255,255,255,.8);background:rgba(255,255,255,.08);}
+#motorSection .mode-toggle {display:flex;align-items:center;background:#fff;border:2px solid var(--border);border-radius:60px;padding:5px;gap:4px;box-shadow:0 2px 12px rgba(15,23,42,.08);}
+#motorSection .mode-btn {padding:11px 32px;border-radius:50px;border:none;cursor:pointer;font-size:.95rem;font-weight:800;letter-spacing:.03em;transition:all .28s;background:transparent;color:var(--ink-lite);display:flex;align-items:center;gap:9px;}
+#motorSection .mode-btn.active {background:linear-gradient(135deg,var(--th-mid),var(--th-vivid));color:#fff;box-shadow:0 4px 20px var(--th-glow);}
+#motorSection .mode-btn:hover:not(.active) {color:var(--th-mid);background:var(--th-soft);}
 #motorSection .vs-active-label {font-size:.74rem;font-weight:600;color:var(--th-mid);letter-spacing:.06em;text-transform:uppercase;}
 
 /* LAYOUT */

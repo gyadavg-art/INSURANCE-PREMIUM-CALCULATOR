@@ -1,10 +1,10 @@
 #firePlaceholder {
-  --fire-vivid: #dc2626;
-  --fire-mid:   #b91c1c;
-  --fire-deep:  #7f1d1d;
+  --fire-vivid: #e11d48;
+  --fire-mid:   #be185d;
+  --fire-deep:  #881337;
   --fire-soft:  #fff1f2;
-  --fire-glow:  rgba(220,38,38,.18);
-  --fire-border:#fecaca;
+  --fire-glow:  rgba(225,29,72,.2);
+  --fire-border:#fda4af;
   --ink:   #0f172a;
   --ink-m: #334155;
   --ink-l: #64748b;
@@ -14,7 +14,7 @@
   --sha:   0 2px 8px rgba(15,23,42,.07);
   --sha-m: 0 4px 20px rgba(15,23,42,.10);
   min-height: 100vh;
-  background: linear-gradient(160deg,#fff1f2 0%,#fef2f2 40%,#fafafa 100%);
+  background: linear-gradient(160deg,#fff1f2 0%,#ffe4e6 35%,#fff7ed 70%,#fafafa 100%);
   font-family: 'Segoe UI', system-ui, sans-serif;
 }
 /* Product switcher zone */
@@ -123,12 +123,12 @@
 /* Action row */
 .fire-action-row { display:flex; gap:10px; margin-bottom:4px; }
 .fire-btn-calc {
-  flex:1; background:linear-gradient(135deg,var(--fire-mid),var(--fire-vivid));
+  flex:1; background:linear-gradient(135deg,#be185d,#e11d48,#f97316);
   color:#fff; border:none; border-radius:var(--r); padding:14px 0;
   font-size:.9rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
   cursor:pointer; box-shadow:0 4px 16px var(--fire-glow); transition:all .18s;
 }
-.fire-btn-calc:hover { transform:translateY(-2px); box-shadow:0 8px 28px var(--fire-glow); }
+.fire-btn-calc:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(225,29,72,.35); }
 .fire-btn-reset {
   background:#f1f5f9; border:1.5px solid var(--bd); color:var(--ink-m); border-radius:var(--r);
   padding:14px 20px; font-size:.82rem; font-weight:700; cursor:pointer; transition:all .18s;
@@ -167,7 +167,7 @@
 
 /* Total column */
 .fire-res-total-col {
-  background:linear-gradient(145deg,var(--fire-vivid),var(--fire-mid));
+  background:linear-gradient(145deg,#e11d48,#be185d,#9d174d);
   padding:22px 22px; display:flex; flex-direction:column; justify-content:center;
   min-width:200px; position:relative; overflow:hidden;
 }
@@ -230,8 +230,8 @@
   #navTitle { font-size: 14px; }
 
   /* LANDING: reduce excessive padding */
-  .hero-inner { padding: 22px 16px 26px; gap: 18px; }
-  .category-section { padding: 22px 14px 32px; }
+  .hero-inner { padding: 24px 16px 28px; gap: 18px; }
+  .category-section { padding: 24px 14px 36px; }
 
   /* MOTOR INPUTS: 16px prevents iOS auto-zoom on focus */
   #motorSection .f-inp,

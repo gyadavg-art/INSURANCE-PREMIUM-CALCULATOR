@@ -1,16 +1,16 @@
 
 :root{
-  --primary:#1e3a5f;--primary-light:#2563a8;--primary-dark:#0f2240;
+  --primary:#2563eb;--primary-light:#4338ca;--primary-dark:#1e3a8a;
   --accent:#f59e0b;--accent2:#10b981;--accent3:#8b5cf6;
-  --danger:#ef4444;--bg:#f1f5f9;--card:#ffffff;
+  --danger:#ef4444;--bg:#eef2ff;--card:#ffffff;
   --text:#1e293b;--muted:#64748b;--border:#e2e8f0;
-  --shadow:0 4px 20px rgba(0,0,0,.08);--radius:14px;
+  --shadow:0 4px 20px rgba(67,56,202,.08);--radius:14px;
 }
 #healthSection * {box-sizing:border-box;margin:0;padding:0}
 #healthSection body {font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
 
 /* ── HEADER ── */
-#healthSection .site-header {background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 50%,var(--primary-light) 100%);padding:0;position:relative;overflow:hidden;margin-bottom:24px}
+#healthSection .site-header {background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 30%,#4338ca 65%,#7c3aed 100%);padding:0;position:relative;overflow:hidden;margin-bottom:24px}
 #healthSection .site-header::before {content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
 #healthSection .header-inner {max-width:960px;margin:0 auto;padding:20px 24px;display:flex;align-items:center;gap:18px;position:relative}
 #healthSection .logo-badge {width:60px;height:60px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);border-radius:14px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);flex-shrink:0}
@@ -72,7 +72,7 @@
 #healthSection .action-bar {display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:20px 0}
 
 /* ── RESULT CARD ── */
-#healthSection .result-wrap {background:linear-gradient(160deg,var(--primary-dark) 0%,var(--primary) 60%,#1d4ed8 100%);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:0 8px 32px rgba(30,58,95,.3)}
+#healthSection .result-wrap {background:linear-gradient(160deg,#1e3a8a 0%,#2563eb 45%,#4338ca 80%,#6d28d9 100%);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:0 8px 32px rgba(67,56,202,.3)}
 #healthSection .result-wrap h2 {color:#fff;font-size:16px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px}
 #healthSection .result-meta {font-size:12px;color:rgba(255,255,255,.65);margin-bottom:16px;line-height:1.7}
 #healthSection .result-meta span {display:inline-block;background:rgba(255,255,255,.12);padding:2px 10px;border-radius:5px;margin:2px 2px 2px 0;font-weight:600;color:rgba(255,255,255,.9)}
@@ -85,7 +85,7 @@
 #healthSection .rt-total td {background:rgba(255,215,0,.12);border-top:2px solid rgba(255,215,0,.4)!important;font-weight:800;font-size:15px;color:#ffd700}
 
 /* ── COMMISSION CARDS ── */
-#healthSection .commission-section {background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:0 8px 32px rgba(0,0,0,.25)}
+#healthSection .commission-section {background:linear-gradient(135deg,#1e3a8a 0%,#1e40af 35%,#4338ca 65%,#5b21b6 100%);border-radius:var(--radius);padding:24px;margin-bottom:16px;box-shadow:0 8px 32px rgba(67,56,202,.28)}
 #healthSection .comm-header {display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 #healthSection .comm-title {font-size:16px;font-weight:800;color:#fff;display:flex;align-items:center;gap:10px}
 #healthSection .comm-title-icon {width:36px;height:36px;background:linear-gradient(135deg,#d97706,#f59e0b);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
