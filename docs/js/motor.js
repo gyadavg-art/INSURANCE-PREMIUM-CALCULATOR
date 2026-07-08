@@ -595,11 +595,22 @@ function cvClassChange(){
   sd('cvOverturningBlock',isD); sd('cvLlEmpBlock',!isD);
   const isBus=cl==='C2';
   sd('cvBusTypeField',isBus); sd('cvPassCapField',isPass);
-  if(isPass){
-    const lbl=$('cvPassCapField')?.querySelector('.f-label');
-    if(lbl) lbl.textContent=isBus?'Seating Capacity (as per RC)':'Licensed Passenger Capacity';
-  }
+  cvUpdatePassDisplay();
   cvRefreshAddons();
+}
+
+function cvUpdatePassDisplay(){
+  const cl=$('cvClass')?.value||'';
+  const isPass=['C1a','C1b','C2','C3'].includes(cl);
+  const hint=$('cvPassDerivedHint');
+  if(!hint) return;
+  if(!isPass){ hint.style.display='none'; return; }
+  const rcSeats=parseInt($('cvRCSeats')?.value)||0;
+  const llP=parseInt($('cvLLDriverPersons')?.value)||0;
+  const passTp=Math.max(1, rcSeats - llP);
+  const valEl=$('cvPassDerivedVal');
+  if(valEl) valEl.textContent=passTp+' ('+rcSeats+' RC − '+llP+' crew)';
+  hint.style.display='block';
 }
 
 function cvFuelChange(){
@@ -718,7 +729,7 @@ function calculateCV(){
       baseOD=(r/100)*idv;
     } else if(cl==='C2'){
       const r=c2R[zone]?c2R[zone][abi]||0:0;
-      const cap=parseInt($('cvPassCap').value)||20;
+      const cap=parseInt($('cvRCSeats').value)||20;
       const band=cap<=18?'7to18':cap<=36?'19to36':cap<=60?'37to60':'over60';
       baseOD=c2Fix[band]+((r/100)*idv);
     } else if(cl==='C3'){
@@ -754,6 +765,8 @@ function calculateCV(){
     ['cv_lbl_baseOD','cv_lbl_gvwLoad','cv_lbl_otLoad','cv_lbl_odDisc','cv_lbl_ncbDisc','cv_lbl_netOD'].forEach(id=>setT(id,'0.00'));
   }
 
+  const llP=parseInt($('cvLLDriverPersons').value)||1;
+
   let tp=0, hevDisc=0;
   {
     // TP rate lookup — uses gvwBand derived from exact GVW above
@@ -767,23 +780,24 @@ function calculateCV(){
     } else if(cl==='A4'){
       tp=ft==='ev'?3211:3922;
     } else if(cl==='C1a'){
-      // Fixed: base covers 1 passenger, per-pass rate × (n-1) additional passengers
-      const pass=parseInt($('cvPassCap').value)||4;
+      // Passenger TP = RC seats − LL crew (driver/cleaner/conductor)
+      const pass=Math.max(1,(parseInt($('cvRCSeats').value)||4)-llP);
       const cc=$('cvCC').value;
       if(ft==='ev'){const kw=$('cvKW').value;const eb=kw==='under30'?5134:kw==='30to65'?6749:8945;const ep=kw==='under30'?988:kw==='30to65'?831:949;tp=eb+ep*(pass-1);}
       else{const b=cc==='under1000'?6040:cc==='1000to1500'?7940:10523;const p=cc==='under1000'?1162:cc==='1000to1500'?978:1117;tp=b+p*(pass-1);}
     } else if(cl==='C1b'){
-      const pass=parseInt($('cvPassCap').value)||3;
+      const pass=Math.max(1,(parseInt($('cvRCSeats').value)||3)-llP);
       const b=ft==='ev'?1539:2371, p=ft==='ev'?737:1134;
       tp=b+p*(pass-1);
     } else if(cl==='C2'){
-      const pass=parseInt($('cvPassCap').value)||20;
+      // OD banding uses full RC seats; TP uses seats minus LL crew
+      const pass=Math.max(1,(parseInt($('cvRCSeats').value)||20)-llP);
       const tpP=Math.max(0,pass-1);
       const bt=$('cvBusType').value;
       if(ft==='ev') tp=(bt==='educational'?10363:bt==='school'?13177:12192)+((bt==='educational'?633:bt==='school'?806:745)*tpP);
       else tp=(bt==='educational'?12192:bt==='school'?15502:14343)+((bt==='educational'?745:bt==='school'?948:877)*tpP);
     } else if(cl==='C3'){
-      const pass=parseInt($('cvPassCap').value)||10;
+      const pass=Math.max(1,(parseInt($('cvRCSeats').value)||10)-llP);
       tp=ft==='ev'?(5749+1147*(pass-1)):(6763+1349*(pass-1));
     } else if(isD){
       tp=$('cvClassDType').value==='type1'?1645:7267;
@@ -794,7 +808,6 @@ function calculateCV(){
   const netTP=tp-hevDisc;
 
   const pa=$('cvCompPA').checked?275:0;
-  const llP=parseInt($('cvLLDriverPersons').value)||1;
   const llDrvCb=$('cvLLDriver');
   const llDrv=llDrvCb&&llDrvCb.checked?50*llP:0;
   const llEmpCb=$('cvLLEmployee');

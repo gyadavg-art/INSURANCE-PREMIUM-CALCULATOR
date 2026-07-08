@@ -1344,8 +1344,9 @@
             </select></div>
           </div>
           <div class="field-g" id="cvPassCapField">
-            <label class="f-label">Licensed Passenger Capacity</label>
-            <input type="number" id="cvPassCap" class="f-inp" value="4" min="1">
+            <label class="f-label">Seating Capacity as per RC</label>
+            <input type="number" id="cvRCSeats" class="f-inp" value="4" min="1" oninput="cvUpdatePassDisplay()">
+            <p class="f-hint" id="cvPassDerivedHint" style="display:none">Passengers for TP: <strong id="cvPassDerivedVal">—</strong> (RC Seats − LL crew)</p>
           </div>
           <div class="field-g hidden" id="cvBusTypeField">
             <label class="f-label">Bus Type</label>
@@ -1452,7 +1453,7 @@
           <div class="cbt" style="flex:1"><strong>LL to Paid Driver / Cleaner / Conductor</strong><span>₹50 per person (Endt.39)</span></div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
             <label style="font-size:.62rem;font-weight:700;color:var(--ink-lite);text-transform:uppercase">Persons</label>
-            <input type="number" id="cvLLDriverPersons" value="1" min="1" max="5" style="width:56px;border:1.5px solid var(--border);border-radius:6px;padding:4px 7px;font-size:.8rem;font-weight:600;text-align:center;outline:none;">
+            <input type="number" id="cvLLDriverPersons" value="1" min="1" max="5" oninput="cvUpdatePassDisplay()" style="width:56px;border:1.5px solid var(--border);border-radius:6px;padding:4px 7px;font-size:.8rem;font-weight:600;text-align:center;outline:none;">
           </div>
         </div>
         <div class="check-block neutral" id="cvLlEmpBlock" style="margin-top:8px">
