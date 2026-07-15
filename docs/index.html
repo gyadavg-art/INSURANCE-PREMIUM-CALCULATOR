@@ -1024,7 +1024,7 @@
         </div>
         <div class="field-g">
           <label class="f-label">Make / Brand</label>
-          <div class="sel-wrap"><select id="pcMakeBrand" class="f-sel">
+          <div class="sel-wrap"><select id="pcMakeBrand" class="f-sel" onchange="pcMakeChange()">
             <option value="nonMaruti" selected>Non-Maruti (Standard rates)</option>
             <option value="maruti">Maruti Suzuki (Lower Nil Dep rates)</option>
           </select></div>
@@ -1126,6 +1126,7 @@
     <div class="card-header"><div class="s-num">5</div><h2>Enhanced Add-on Covers</h2><span class="ch-note">Age-based availability</span></div>
     <div class="card-body">
       <div id="pcTpNotice" class="hidden" style="padding:8px 12px;background:#FFF8E6;border:1.5px solid #E2C47A;border-radius:8px;font-size:.74rem;color:#7A5C00;font-weight:600;margin-bottom:12px">⚠️ No add-on covers under TP Only policy.</div>
+      <div id="pcMarutiDiscNote" style="display:none;padding:8px 12px;background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:8px;font-size:.74rem;color:#1e40af;font-weight:600;margin-bottom:12px">ℹ️ Maruti Suzuki: Add-on discounts are not applicable — IRDAI-filed rates apply.</div>
       <div class="addon-grid">
         <div class="addon-card" id="pc_card_nilDep" data-maxyr="7" data-allow="PKG,SAOD">
           <div class="addon-top"><label class="addon-lbl"><input type="checkbox" id="pc_nilDep" onchange="pcCardToggle('nilDep')"><span><span class="aname">Nil Depreciation</span><div class="ameta"><span class="atag t-pkg">PKG/SAOD</span><span class="atag t-age">≤7 yrs</span><span class="atag t-off hidden" id="pc_dtag_nilDep">Age Exceeded</span></div></span></label><div class="disc-g"><label>Disc %</label><input type="number" id="pc_disc_nilDep" value="0" min="0" max="100"></div></div>
