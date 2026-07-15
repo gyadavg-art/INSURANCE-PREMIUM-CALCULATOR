@@ -341,6 +341,19 @@ function pcCovChange(){
   pcRefreshAddons();
 }
 
+function pcMakeChange(){
+  const isMaruti=$('pcMakeBrand')&&$('pcMakeBrand').value==='maruti';
+  ['nilDep','engineProtect','rti','consumables','tyreAlloy','batteryProtect'].forEach(id=>{
+    const el=$('pc_disc_'+id);
+    if(!el) return;
+    el.disabled=isMaruti;
+    if(isMaruti) el.value=0;
+    el.style.opacity=isMaruti?'0.35':'';
+    el.style.cursor=isMaruti?'not-allowed':'';
+  });
+  const note=$('pcMarutiDiscNote'); if(note) note.style.display=isMaruti?'block':'none';
+}
+
 function pcVehicleChange(){
   const vt=$('pcVehicleType').value;
   sd('pcKwField',vt==='EV'); sd('pcCcField',vt!=='EV');
