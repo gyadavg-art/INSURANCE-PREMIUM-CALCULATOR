@@ -184,3 +184,6 @@
   #healthSection .card, #healthSection .result-wrap, #healthSection .commission-section {box-shadow:none;page-break-inside:avoid}
 }
 
+/* Hide product picker when launched directly from a landing-page tile */
+#healthSection.direct-mode #healthProductStep { display: none !important; }
+

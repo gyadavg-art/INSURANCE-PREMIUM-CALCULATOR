@@ -279,3 +279,6 @@
   /* MODE TOGGLE: compact but tappable */
   #motorSection .mode-btn { padding: 11px 14px; font-size: .82rem; }
 }
+
+/* Hide fire product switcher when launched directly from a landing-page tile */
+#fireSection.direct-mode .fire-switcher { display: none !important; }

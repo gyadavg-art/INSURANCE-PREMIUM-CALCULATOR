@@ -31,6 +31,28 @@ function showLanding() {
   document.getElementById('otherPlaceholder').classList.add('hidden');
   document.getElementById('landingScreen').classList.remove('hidden');
   document.getElementById('globalNav').style.display = 'none';
+  ['motorSection','healthSection','fireSection'].forEach(function(id){
+    var el = document.getElementById(id); if (el) el.classList.remove('direct-mode');
+  });
+}
+
+function launchMotor(mode) {
+  showSection('motor');
+  setMode(mode);
+  document.getElementById('motorSection').classList.add('direct-mode');
+}
+
+function launchHealth(product) {
+  showSection('health');
+  var radio = document.querySelector('input[name="product"][value="' + product + '"]');
+  if (radio) { radio.checked = true; if (typeof onProductChange === 'function') onProductChange(); }
+  document.getElementById('healthSection').classList.add('direct-mode');
+}
+
+function launchFire(product) {
+  showSection('fire');
+  if (typeof fireSetProduct === 'function') fireSetProduct(product);
+  document.getElementById('fireSection').classList.add('direct-mode');
 }
 
 function launchMotor(mode) {

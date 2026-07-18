@@ -259,3 +259,6 @@
   #motorSection .pc-pt-btn{padding:10px 14px;width:100%;}
   #motorSection .pc-pt-sub{display:none;}
 }
+
+/* Hide vehicle switcher when launched directly from a landing-page tile */
+#motorSection.direct-mode .vehicle-switcher { display: none !important; }
