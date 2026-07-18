@@ -330,21 +330,21 @@ body { font-family: 'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif; backg
 #motorSection .veh-icon-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  gap: 12px;
   width: 100%;
-  max-width: 680px;
+  max-width: 840px;
 }
 #motorSection .veh-icon-btn {
   position: relative;
   background: #ffffff;
   border: 1.5px solid var(--border);
-  border-radius: 18px;
-  padding: 22px 16px 18px;
+  border-radius: 16px;
+  padding: 18px 12px 14px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   transition: all 0.28s cubic-bezier(0.4,0,0.2,1);
   box-shadow: 0 2px 8px rgba(15,23,42,0.06);
   overflow: hidden;
@@ -362,14 +362,14 @@ body { font-family: 'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif; backg
   transform: translateY(-4px);
 }
 #motorSection .vib-icon {
-  font-size: 2.4rem;
+  font-size: 2.0rem;
   line-height: 1;
   transition: transform 0.28s;
   filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
 }
 #motorSection .veh-icon-btn.active .vib-icon { transform: scale(1.12); }
 #motorSection .vib-name {
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   font-weight: 800;
   color: var(--ink);
   letter-spacing: -0.2px;
@@ -390,10 +390,10 @@ body { font-family: 'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif; backg
   transition: opacity 0.28s;
 }
 #motorSection .veh-icon-btn.active .vib-active-bar { opacity: 1; }
-@media(max-width:480px){
-  #motorSection .veh-icon-grid { gap: 10px; }
-  #motorSection .vib-icon { font-size: 1.9rem; }
-  #motorSection .vib-name { font-size: 0.78rem; }
+@media(max-width:540px){
+  #motorSection .veh-icon-grid { gap: 8px; grid-template-columns: repeat(2, 1fr); }
+  #motorSection .vib-icon { font-size: 1.7rem; }
+  #motorSection .vib-name { font-size: 0.74rem; }
   #motorSection .vib-sub  { display: none; }
 }
 

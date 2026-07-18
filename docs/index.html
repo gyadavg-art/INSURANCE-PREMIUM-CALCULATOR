@@ -605,7 +605,7 @@
 <!-- VEHICLE SWITCHER -->
 <div class="vehicle-switcher">
   <div class="vs-inner">
-    <div class="vs-chooser-label">Select Vehicle Class</div>
+    <div class="vs-chooser-label">Select Vehicle Category</div>
     <div class="veh-icon-grid">
       <button class="veh-icon-btn active" id="btnTW" onclick="setMode('TW')">
         <div class="vib-icon">🏍️</div>
@@ -619,10 +619,28 @@
         <div class="vib-sub">Personal Vehicles</div>
         <div class="vib-active-bar"></div>
       </button>
-      <button class="veh-icon-btn" id="btnCV" onclick="setMode('CV')">
-        <div class="vib-icon">🚛</div>
-        <div class="vib-name">Commercial</div>
-        <div class="vib-sub">Goods &amp; Passengers</div>
+      <button class="veh-icon-btn" id="btnGC" onclick="setMode('GC')">
+        <div class="vib-icon">🚚</div>
+        <div class="vib-name">Goods Carrying</div>
+        <div class="vib-sub">A1 — Public Carrier</div>
+        <div class="vib-active-bar"></div>
+      </button>
+      <button class="veh-icon-btn" id="btnTAXI" onclick="setMode('TAXI')">
+        <div class="vib-icon">🚕</div>
+        <div class="vib-name">Taxi</div>
+        <div class="vib-sub">C-1a Passenger</div>
+        <div class="vib-active-bar"></div>
+      </button>
+      <button class="veh-icon-btn" id="btnBUS" onclick="setMode('BUS')">
+        <div class="vib-icon">🚌</div>
+        <div class="vib-name">Bus</div>
+        <div class="vib-sub">C-2 Passenger</div>
+        <div class="vib-active-bar"></div>
+      </button>
+      <button class="veh-icon-btn" id="btnMISC" onclick="setMode('MISC')">
+        <div class="vib-icon">🚜</div>
+        <div class="vib-name">Misc / Agri</div>
+        <div class="vib-sub">Class D</div>
         <div class="vib-active-bar"></div>
       </button>
     </div>
@@ -1232,8 +1250,16 @@
   <div class="card">
     <div class="card-header"><div class="s-num">3</div><h2>Vehicle Class &amp; Specifications</h2></div>
     <div class="card-body">
+      <!-- Category badge — shown when entering via quick-select buttons (GC/TAXI/BUS/MISC) -->
+      <div id="cvCategoryBadge" style="display:none;align-items:center;gap:14px;padding:11px 16px;margin-bottom:14px;background:linear-gradient(135deg,var(--th-soft),#fff);border:1.5px solid var(--th-vivid);border-radius:12px">
+        <span id="cvCatIcon" style="font-size:1.8rem;line-height:1;flex-shrink:0"></span>
+        <div>
+          <div id="cvCatName" style="font-size:.88rem;font-weight:800;color:var(--ink)"></div>
+          <div id="cvCatCode" style="font-size:.7rem;color:var(--ink-lite);margin-top:2px"></div>
+        </div>
+      </div>
       <div class="form-grid cols3" style="margin-bottom:14px">
-        <div class="field-g">
+        <div class="field-g" id="cvClassRow">
           <label class="f-label">Vehicle Class</label>
           <div class="sel-wrap"><select id="cvClass" class="f-sel" onchange="cvClassChange()">
             <optgroup label="── Goods Carrying ──">
@@ -1309,9 +1335,9 @@
             </select></div>
           </div>
           <div class="field-g" id="cvPassCapField">
-            <label class="f-label">Seating Capacity as per RC</label>
+            <label class="f-label">Actual Seating Capacity As Per RC</label>
             <input type="number" id="cvRCSeats" class="f-inp" value="4" min="1" oninput="cvUpdatePassDisplay()">
-            <p class="f-hint" id="cvPassDerivedHint" style="display:none">Passengers for TP: <strong id="cvPassDerivedVal">—</strong> (RC Seats − LL crew)</p>
+            <p class="f-hint" id="cvPassDerivedHint" style="display:none">Passengers for TP: <strong id="cvPassDerivedVal">—</strong> (RC Seats − LL Driver/Conductor)</p>
           </div>
           <div class="field-g hidden" id="cvBusTypeField">
             <label class="f-label">Bus Type</label>
