@@ -35,33 +35,72 @@ function getAgent(){
 
 /* ── MODE SWITCHER ── */
 function setMode(m){
-  // Directly show/hide each section
   var twEl=document.getElementById('twSection');
   var pcEl=document.getElementById('pcSection');
   var cvEl=document.getElementById('cvSection');
+  // Quick modes GC/TAXI/BUS/MISC all route to the CV section
+  var quickCV=['GC','TAXI','BUS','MISC'];
+  var isCVQuick=quickCV.includes(m);
+  var showCV=isCVQuick||m==='CV';
   if(twEl) twEl.style.display = m==='TW' ? 'block' : 'none';
   if(pcEl) pcEl.style.display = m==='PC' ? 'block' : 'none';
-  if(cvEl) cvEl.style.display = m==='CV' ? 'block' : 'none';
+  if(cvEl) cvEl.style.display = showCV ? 'block' : 'none';
 
   // Theme via body class
-  var b = document.getElementById('motorSection');
-  b.classList.remove('tw-mode');
-  b.classList.remove('cv-mode');
+  var b=document.getElementById('motorSection');
+  b.classList.remove('tw-mode','cv-mode');
   if(m==='TW') b.classList.add('tw-mode');
-  if(m==='CV') b.classList.add('cv-mode');
+  if(showCV) b.classList.add('cv-mode');
 
-  // Button active state
-  var btnTW=document.getElementById('btnTW'), btnPC=document.getElementById('btnPC'), btnCV=document.getElementById('btnCV');
-  if(btnTW){ btnTW.classList.remove('active'); } if(btnPC){ btnPC.classList.remove('active'); } if(btnCV){ btnCV.classList.remove('active'); }
-  var activeBtn=document.getElementById('btn'+m); if(activeBtn) activeBtn.classList.add('active');
+  // Button active state — all 6 buttons
+  ['TW','PC','GC','TAXI','BUS','MISC'].forEach(function(id){
+    var btn=document.getElementById('btn'+id); if(btn) btn.classList.toggle('active',id===m);
+  });
+
+  // Quick-mode: pre-set cvClass, show category badge, hide class row
+  var classMap={GC:'A1',TAXI:'C1a',BUS:'C2',MISC:'D'};
+  var catMap={
+    GC:  {icon:'🚚',name:'Goods Carrying',code:'A-1 Public Carrier (4-wheel) — IRDAI Section 4 Tariff'},
+    TAXI:{icon:'🚕',name:'Taxi / Cab',code:'C-1a Passenger Carrying ≤6 Pass (4-wheel) — IRDAI Section 4 Tariff'},
+    BUS: {icon:'🚌',name:'Bus / Minibus',code:'C-2 Passenger Carrying >6 Pass (4-wheel) — IRDAI Section 4 Tariff'},
+    MISC:{icon:'🚜',name:'Misc / Agri Tractor',code:'Class D — Misc & Special Types — IRDAI Section 4 Tariff'}
+  };
+  var cvClassSel=document.getElementById('cvClass');
+  var cvClassRow=document.getElementById('cvClassRow');
+  var cvCatBadge=document.getElementById('cvCategoryBadge');
+  if(isCVQuick){
+    if(cvClassSel) cvClassSel.value=classMap[m];
+    if(cvClassRow) cvClassRow.style.display='none';
+    if(cvCatBadge){
+      cvCatBadge.style.display='flex';
+      var info=catMap[m];
+      var iconEl=document.getElementById('cvCatIcon');
+      var nameEl=document.getElementById('cvCatName');
+      var codeEl=document.getElementById('cvCatCode');
+      if(iconEl) iconEl.textContent=info.icon;
+      if(nameEl) nameEl.textContent=info.name;
+      if(codeEl) codeEl.textContent=info.code;
+    }
+  } else {
+    if(cvClassRow) cvClassRow.style.display='';
+    if(cvCatBadge) cvCatBadge.style.display='none';
+  }
 
   try{ window.scrollTo(0,0); }catch(e){}
-  var icons={TW:'🏍️',PC:'🚗',CV:'🚛'};
-  var labels={TW:'Two Wheeler — Section 3 Tariff',PC:'Private Car — Section 2 Tariff',CV:'Commercial Vehicle — Section 4 Tariff'};
-  var logo=$('vsLogo'); if(logo) logo.textContent=icons[m];
-  var lbl=$('vsActiveLbl'); if(lbl) lbl.textContent=labels[m];
+  var icons={TW:'🏍️',PC:'🚗',GC:'🚚',TAXI:'🚕',BUS:'🚌',MISC:'🚜',CV:'🚛'};
+  var labels={
+    TW:'Two Wheeler — Section 3 Tariff',
+    PC:'Private Car — Section 2 Tariff',
+    GC:'Goods Carrying — A1 Public Carrier (4-wheel)',
+    TAXI:'Taxi / Cab — C-1a Passenger Carrying',
+    BUS:'Bus / Minibus — C-2 Passenger Carrying',
+    MISC:'Misc / Agri Tractor — Class D',
+    CV:'Commercial Vehicle — Section 4 Tariff'
+  };
+  var logo=$('vsLogo'); if(logo) logo.textContent=icons[m]||'';
+  var lbl=$('vsActiveLbl'); if(lbl) lbl.textContent=labels[m]||'';
   try{
-    if(m==='CV'){cvCovChange();cvClassChange();cvFuelChange();}
+    if(showCV){cvCovChange();cvClassChange();cvFuelChange();}
     else if(m==='PC'){pcCovChange();}
     else{twCovChange();}
   }catch(e){ console.error('setMode init error:',e); }
