@@ -96,13 +96,8 @@ body { font-family: 'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif; backg
   position: relative; z-index: 2;
 }
 
-.sambhal-badge { flex-shrink: 0; width: 200px; height: 200px; animation: fadeUp 0.7s ease both; }
-@media(max-width:900px){ .sambhal-badge { width: 160px; height: 160px; } }
 @media(max-width:640px){
-  .sambhal-badge { width: 130px; height: 130px; }
-  .hero-inner { flex-direction: column; align-items: center; padding: 28px 20px 24px; gap: 20px; }
-  .hero-text-block { text-align: center; }
-  .hero-agency-tag { justify-content: center; }
+  .hero-inner { padding: 28px 20px 24px; }
 }
 
 .hero-text-block { flex: 1; animation: fadeUp 0.7s ease 0.1s both; }
