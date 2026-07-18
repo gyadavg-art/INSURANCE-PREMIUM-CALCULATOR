@@ -96,13 +96,8 @@ body { font-family: 'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif; backg
   position: relative; z-index: 2;
 }
 
-.sambhal-badge { flex-shrink: 0; width: 200px; height: 200px; animation: fadeUp 0.7s ease both; }
-@media(max-width:900px){ .sambhal-badge { width: 160px; height: 160px; } }
 @media(max-width:640px){
-  .sambhal-badge { width: 130px; height: 130px; }
-  .hero-inner { flex-direction: column; align-items: center; padding: 28px 20px 24px; gap: 20px; }
-  .hero-text-block { text-align: center; }
-  .hero-agency-tag { justify-content: center; }
+  .hero-inner { padding: 28px 20px 24px; }
 }
 
 .hero-text-block { flex: 1; animation: fadeUp 0.7s ease 0.1s both; }
@@ -323,6 +318,141 @@ body { font-family: 'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif; backg
 @media print {
   #globalNav, #landingScreen, #firePlaceholder, #otherPlaceholder, #csToast { display: none !important; }
 }
+
+/* ══════════════════════════════════════════════
+   LANDING — Products Section (flat sub-category layout)
+══════════════════════════════════════════════ */
+.products-section {
+  flex: 1; max-width: 1200px; margin: 0 auto; width: 100%;
+  padding: 36px 28px 56px;
+  display: flex; flex-direction: column; gap: 20px;
+  animation: fadeUp 0.7s ease 0.2s both;
+}
+@media(max-width:600px){ .products-section { padding: 24px 14px 48px; gap: 14px; } }
+
+.prod-group {
+  background: #fff; border: 1.5px solid #e8ecf8; border-radius: 20px;
+  overflow: hidden; box-shadow: 0 2px 12px rgba(67,56,202,0.07);
+}
+.prod-group-motor  { border-left: 4px solid #4f46e5; }
+.prod-group-health { border-left: 4px solid #059669; }
+.prod-group-fire   { border-left: 4px solid #c9962a; }
+.prod-group-nari   { border-left: 4px solid #be185d; }
+
+.prod-group-hdr {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 16px 20px 12px; border-bottom: 1px solid #f1f5f9;
+  background: linear-gradient(135deg, #f8fafc, #fff); flex-wrap: wrap;
+}
+.pgh-info { display: flex; align-items: center; gap: 12px; }
+.pgh-icon { font-size: 1.7rem; line-height: 1; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1)); }
+.pgh-name { font-size: 0.97rem; font-weight: 800; color: #0f172a; letter-spacing: -0.3px; }
+.pgh-hindi { font-size: 9.5px; color: #94a3b8; font-weight: 500; margin-top: 2px; }
+.pgh-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 9px; font-weight: 800; padding: 4px 10px;
+  border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap;
+}
+.pgh-badge-live   { background: #d1fae5; border: 1px solid #6ee7b7; color: #059669; }
+.pgh-badge-health { background: #d1fae5; border: 1px solid #6ee7b7; color: #059669; }
+.pgh-badge-fire   { background: #fef3c7; border: 1px solid #fde68a; color: #92400e; }
+.pgh-badge-soon   { background: #fef3c7; border: 1px solid #fde68a; color: #92400e; }
+
+/* ── MOTOR TILES ── */
+.motor-tile-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; padding: 14px; }
+@media(max-width:540px){ .motor-tile-grid { grid-template-columns: repeat(2,1fr); gap: 8px; } }
+
+.motor-tile {
+  position: relative; background: #f8fafc; border: 1.5px solid #e8ecf8;
+  border-radius: 14px; padding: 16px 10px 14px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1); overflow: hidden; text-align: center;
+}
+.motor-tile:hover { background: #eef2ff; border-color: #818cf8; transform: translateY(-4px); box-shadow: 0 8px 24px rgba(67,56,202,0.15); }
+.mtile-icon { font-size: 1.9rem; line-height: 1; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.12)); transition: transform 0.25s; }
+.motor-tile:hover .mtile-icon { transform: scale(1.15) rotate(-5deg); }
+.mtile-name { font-size: 0.78rem; font-weight: 800; color: #0f172a; letter-spacing: -0.1px; }
+.mtile-sub  { font-size: 0.62rem; color: #94a3b8; font-weight: 500; }
+.mtile-bar {
+  position: absolute; bottom: 0; left: 20%; right: 20%; height: 3px;
+  border-radius: 3px 3px 0 0; background: linear-gradient(90deg,#4f46e5,#818cf8);
+  opacity: 0; transition: opacity 0.25s;
+}
+.motor-tile:hover .mtile-bar { opacity: 1; }
+@media(max-width:540px){ .mtile-sub { display: none; } }
+
+/* ── HEALTH TILES ── */
+.health-tile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px; }
+@media(max-width:520px){ .health-tile-grid { grid-template-columns: 1fr; } }
+
+.health-tile {
+  position: relative; cursor: pointer; border: 1.5px solid #a7f3d0;
+  border-radius: 16px; padding: 18px 16px 14px; background: #f0fdf9;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; gap: 6px;
+}
+.health-tile:hover { border-color: #34d399; background: #ecfdf5; transform: translateY(-4px); box-shadow: 0 12px 32px rgba(16,185,129,0.18); }
+.htile-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 4px; }
+.htile-icon-wrap {
+  width: 50px; height: 50px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.75rem; line-height: 1; transition: transform 0.25s; flex-shrink: 0;
+}
+.health-tile:hover .htile-icon-wrap { transform: scale(1.08) rotate(-5deg); }
+.htile-yb  { background: linear-gradient(135deg,#d1fae5,#a7f3d0); }
+.htile-nif { background: linear-gradient(135deg,#dbeafe,#bfdbfe); }
+.htile-live-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #d1fae5; border: 1px solid #6ee7b7; color: #059669;
+  font-size: 8px; font-weight: 800; padding: 3px 8px;
+  border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px;
+}
+.htile-name { font-size: 1rem; font-weight: 800; color: #065f46; letter-spacing: -0.3px; }
+.htile-sub  { font-size: 0.72rem; color: #6b7280; font-weight: 500; margin-top: -2px; }
+.htile-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.htile-tags span {
+  font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 20px;
+  background: rgba(16,185,129,0.1); color: #065f46; border: 1px solid rgba(16,185,129,0.2);
+}
+.htile-cta { margin-top: 8px; font-size: 11px; font-weight: 700; color: #059669; padding-top: 10px; border-top: 1px solid #d1fae5; transition: color 0.2s; }
+.health-tile:hover .htile-cta { color: #047857; }
+
+/* ── FIRE TILES ── */
+.fire-tile-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; padding: 14px; }
+@media(max-width:700px){ .fire-tile-grid { grid-template-columns: repeat(2,1fr); } }
+
+.fire-tile {
+  position: relative; border-radius: 14px; padding: 16px 10px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  border: 1.5px solid #e8ecf8; background: #fff; transition: all 0.25s; text-align: center;
+}
+.ftile-live { cursor: pointer; }
+.ftile-live:hover { border-color: #fde68a; background: #fffbeb; transform: translateY(-4px); box-shadow: 0 8px 24px rgba(201,150,42,0.18); }
+.ftile-soon { opacity: 0.65; cursor: pointer; }
+.ftile-soon:hover { border-color: #fde68a; background: #fffbeb; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(201,150,42,0.12); }
+.ftile-icon { font-size: 1.75rem; line-height: 1; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1)); transition: transform 0.25s; }
+.ftile-live:hover .ftile-icon { transform: scale(1.12) rotate(-5deg); }
+.ftile-name { font-size: 0.76rem; font-weight: 800; color: #0f172a; letter-spacing: -0.1px; line-height: 1.3; }
+.ftile-sub  { font-size: 0.61rem; color: #94a3b8; font-weight: 500; }
+.ftile-badge {
+  margin-top: 4px; font-size: 8px; font-weight: 800; padding: 3px 8px;
+  border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.ftile-badge-live { background: #d1fae5; border: 1px solid #6ee7b7; color: #059669; }
+.ftile-badge-soon { background: #fef3c7; border: 1px solid #fde68a; color: #92400e; }
+
+/* ── NARI BANNER ── */
+.nari-coming-banner {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 20px; margin: 0 14px 14px;
+  background: linear-gradient(135deg,#fdf2f8,#fce7f3);
+  border: 1.5px solid #f9a8d4; border-radius: 14px;
+}
+.ncb-icon { font-size: 2rem; line-height: 1; flex-shrink: 0; }
+.ncb-text  { flex: 1; }
+.ncb-products { font-size: 0.82rem; font-weight: 700; color: #9d174d; }
+.ncb-sub  { font-size: 0.68rem; color: #be185d; margin-top: 4px; }
+@media(max-width:480px){ .nari-coming-banner { flex-direction: column; text-align: center; gap: 10px; } }
 
 /* ══════════════════════════════════════════════
    MOTOR — Vehicle Icon Switcher
