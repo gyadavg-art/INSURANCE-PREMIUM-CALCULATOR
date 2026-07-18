@@ -55,19 +55,5 @@ function launchFire(product) {
   document.getElementById('fireSection').classList.add('direct-mode');
 }
 
-function launchMotor(mode) {
-  showSection('motor');
-  setMode(mode);
-}
 
-function launchHealth(product) {
-  showSection('health');
-  var radio = document.querySelector('input[name="product"][value="' + product + '"]');
-  if (radio) { radio.checked = true; if (typeof onProductChange === 'function') onProductChange(); }
-}
-
-function launchFire(product) {
-  showSection('fire');
-  if (typeof fireSetProduct === 'function') fireSetProduct(product);
-}
 
