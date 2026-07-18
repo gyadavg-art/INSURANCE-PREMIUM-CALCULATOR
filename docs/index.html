@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NIA Calculator">
-<meta name="theme-color" content="#1e3a5f">
+<meta name="theme-color" content="#0f1b52">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
 <!-- Styles -->
 <link rel="stylesheet" href="./css/global.css">
@@ -49,170 +49,108 @@
     <div class="hero-gold-stripe"></div>
 
     <div class="hero-inner">
-      <!-- Sambhal UP-38 Badge SVG removed -->
-      <div class="sambhal-badge" style="display:none">
-        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="190" height="190">
+      <!-- New India Sambhal Coin Badge -->
+      <div class="sambhal-badge">
+        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="200" height="200" style="display:block;filter:drop-shadow(0 6px 32px rgba(212,175,55,0.55))">
           <defs>
-            <!-- Arc paths for text -->
-            <path id="sb-arc-top"    d="M 22,150 A 128,128 0 0,1 278,150" fill="none"/>
-            <path id="sb-arc-top2"   d="M 42,150 A 108,108 0 0,1 258,150" fill="none"/>
-            <path id="sb-arc-bot"    d="M 22,150 A 128,128 0 0,0 278,150" fill="none"/>
-            <path id="sb-arc-bot2"   d="M 50,150 A 100,100 0 0,0 250,150" fill="none"/>
-            <!-- Shield clip -->
-            <clipPath id="shieldClip">
-              <path d="M150,62 L195,78 L195,138 Q195,178 150,200 Q105,178 105,138 L105,78 Z"/>
+            <!-- Arc text paths (r=120, centered at 150,150) -->
+            <path id="nia-top" d="M 30,150 A 120,120 0 0,1 270,150" fill="none"/>
+            <path id="nia-bot" d="M 30,150 A 120,120 0 0,0 270,150" fill="none"/>
+            <!-- Clip to gold center disc -->
+            <clipPath id="nia-clip">
+              <circle cx="150" cy="150" r="85"/>
             </clipPath>
+            <!-- Gold radial gradient for center disc -->
+            <radialGradient id="nia-gold" cx="38%" cy="32%" r="68%">
+              <stop offset="0%"   stop-color="#f8f060"/>
+              <stop offset="28%"  stop-color="#ecd050"/>
+              <stop offset="58%"  stop-color="#d4af37"/>
+              <stop offset="85%"  stop-color="#b89020"/>
+              <stop offset="100%" stop-color="#8b6508"/>
+            </radialGradient>
+            <!-- Navy gradient for coin ring body -->
+            <radialGradient id="nia-navy" cx="50%" cy="40%" r="55%">
+              <stop offset="0%"   stop-color="#1c2d73"/>
+              <stop offset="100%" stop-color="#0a1440"/>
+            </radialGradient>
           </defs>
 
-          <!-- === OUTER RING: orange === -->
-          <circle cx="150" cy="150" r="146" fill="#e8621a"/>
-          <!-- White spacer -->
-          <circle cx="150" cy="150" r="136" fill="#ffffff"/>
-          <!-- Gold ring -->
-          <circle cx="150" cy="150" r="133" fill="#c9a227"/>
-          <!-- Navy body -->
-          <circle cx="150" cy="150" r="128" fill="#1a2b5e"/>
-          <!-- Inner gold ring -->
-          <circle cx="150" cy="150" r="122" fill="none" stroke="#c9a227" stroke-width="2"/>
-          <circle cx="150" cy="150" r="119" fill="none" stroke="#c9a227" stroke-width="0.8"/>
+          <!-- COIN RING BODY: deep navy (blends into header gradient) -->
+          <circle cx="150" cy="150" r="148" fill="url(#nia-navy)"/>
 
-          <!-- === ARC TEXT: SAMBHAL (top, large) === -->
-          <text font-family="'Arial Black',Arial,sans-serif" font-size="22" font-weight="900" fill="#ffffff" letter-spacing="6">
-            <textPath href="#sb-arc-top" startOffset="50%" text-anchor="middle">SAMBHAL</textPath>
+          <!-- Outer decorative gold border rings -->
+          <circle cx="150" cy="150" r="147" fill="none" stroke="#d4af37" stroke-width="3"/>
+          <circle cx="150" cy="150" r="141" fill="none" stroke="rgba(212,175,55,0.35)" stroke-width="1"/>
+
+          <!-- Inner gold border rings (boundary of center disc area) -->
+          <circle cx="150" cy="150" r="100" fill="none" stroke="#d4af37" stroke-width="2"/>
+          <circle cx="150" cy="150" r="96"  fill="none" stroke="rgba(212,175,55,0.22)" stroke-width="1"/>
+
+          <!-- Gold separator studs at 9 o'clock and 3 o'clock -->
+          <circle cx="30"  cy="150" r="5.5" fill="#d4af37"/>
+          <circle cx="30"  cy="150" r="2.5" fill="#f0e060"/>
+          <circle cx="270" cy="150" r="5.5" fill="#d4af37"/>
+          <circle cx="270" cy="150" r="2.5" fill="#f0e060"/>
+
+          <!-- NEW INDIA arc text (top half) -->
+          <text font-family="'Arial Black',Arial,sans-serif" font-size="22" font-weight="900"
+                fill="#ffffff" letter-spacing="7" text-rendering="geometricPrecision">
+            <textPath href="#nia-top" startOffset="50%" text-anchor="middle">NEW INDIA</textPath>
           </text>
 
-          <!-- === ARC TEXT: UTTAR PRADESH (smaller, just below SAMBHAL) === -->
-          <text font-family="Arial,sans-serif" font-size="11" font-weight="700" fill="#e8c547" letter-spacing="2.5">
-            <textPath href="#sb-arc-top2" startOffset="50%" text-anchor="middle">UTTAR PRADESH</textPath>
+          <!-- SAMBHAL arc text (bottom half) -->
+          <text font-family="'Arial Black',Arial,sans-serif" font-size="20" font-weight="900"
+                fill="#ffffff" letter-spacing="10" text-rendering="geometricPrecision">
+            <textPath href="#nia-bot" startOffset="50%" text-anchor="middle">SAMBHAL</textPath>
           </text>
 
-          <!-- === ARC TEXT: NEW INDIA (bottom, large) === -->
-          <text font-family="'Arial Black',Arial,sans-serif" font-size="20" font-weight="900" fill="#ffffff" letter-spacing="5">
-            <textPath href="#sb-arc-bot" startOffset="50%" text-anchor="middle">NEW INDIA</textPath>
-          </text>
+          <!-- CENTER GOLD DISC -->
+          <circle cx="150" cy="150" r="86" fill="url(#nia-gold)"/>
 
-          <!-- === ARC TEXT: PROGRESS | HERITAGE | DEVELOPMENT === -->
-          <text font-family="Arial,sans-serif" font-size="8.5" font-weight="600" fill="#e8c547" letter-spacing="0.8">
-            <textPath href="#sb-arc-bot2" startOffset="50%" text-anchor="middle">PROGRESS | HERITAGE | DEVELOPMENT</textPath>
-          </text>
-
-          <!-- === LEFT LAUREL WREATH (green leaves) === -->
-          <g transform="translate(32,150)" opacity="0.92">
-            <!-- stem -->
-            <line x1="0" y1="30" x2="0" y2="-30" stroke="#3a7d1e" stroke-width="1.5"/>
-            <!-- leaves left side -->
-            <ellipse cx="-7" cy="22" rx="8" ry="4" fill="#4a9e28" transform="rotate(-40,-7,22)"/>
-            <ellipse cx="-8" cy="10" rx="8" ry="4" fill="#5cb832" transform="rotate(-50,-8,10)"/>
-            <ellipse cx="-7" cy="-2" rx="7" ry="3.5" fill="#4a9e28" transform="rotate(-55,-7,-2)"/>
-            <ellipse cx="-5" cy="-14" rx="6" ry="3" fill="#5cb832" transform="rotate(-60,-5,-14)"/>
-            <ellipse cx="-3" cy="-25" rx="5" ry="2.5" fill="#4a9e28" transform="rotate(-65,-3,-25)"/>
-            <!-- leaves right side -->
-            <ellipse cx="7" cy="22" rx="8" ry="4" fill="#5cb832" transform="rotate(40,7,22)"/>
-            <ellipse cx="8" cy="10" rx="8" ry="4" fill="#4a9e28" transform="rotate(50,8,10)"/>
-            <ellipse cx="7" cy="-2" rx="7" ry="3.5" fill="#5cb832" transform="rotate(55,7,-2)"/>
-            <ellipse cx="5" cy="-14" rx="6" ry="3" fill="#4a9e28" transform="rotate(60,5,-14)"/>
-            <ellipse cx="3" cy="-25" rx="5" ry="2.5" fill="#5cb832" transform="rotate(65,3,-25)"/>
-          </g>
-
-          <!-- === RIGHT LAUREL WREATH === -->
-          <g transform="translate(268,150)" opacity="0.92">
-            <line x1="0" y1="30" x2="0" y2="-30" stroke="#3a7d1e" stroke-width="1.5"/>
-            <ellipse cx="-7" cy="22" rx="8" ry="4" fill="#4a9e28" transform="rotate(-40,-7,22)"/>
-            <ellipse cx="-8" cy="10" rx="8" ry="4" fill="#5cb832" transform="rotate(-50,-8,10)"/>
-            <ellipse cx="-7" cy="-2" rx="7" ry="3.5" fill="#4a9e28" transform="rotate(-55,-7,-2)"/>
-            <ellipse cx="-5" cy="-14" rx="6" ry="3" fill="#5cb832" transform="rotate(-60,-5,-14)"/>
-            <ellipse cx="-3" cy="-25" rx="5" ry="2.5" fill="#4a9e28" transform="rotate(-65,-3,-25)"/>
-            <ellipse cx="7" cy="22" rx="8" ry="4" fill="#5cb832" transform="rotate(40,7,22)"/>
-            <ellipse cx="8" cy="10" rx="8" ry="4" fill="#4a9e28" transform="rotate(50,8,10)"/>
-            <ellipse cx="7" cy="-2" rx="7" ry="3.5" fill="#5cb832" transform="rotate(55,7,-2)"/>
-            <ellipse cx="5" cy="-14" rx="6" ry="3" fill="#4a9e28" transform="rotate(60,5,-14)"/>
-            <ellipse cx="3" cy="-25" rx="5" ry="2.5" fill="#5cb832" transform="rotate(65,3,-25)"/>
-          </g>
-
-          <!-- === SHIELD / CREST === -->
-          <!-- Shield border (gold) -->
-          <path d="M150,60 L198,78 L198,140 Q198,184 150,206 Q102,184 102,140 L102,78 Z"
-                fill="#c9a227" stroke="#c9a227" stroke-width="2"/>
-          <!-- Shield fill (dark navy) -->
-          <path d="M150,65 L194,82 L194,140 Q194,180 150,201 Q106,180 106,140 L106,82 Z"
-                fill="#12205a"/>
-
-          <!-- India map inside shield (outline style, gold/yellow) -->
-          <g transform="translate(150,132) scale(0.52)" clip-path="url(#shieldClip)">
-            <!-- India full outline -->
-            <path d="
-              M0,-105 C-5,-108 -18,-105 -25,-98 C-32,-91 -38,-80 -42,-68
-              C-46,-56 -50,-45 -48,-33 C-45,-20 -52,-15 -55,-5
-              C-58,5 -55,16 -52,25 C-48,34 -50,42 -45,50
-              C-40,58 -32,60 -28,68 C-22,78 -25,88 -18,95
-              C-11,102 -2,105 6,108 C14,111 20,118 28,120
-              C36,122 42,116 50,112 C58,108 66,106 72,100
-              C78,94 78,84 82,76 C86,68 92,62 92,52
-              C92,42 86,34 84,24 C82,14 86,4 82,-6
-              C78,-16 70,-20 65,-30 C60,-40 62,-52 55,-60
-              C48,-68 36,-70 28,-78 C20,-86 18,-98 8,-104
-              C0,-110 5,-102 0,-105 Z
-            " fill="#c9a227" stroke="#e8d060" stroke-width="1.5" opacity="0.95"/>
-            <!-- Kashmir bulge top -->
+          <!-- India map silhouette clipped to disc -->
+          <g transform="translate(150,147) scale(0.43)" clip-path="url(#nia-clip)">
+            <!-- Main India outline -->
+            <path d="M0,-105 C-5,-108 -18,-105 -25,-98 C-32,-91 -38,-80 -42,-68
+                     C-46,-56 -50,-45 -48,-33 C-45,-20 -52,-15 -55,-5
+                     C-58,5 -55,16 -52,25 C-48,34 -50,42 -45,50
+                     C-40,58 -32,60 -28,68 C-22,78 -25,88 -18,95
+                     C-11,102 -2,105 6,108 C14,111 20,118 28,120
+                     C36,122 42,116 50,112 C58,108 66,106 72,100
+                     C78,94 78,84 82,76 C86,68 92,62 92,52
+                     C92,42 86,34 84,24 C82,14 86,4 82,-6
+                     C78,-16 70,-20 65,-30 C60,-40 62,-52 55,-60
+                     C48,-68 36,-70 28,-78 C20,-86 18,-98 8,-104
+                     C0,-110 5,-102 0,-105 Z"
+                  fill="#7a5500" stroke="#5a3e00" stroke-width="2.5" opacity="0.9"/>
+            <!-- Kashmir bulge -->
             <path d="M0,-105 C-5,-112 -15,-115 -20,-108 C-25,-101 -20,-92 -12,-90 C-5,-88 2,-96 0,-105 Z"
-                  fill="#c9a227" stroke="#e8d060" stroke-width="1" opacity="0.95"/>
-            <!-- UP highlight (center-north) -->
+                  fill="#7a5500" stroke="#5a3e00" stroke-width="1.5"/>
+            <!-- UP / Sambhal region highlight -->
             <path d="M-8,-30 C-15,-35 -25,-32 -30,-25 C-35,-18 -32,-8 -26,-4 C-20,0 -10,-2 -4,-8 C2,-14 -2,-25 -8,-30 Z"
-                  fill="#f0c030" opacity="0.7"/>
-            <!-- Dot for Sambhal -->
-            <circle cx="-12" cy="-18" r="4" fill="#ffffff" opacity="0.9"/>
+                  fill="#c9820a" opacity="0.55"/>
+            <!-- Sambhal location dot (white + navy center) -->
+            <circle cx="-12" cy="-18" r="6"   fill="#ffffff" opacity="0.95"/>
+            <circle cx="-12" cy="-18" r="3"   fill="#0f1b52"/>
           </g>
 
-          <!-- UP-38 label on shield -->
-          <rect x="114" y="178" width="72" height="22" rx="4" fill="#c9a227"/>
-          <text x="150" y="194" text-anchor="middle"
-                font-family="'Arial Black',Arial,sans-serif" font-size="13" font-weight="900"
-                fill="#12205a" letter-spacing="2">UP - 38</text>
-
-          <!-- Ashoka Chakra below shield -->
-          <circle cx="150" cy="215" r="10" fill="none" stroke="#ffffff" stroke-width="1.5"/>
-          <circle cx="150" cy="215" r="2" fill="#1a3a8a"/>
-          <!-- 12 spokes -->
-          <g stroke="#1a3a8a" stroke-width="0.8">
-            <line x1="150" y1="205" x2="150" y2="207"/>
-            <line x1="150" y1="223" x2="150" y2="225"/>
-            <line x1="140" y1="215" x2="142" y2="215"/>
-            <line x1="158" y1="215" x2="160" y2="215"/>
-            <line x1="142.9" y1="207.9" x2="144.3" y2="209.3"/>
-            <line x1="155.7" y1="220.7" x2="157.1" y2="222.1"/>
-            <line x1="157.1" y1="207.9" x2="155.7" y2="209.3"/>
-            <line x1="144.3" y1="220.7" x2="142.9" y2="222.1"/>
-            <line x1="140" y1="210" x2="142" y2="211"/>
-            <line x1="158" y1="219" x2="160" y2="220"/>
-            <line x1="140" y1="220" x2="142" y2="219"/>
-            <line x1="158" y1="211" x2="160" y2="210"/>
-          </g>
-          <!-- Tricolor arc under chakra -->
-          <path d="M137,222 Q150,232 163,222" stroke="#f97316" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <path d="M137,227 Q150,237 163,227" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <path d="M138,231 Q150,241 162,231" stroke="#138808" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-
-          <!-- Small map silhouettes on left/right of shield (grey outline) -->
-          <g transform="translate(60,148) scale(0.18)" opacity="0.55">
-            <path d="M0,-105 C-5,-108 -18,-105 -25,-98 C-32,-91 -38,-80 -42,-68 C-46,-56 -50,-45 -48,-33 C-45,-20 -52,-15 -55,-5 C-58,5 -55,16 -52,25 C-48,34 -50,42 -45,50 C-40,58 -32,60 -28,68 C-22,78 -25,88 -18,95 C-11,102 -2,105 6,108 C14,111 20,118 28,120 C36,122 42,116 50,112 C58,108 66,106 72,100 C78,94 78,84 82,76 C86,68 92,62 92,52 C92,42 86,34 84,24 C82,14 86,4 82,-6 C78,-16 70,-20 65,-30 C60,-40 62,-52 55,-60 C48,-68 36,-70 28,-78 C20,-86 18,-98 8,-104 C0,-110 5,-102 0,-105 Z"
-                  fill="#aab8d0" stroke="#8898b0" stroke-width="4"/>
-          </g>
-          <g transform="translate(240,148) scale(0.18)" opacity="0.55">
-            <path d="M0,-105 C-5,-108 -18,-105 -25,-98 C-32,-91 -38,-80 -42,-68 C-46,-56 -50,-45 -48,-33 C-45,-20 -52,-15 -55,-5 C-58,5 -55,16 -52,25 C-48,34 -50,42 -45,50 C-40,58 -32,60 -28,68 C-22,78 -25,88 -18,95 C-11,102 -2,105 6,108 C14,111 20,118 28,120 C36,122 42,116 50,112 C58,108 66,106 72,100 C78,94 78,84 82,76 C86,68 92,62 92,52 C92,42 86,34 84,24 C82,14 86,4 82,-6 C78,-16 70,-20 65,-30 C60,-40 62,-52 55,-60 C48,-68 36,-70 28,-78 C20,-86 18,-98 8,-104 C0,-110 5,-102 0,-105 Z"
-                  fill="#aab8d0" stroke="#8898b0" stroke-width="4"/>
-          </g>
+          <!-- Disc edge ring -->
+          <circle cx="150" cy="150" r="86" fill="none" stroke="#7a5500" stroke-width="1.5"/>
         </svg>
       </div>
 
       <!-- Hero text -->
       <div class="hero-text-block">
-        <div class="hero-agency-tag">&#9679; New India &nbsp;·&nbsp; Sambhal Branch</div>
+        <div class="hero-agency-tag">&#9679; Agent Premium Portal &nbsp;·&nbsp; Sambhal Branch &nbsp;·&nbsp; UP-38 &nbsp;·&nbsp; न्यू इन्डिया</div>
         <h1 class="hero-heading">
           Insurance Premium<br>
           <span class="hero-heading-gold">Calculator Suite</span>
         </h1>
-        <p class="hero-sub">IRDAI Tariff 2025 &nbsp;·&nbsp; Motor · Health · Fire &nbsp;·&nbsp; Built for NIA Agents</p>
+        <p class="hero-sub">
+          <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);color:#34d399;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:800;letter-spacing:1px;margin-right:8px"><span style="width:6px;height:6px;border-radius:50%;background:#34d399;display:inline-block;animation:pulse 2s infinite"></span>IRDAI Tariff 2025</span>
+          Motor &nbsp;·&nbsp; Health &nbsp;·&nbsp; Fire &nbsp;·&nbsp; Nari
+        </p>
         <p class="hero-hindi-tag">बीमा प्रीमियम तुरंत गणना करें — मोटर, स्वास्थ्य, अग्नि एवं अन्य</p>
+        <p style="font-size:9px;color:rgba(255,255,255,0.28);margin-top:10px;letter-spacing:0.5px">Developed by Mr. Devendra Yadav &nbsp;·&nbsp; UP-38 Sambhal Branch</p>
       </div>
     </div>
 
@@ -315,21 +253,22 @@
         </div>
       </div>
 
-      <!-- Other -->
-      <div class="category-card card-other disabled" onclick="showComingSoon('Other')">
+      <!-- Nari Special -->
+      <div class="category-card card-nari disabled" onclick="showComingSoon('Nari Special')">
         <div class="card-top-bar"></div>
         <div class="card-body-wrap">
           <div class="card-icon-row">
-            <span class="card-icon-big" style="opacity:0.35">📋</span>
+            <span class="card-icon-big" style="opacity:0.78">🌸</span>
             <div class="coming-soon-badge">⏱ Soon</div>
           </div>
-          <h2 class="card-title card-title-muted">Other / Misc</h2>
-          <p class="card-hindi-sm">अन्य बीमा</p>
-          <p class="card-desc-text">Marine · Burglary · Engineering · Misc</p>
+          <h2 class="card-title">Nari Special</h2>
+          <p class="card-hindi-sm">नारी विशेष बीमा</p>
+          <p class="card-desc-text">Samman · Udyam · Stree Shakti &amp; Women-focused plans</p>
         </div>
         <div class="card-cta">
           <span class="card-cta-pills">
-            <span class="card-pill-sm">Soon</span>
+            <span class="card-pill-sm">Samman</span>
+            <span class="card-pill-sm">Udyam</span>
           </span>
           <span class="card-cta-arrow">⏱</span>
         </div>
@@ -338,9 +277,34 @@
     </div>
   </div>
 
+  <!-- ── QUICK ACTIONS STRIP ── -->
+  <div class="quick-actions">
+    <div class="qa-tile">
+      <span class="qa-icon">📄</span>
+      <div>
+        <div class="qa-text-title">PDF Quotations</div>
+        <div class="qa-text-sub">Generate branded quote PDFs instantly</div>
+      </div>
+    </div>
+    <div class="qa-tile">
+      <span class="qa-icon">✅</span>
+      <div>
+        <div class="qa-text-title">100% Tariff Accurate</div>
+        <div class="qa-text-sub">IRDAI 2025 rates — always up to date</div>
+      </div>
+    </div>
+    <div class="qa-tile">
+      <span class="qa-icon">📱</span>
+      <div>
+        <div class="qa-text-title">Works Offline</div>
+        <div class="qa-text-sub">Install as PWA — no internet needed</div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <div class="landing-footer">
-    <strong>New India</strong> &nbsp;·&nbsp; UP-38 Sambhal Branch &nbsp;·&nbsp;
+    <strong>UP-38 Sambhal Branch</strong> &nbsp;·&nbsp;
     Tariff rates as per IRDAI 2025 &nbsp;·&nbsp; For authorised agent use only
   </div>
 
