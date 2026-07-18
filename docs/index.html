@@ -95,97 +95,167 @@
     <div class="hero-gold-stripe hero-gold-stripe-bottom"></div>
   </div>
 
-  <!-- ── CATEGORY CARDS ── -->
-  <div class="category-section">
-    <p class="section-label">— Select a product category to begin —</p>
-    <div class="category-grid">
+  <!-- ── PRODUCTS SECTION ── -->
+  <div class="products-section">
+    <p class="section-label">— Select a product to begin —</p>
 
-      <!-- Motor -->
-      <div class="category-card card-motor" onclick="showSection('motor')">
-        <div class="card-top-bar"></div>
-        <div class="card-body-wrap">
-          <div class="card-icon-row">
-            <span class="card-icon-big">🚗</span>
-            <div class="active-badge"><span class="badge-dot"></span> Live</div>
+    <!-- ── MOTOR INSURANCE ── -->
+    <div class="prod-group prod-group-motor">
+      <div class="prod-group-hdr">
+        <div class="pgh-info">
+          <span class="pgh-icon">🚗</span>
+          <div>
+            <div class="pgh-name">Motor Insurance</div>
+            <div class="pgh-hindi">मोटर बीमा &nbsp;·&nbsp; IRDAI Tariff 2025</div>
           </div>
-          <h2 class="card-title">Motor Insurance</h2>
-          <p class="card-hindi-sm">मोटर बीमा</p>
-          <p class="card-desc-text">Two Wheeler · Private Car · Commercial Vehicle · NCB &amp; Add-ons</p>
         </div>
-        <div class="card-cta">
-          <span class="card-cta-pills">
-            <span class="card-pill-sm">TW</span>
-            <span class="card-pill-sm">PC</span>
-            <span class="card-pill-sm">CV</span>
-          </span>
-          <span class="card-cta-arrow">Open →</span>
-        </div>
+        <span class="pgh-badge pgh-badge-live"><span class="badge-dot"></span>Live</span>
       </div>
-
-      <!-- Health -->
-      <div class="category-card card-health" onclick="showSection('health')">
-        <div class="card-top-bar"></div>
-        <div class="card-body-wrap">
-          <div class="card-icon-row">
-            <span class="card-icon-big">🏥</span>
-            <div class="active-badge"><span class="badge-dot"></span> Live</div>
-          </div>
-          <h2 class="card-title">Health Insurance</h2>
-          <p class="card-hindi-sm">स्वास्थ्य बीमा</p>
-          <p class="card-desc-text">Yuva Bharat · NI Floater Mediclaim · PDF Quote · Commission</p>
-        </div>
-        <div class="card-cta">
-          <span class="card-cta-pills">
-            <span class="card-pill-sm">Yuva</span>
-            <span class="card-pill-sm">Floater</span>
-          </span>
-          <span class="card-cta-arrow">Open →</span>
-        </div>
+      <div class="motor-tile-grid">
+        <button class="motor-tile" onclick="launchMotor('TW')">
+          <div class="mtile-icon">🏍️</div>
+          <div class="mtile-name">Two Wheeler</div>
+          <div class="mtile-sub">Bikes &amp; Scooters</div>
+          <div class="mtile-bar"></div>
+        </button>
+        <button class="motor-tile" onclick="launchMotor('PC')">
+          <div class="mtile-icon">🚗</div>
+          <div class="mtile-name">Private Car</div>
+          <div class="mtile-sub">Personal Vehicles</div>
+          <div class="mtile-bar"></div>
+        </button>
+        <button class="motor-tile" onclick="launchMotor('GC')">
+          <div class="mtile-icon">🚚</div>
+          <div class="mtile-name">Goods Carrying</div>
+          <div class="mtile-sub">A1 — Public Carrier</div>
+          <div class="mtile-bar"></div>
+        </button>
+        <button class="motor-tile" onclick="launchMotor('TAXI')">
+          <div class="mtile-icon">🚕</div>
+          <div class="mtile-name">Taxi</div>
+          <div class="mtile-sub">C-1a Passenger</div>
+          <div class="mtile-bar"></div>
+        </button>
+        <button class="motor-tile" onclick="launchMotor('BUS')">
+          <div class="mtile-icon">🚌</div>
+          <div class="mtile-name">Bus</div>
+          <div class="mtile-sub">C-2 Passenger</div>
+          <div class="mtile-bar"></div>
+        </button>
+        <button class="motor-tile" onclick="launchMotor('MISC')">
+          <div class="mtile-icon">🚜</div>
+          <div class="mtile-name">Misc / Agri</div>
+          <div class="mtile-sub">Class D</div>
+          <div class="mtile-bar"></div>
+        </button>
       </div>
-
-      <!-- Fire -->
-      <div class="category-card card-fire" onclick="showSection('fire')">
-        <div class="card-top-bar"></div>
-        <div class="card-body-wrap">
-          <div class="card-icon-row">
-            <span class="card-icon-big">🔥</span>
-            <div class="active-badge"><span class="badge-dot"></span> Live</div>
-          </div>
-          <h2 class="card-title">Fire Insurance</h2>
-          <p class="card-hindi-sm">अग्नि बीमा</p>
-          <p class="card-desc-text">Shop Keeper · Cold Storage · Stand Alone Godowns · Griha Raksha</p>
-        </div>
-        <div class="card-cta">
-          <span class="card-cta-pills">
-            <span class="card-pill-sm">Shop</span>
-            <span class="card-pill-sm">Cold</span>
-          </span>
-          <span class="card-cta-arrow">Open →</span>
-        </div>
-      </div>
-
-      <!-- Nari Special -->
-      <div class="category-card card-nari disabled" onclick="showComingSoon('Nari Special')">
-        <div class="card-top-bar"></div>
-        <div class="card-body-wrap">
-          <div class="card-icon-row">
-            <span class="card-icon-big" style="opacity:0.78">🌸</span>
-            <div class="coming-soon-badge">⏱ Soon</div>
-          </div>
-          <h2 class="card-title">Nari Special</h2>
-          <p class="card-hindi-sm">नारी विशेष बीमा</p>
-          <p class="card-desc-text">Samman · Udyam · Stree Shakti &amp; Women-focused plans</p>
-        </div>
-        <div class="card-cta">
-          <span class="card-cta-pills">
-            <span class="card-pill-sm">Samman</span>
-            <span class="card-pill-sm">Udyam</span>
-          </span>
-          <span class="card-cta-arrow">⏱</span>
-        </div>
-      </div>
-
     </div>
+
+    <!-- ── HEALTH INSURANCE ── -->
+    <div class="prod-group prod-group-health">
+      <div class="prod-group-hdr">
+        <div class="pgh-info">
+          <span class="pgh-icon">🏥</span>
+          <div>
+            <div class="pgh-name">Health Insurance</div>
+            <div class="pgh-hindi">स्वास्थ्य बीमा &nbsp;·&nbsp; Zero GST</div>
+          </div>
+        </div>
+        <span class="pgh-badge pgh-badge-health"><span class="badge-dot"></span>Live · No GST</span>
+      </div>
+      <div class="health-tile-grid">
+        <div class="health-tile" onclick="launchHealth('yb')">
+          <div class="htile-top">
+            <div class="htile-icon-wrap htile-yb">🏥</div>
+            <span class="htile-live-badge"><span class="badge-dot"></span>Live</span>
+          </div>
+          <div class="htile-name">Yuva Bharat</div>
+          <div class="htile-sub">Health Policy</div>
+          <div class="htile-tags">
+            <span>Basic · Gold · Platinum</span>
+            <span>SI ₹5L – ₹1 Cr</span>
+            <span>Individual / Floater</span>
+          </div>
+          <div class="htile-cta">Open Calculator →</div>
+        </div>
+        <div class="health-tile" onclick="launchHealth('nif')">
+          <div class="htile-top">
+            <div class="htile-icon-wrap htile-nif">🏨</div>
+            <span class="htile-live-badge"><span class="badge-dot"></span>Live</span>
+          </div>
+          <div class="htile-name">NI Floater Mediclaim</div>
+          <div class="htile-sub">Family Floater Policy</div>
+          <div class="htile-tags">
+            <span>Family Floater</span>
+            <span>SI ₹2L – ₹15L</span>
+            <span>Annual Premium</span>
+          </div>
+          <div class="htile-cta">Open Calculator →</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FIRE INSURANCE ── -->
+    <div class="prod-group prod-group-fire">
+      <div class="prod-group-hdr">
+        <div class="pgh-info">
+          <span class="pgh-icon">🔥</span>
+          <div>
+            <div class="pgh-name">Fire Insurance</div>
+            <div class="pgh-hindi">अग्नि बीमा &nbsp;·&nbsp; Property Cover</div>
+          </div>
+        </div>
+        <span class="pgh-badge pgh-badge-fire">2 Live · 2 Soon</span>
+      </div>
+      <div class="fire-tile-grid">
+        <div class="fire-tile ftile-live" onclick="launchFire('SK')">
+          <div class="ftile-icon">🏪</div>
+          <div class="ftile-name">Shop Keeper</div>
+          <div class="ftile-sub">Property &amp; Stock</div>
+          <span class="ftile-badge ftile-badge-live"><span class="badge-dot"></span>Live</span>
+        </div>
+        <div class="fire-tile ftile-live" onclick="launchFire('CS')">
+          <div class="ftile-icon">🧊</div>
+          <div class="ftile-name">Cold Storage</div>
+          <div class="ftile-sub">All Risks Cover</div>
+          <span class="ftile-badge ftile-badge-live"><span class="badge-dot"></span>Live</span>
+        </div>
+        <div class="fire-tile ftile-soon" onclick="launchFire('SG')">
+          <div class="ftile-icon">🏭</div>
+          <div class="ftile-name">Stand Alone Godowns</div>
+          <div class="ftile-sub">Warehousing Cover</div>
+          <span class="ftile-badge ftile-badge-soon">⏱ Soon</span>
+        </div>
+        <div class="fire-tile ftile-soon" onclick="launchFire('HR')">
+          <div class="ftile-icon">🏠</div>
+          <div class="ftile-name">Griha Raksha</div>
+          <div class="ftile-sub">Home Insurance</div>
+          <span class="ftile-badge ftile-badge-soon">⏱ Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── NARI SPECIAL ── -->
+    <div class="prod-group prod-group-nari">
+      <div class="prod-group-hdr">
+        <div class="pgh-info">
+          <span class="pgh-icon" style="opacity:0.7">🌸</span>
+          <div>
+            <div class="pgh-name">Nari Special Insurance</div>
+            <div class="pgh-hindi">नारी विशेष बीमा &nbsp;·&nbsp; Women-focused Plans</div>
+          </div>
+        </div>
+        <span class="pgh-badge pgh-badge-soon">⏱ Coming Soon</span>
+      </div>
+      <div class="nari-coming-banner">
+        <span class="ncb-icon">🌸</span>
+        <div class="ncb-text">
+          <div class="ncb-products">Samman &nbsp;·&nbsp; Udyam &nbsp;·&nbsp; Stree Shakti</div>
+          <div class="ncb-sub">Women-focused insurance plans — launching soon</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ── QUICK ACTIONS STRIP ── -->
