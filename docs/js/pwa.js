@@ -6,27 +6,38 @@
         .catch(function(e){ console.log('SW error:', e); });
     });
   }
+
   var deferredPrompt = null;
-  var installBtn = document.getElementById('pwaInstallBtn');
-  window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault(); deferredPrompt = e;
-    if (installBtn) installBtn.style.display = 'flex';
-  });
-  if (installBtn) {
-    installBtn.addEventListener('click', function () {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(function (r) {
-        if (r.outcome === 'accepted') installBtn.style.display = 'none';
-        deferredPrompt = null;
-      });
-    });
+
+  function allInstallBtns() {
+    return document.querySelectorAll('.pwa-install-btn');
   }
+  function showBtns() { allInstallBtns().forEach(function(b){ b.style.display = 'flex'; }); }
+  function hideBtns() { allInstallBtns().forEach(function(b){ b.style.display = 'none'; }); }
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    showBtns();
+  });
+
+  // Single delegated click handler for all install buttons
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.pwa-install-btn');
+    if (!btn || !deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function (r) {
+      if (r.outcome === 'accepted') hideBtns();
+      deferredPrompt = null;
+    });
+  });
+
   window.addEventListener('appinstalled', function () {
-    if (installBtn) installBtn.style.display = 'none';
+    hideBtns();
     deferredPrompt = null;
   });
+
   if (window.matchMedia('(display-mode: standalone)').matches) {
-    if (installBtn) installBtn.style.display = 'none';
+    hideBtns();
   }
 })();

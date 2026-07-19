@@ -2,6 +2,19 @@
 // LANDING NAVIGATION CONTROLLER
 // ═══════════════════════════════════════════════════════════
 let _healthInited = false, _motorInited = false;
+let _navFromPopstate = false;
+
+// Stamp the landing state so the browser back button can return here
+history.replaceState({ page: 'landing' }, '');
+
+// Browser back / forward button handler
+window.addEventListener('popstate', function(e) {
+  _navFromPopstate = true;
+  var pg = (e.state && e.state.page) || 'landing';
+  if (pg === 'landing') showLanding();
+  else showSection(pg);
+  _navFromPopstate = false;
+});
 
 function showSection(name) {
   document.querySelectorAll('.calc-section').forEach(s => s.classList.add('hidden'));
@@ -11,6 +24,8 @@ function showSection(name) {
   document.getElementById('globalNav').style.display = '';
   const titles = { motor: 'Motor Insurance', health: 'Health Insurance', fire: 'Fire Insurance' };
   document.getElementById('navTitle').textContent = titles[name] || name;
+  // Push a history entry so the browser back button returns here
+  if (!_navFromPopstate) history.pushState({ page: name }, '');
   if (name === 'fire')  { document.getElementById('firePlaceholder').classList.remove('hidden'); return; }
   if (name === 'other') { document.getElementById('otherPlaceholder').classList.remove('hidden'); return; }
   document.getElementById(name + 'Section').classList.remove('hidden');
@@ -54,6 +69,3 @@ function launchFire(product) {
   if (typeof fireSetProduct === 'function') fireSetProduct(product);
   document.getElementById('fireSection').classList.add('direct-mode');
 }
-
-
-
