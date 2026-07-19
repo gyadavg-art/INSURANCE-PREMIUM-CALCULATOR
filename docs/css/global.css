@@ -403,12 +403,21 @@ body { font-family: 'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif; backg
 .health-tile:hover .htile-icon-wrap { transform: scale(1.08) rotate(-5deg); }
 .htile-yb  { background: linear-gradient(135deg,#d1fae5,#a7f3d0); }
 .htile-nif { background: linear-gradient(135deg,#dbeafe,#bfdbfe); }
+.htile-cg  { background: linear-gradient(135deg,#fce7f3,#fbcfe8); }
+.htile-cp  { background: linear-gradient(135deg,#ede9fe,#c7d2fe); }
 .htile-live-badge {
   display: inline-flex; align-items: center; gap: 4px;
   background: #d1fae5; border: 1px solid #6ee7b7; color: #059669;
   font-size: 8px; font-weight: 800; padding: 3px 8px;
   border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px;
 }
+.htile-soon-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #fef3c7; border: 1px solid #fde68a; color: #92400e;
+  font-size: 8px; font-weight: 800; padding: 3px 8px;
+  border-radius: 20px; text-transform: uppercase; letter-spacing: 0.8px;
+}
+.health-tile.htile-soon { opacity: 0.72; cursor: default; pointer-events: none; }
 .htile-name { font-size: 1rem; font-weight: 800; color: #065f46; letter-spacing: -0.3px; }
 .htile-sub  { font-size: 0.72rem; color: #6b7280; font-weight: 500; margin-top: -2px; }
 .htile-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
@@ -418,6 +427,7 @@ body { font-family: 'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif; backg
 }
 .htile-cta { margin-top: 8px; font-size: 11px; font-weight: 700; color: #059669; padding-top: 10px; border-top: 1px solid #d1fae5; transition: color 0.2s; }
 .health-tile:hover .htile-cta { color: #047857; }
+.htile-cta-soon { color: #92400e; border-top-color: #fde68a; }
 
 /* ── FIRE TILES ── */
 .fire-tile-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; padding: 14px; }
