@@ -386,7 +386,14 @@ body { font-family: 'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif; backg
 
 /* ── HEALTH TILES ── */
 .health-tile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px; }
-@media(max-width:520px){ .health-tile-grid { grid-template-columns: 1fr; } }
+@media(max-width:520px){
+  .health-tile { padding: 12px 10px 10px; gap: 4px; }
+  .htile-icon-wrap { width: 40px; height: 40px; font-size: 1.45rem; border-radius: 11px; }
+  .htile-name { font-size: 0.86rem; }
+  .htile-sub { font-size: 0.68rem; }
+  .htile-tags span { font-size: 8px; padding: 2px 5px; }
+  .htile-cta { font-size: 10px; padding-top: 7px; margin-top: 4px; }
+}
 
 .health-tile {
   position: relative; cursor: pointer; border: 1.5px solid #a7f3d0;
