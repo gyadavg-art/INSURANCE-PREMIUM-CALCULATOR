@@ -23,6 +23,9 @@ body { font-family: 'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif; backg
 #pwaInstallBtn { display:none; align-items:center; gap:6px; margin-left:auto; padding:8px 16px; border-radius:20px; border:1.5px solid rgba(255,255,255,.5); background:rgba(255,255,255,.12); color:#fff; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; transition:background .2s,border-color .2s; }
 #pwaInstallBtn:hover { background:rgba(255,255,255,.22); border-color:#fff; transform:translateY(-1px); }
 #pwaInstallBtn svg { width:15px; height:15px; flex-shrink:0; }
+#pwaLandingInstallBtn { display:none; align-items:center; gap:7px; margin-top:14px; padding:9px 18px; border-radius:22px; border:1.5px solid rgba(255,255,255,.4); background:rgba(255,255,255,.1); color:#fff; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; transition:background .2s,border-color .2s,transform .2s; letter-spacing:.2px; }
+#pwaLandingInstallBtn:hover { background:rgba(255,255,255,.2); border-color:rgba(255,255,255,.75); transform:translateY(-1px); }
+#pwaLandingInstallBtn svg { width:16px; height:16px; flex-shrink:0; }
 #navTitle { font-size: 17px; font-weight: 700; color: #fff; }
 .nav-nia-logo {
   width: 32px; height: 32px; border-radius: 8px;
