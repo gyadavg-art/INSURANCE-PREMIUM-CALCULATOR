@@ -670,9 +670,7 @@ function cvUpdatePassDisplay(){
   const pass=Math.max(1, rcSeats - llP);
   const valEl=$('cvPassDerivedVal');
   if(cl==='C2'){
-    // For Bus: basic TP covers 1 seat; additional (pass-1) passengers are charged per-seat
-    const addlPass=Math.max(0,pass-1);
-    if(valEl) valEl.textContent=pass+' ('+rcSeats+' RC seats − '+llP+' crew) → '+addlPass+' charged additionally';
+    if(valEl) valEl.textContent=pass+' ('+rcSeats+' RC seats − '+llP+' crew) → '+pass+' charged at per-seat rate';
   } else {
     if(valEl) valEl.textContent=pass+' ('+rcSeats+' RC − '+llP+' crew)';
   }
@@ -859,14 +857,13 @@ function calculateCV(){
     } else if(cl==='C2'){
       // passengers for TP = Actual Seating Capacity (RC) − LL Paid Driver/Cleaner/Conductor
       const rcSeats=parseInt($('cvRCSeats').value)||20;
-      const pass=Math.max(1, rcSeats-llP);
-      const addlPass=Math.max(0,pass-1); // basic TP covers first seat; rest charged per-seat
+      const pass=Math.max(0, rcSeats-llP);
       const bt=$('cvBusType').value;
       let busBase,busPerPass;
       if(ft==='ev'){busBase=bt==='educational'?10363:bt==='school'?13177:12192;busPerPass=bt==='educational'?633:bt==='school'?806:745;}
       else          {busBase=bt==='educational'?12192:bt==='school'?15502:14343;busPerPass=bt==='educational'?745:bt==='school'?948:877;}
-      tp=busBase+busPerPass*addlPass;
-      _busBreak={base:busBase,pass:pass,addlPass:addlPass,perPass:busPerPass,passTot:busPerPass*addlPass};
+      tp=busBase+busPerPass*pass;
+      _busBreak={base:busBase,pass:pass,perPass:busPerPass,passTot:busPerPass*pass};
     } else if(cl==='C3'){
       const pass=Math.max(1,(parseInt($('cvRCSeats').value)||10)-llP);
       tp=ft==='ev'?(5749+1147*(pass-1)):(6763+1349*(pass-1));
