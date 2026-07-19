@@ -647,6 +647,14 @@ function cvClassChange(){
   sd('cvOverturningBlock',isD); sd('cvLlEmpBlock',!isD);
   const isBus=cl==='C2';
   sd('cvBusTypeField',isBus); sd('cvPassCapField',isPass);
+  // Reset seat count to a sensible default when switching class
+  const rcEl=$('cvRCSeats');
+  if(rcEl){
+    const v=parseInt(rcEl.value)||0;
+    if(cl==='C2'  && v<7)  rcEl.value=20;   // Bus: minimum is >6 seats
+    if(cl==='C3'  && v<7)  rcEl.value=8;    // Auto-rickshaw 7–17 pass
+    if((cl==='C1a'||cl==='C1b') && v>6) rcEl.value=4; // Taxi/Auto-taxi
+  }
   cvUpdatePassDisplay();
   cvRefreshAddons();
 }
@@ -659,9 +667,15 @@ function cvUpdatePassDisplay(){
   if(!isPass){ hint.style.display='none'; return; }
   const rcSeats=parseInt($('cvRCSeats')?.value)||0;
   const llP=parseInt($('cvLLDriverPersons')?.value)||0;
-  const passTp=Math.max(1, rcSeats - llP);
+  const pass=Math.max(1, rcSeats - llP);
   const valEl=$('cvPassDerivedVal');
-  if(valEl) valEl.textContent=passTp+' ('+rcSeats+' RC − '+llP+' crew)';
+  if(cl==='C2'){
+    // For Bus: basic TP covers 1 seat; additional (pass-1) passengers are charged per-seat
+    const addlPass=Math.max(0,pass-1);
+    if(valEl) valEl.textContent=pass+' ('+rcSeats+' RC seats − '+llP+' crew) → '+addlPass+' charged additionally';
+  } else {
+    if(valEl) valEl.textContent=pass+' ('+rcSeats+' RC − '+llP+' crew)';
+  }
   hint.style.display='block';
 }
 
@@ -730,6 +744,7 @@ function cvCardToggle(id){
 
 function calculateCV(){
   cvUpdateAge();
+  let _busBreak=null; // populated for C2 Bus only
   const ct=cvCovType(), cl=$('cvClass').value;
   const zone=$('cvZone').value, ft=$('cvFuelType').value;
   const br=parseInt($('cvAgeBr').value)||1;
@@ -842,12 +857,16 @@ function calculateCV(){
       const b=ft==='ev'?1539:2371, p=ft==='ev'?737:1134;
       tp=b+p*(pass-1);
     } else if(cl==='C2'){
-      // OD banding uses full RC seats; TP uses seats minus LL crew
-      const pass=Math.max(1,(parseInt($('cvRCSeats').value)||20)-llP);
-      const tpP=Math.max(0,pass-1);
+      // passengers for TP = Actual Seating Capacity (RC) − LL Paid Driver/Cleaner/Conductor
+      const rcSeats=parseInt($('cvRCSeats').value)||20;
+      const pass=Math.max(1, rcSeats-llP);
+      const addlPass=Math.max(0,pass-1); // basic TP covers first seat; rest charged per-seat
       const bt=$('cvBusType').value;
-      if(ft==='ev') tp=(bt==='educational'?10363:bt==='school'?13177:12192)+((bt==='educational'?633:bt==='school'?806:745)*tpP);
-      else tp=(bt==='educational'?12192:bt==='school'?15502:14343)+((bt==='educational'?745:bt==='school'?948:877)*tpP);
+      let busBase,busPerPass;
+      if(ft==='ev'){busBase=bt==='educational'?10363:bt==='school'?13177:12192;busPerPass=bt==='educational'?633:bt==='school'?806:745;}
+      else          {busBase=bt==='educational'?12192:bt==='school'?15502:14343;busPerPass=bt==='educational'?745:bt==='school'?948:877;}
+      tp=busBase+busPerPass*addlPass;
+      _busBreak={base:busBase,pass:pass,addlPass:addlPass,perPass:busPerPass,passTot:busPerPass*addlPass};
     } else if(cl==='C3'){
       const pass=Math.max(1,(parseInt($('cvRCSeats').value)||10)-llP);
       tp=ft==='ev'?(5749+1147*(pass-1)):(6763+1349*(pass-1));
@@ -949,6 +968,16 @@ function calculateCV(){
 
   const setT=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
   setT('cv_lbl_tp',isShort?tp.toFixed(2)+' → ₹'+netTP_sp.toFixed(2):netTP_sp.toFixed(2));
+  // Bus (C2) TP breakdown
+  const isBus=cl==='C2';
+  sd('cvBusBasicTpRow',isBus&&!!_busBreak);
+  sd('cvBusPassTpRow', isBus&&!!_busBreak&&_busBreak.passTot>0);
+  if(isBus&&_busBreak){
+    setT('cv_lbl_busBasicTp',_busBreak.base.toFixed(2));
+    setT('cv_lbl_busPassTp',_busBreak.passTot.toFixed(2));
+    const lbl=$('cv_lbl_busPassTpLbl');
+    if(lbl) lbl.textContent=`↳ Passenger TP (${_busBreak.pass} pax × ₹${_busBreak.perPass})`;
+  }
   setT('cv_lbl_hevDisc',hevDisc.toFixed(2));setT('cv_lbl_pa',pa_sp.toFixed(2));
   setT('cv_lbl_llDriver',llDrv_sp.toFixed(2));setT('cv_lbl_llEmp',llEmp_sp.toFixed(2));
   setT('cv_lbl_addons',addons.toFixed(2));setT('cv_lbl_netOD',netOD.toFixed(2));
